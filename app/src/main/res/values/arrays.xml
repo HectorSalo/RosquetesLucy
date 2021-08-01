@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="identificador">
+        <item>J-</item>
+        <item>V-</item>
+        <item>E-</item>
+        <item>G-</item>
+    </string-array>
+
+</resources>

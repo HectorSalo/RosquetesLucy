@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "857516991108",
+    "project_id": "rosqueteslucy-6aebd",
+    "storage_bucket": "rosqueteslucy-6aebd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:857516991108:android:cbc4dbbf4ae4917d3958d1",
+        "android_client_info": {
+          "package_name": "com.skysam.hchirinos.rosqueteslucy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "857516991108-sqo5viocn072vcra749bkmaj5rp165nd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBogNvzVEHkUeJdXBERHprUM8Jl1q5V9Eg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "857516991108-sqo5viocn072vcra749bkmaj5rp165nd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
