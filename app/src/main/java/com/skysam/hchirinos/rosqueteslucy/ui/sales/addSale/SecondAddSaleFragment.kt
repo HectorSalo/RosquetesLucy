@@ -3,16 +3,20 @@ package com.skysam.hchirinos.rosqueteslucy.ui.sales.addSale
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.classView.ExitDialog
+import com.skysam.hchirinos.rosqueteslucy.common.classView.OnClickExit
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class SecondAddSaleFragment : Fragment() {
+class SecondAddSaleFragment : Fragment(){
 
     private var _binding: FragmentSecondAddSaleBinding? = null
 
@@ -23,8 +27,7 @@ class SecondAddSaleFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         _binding = FragmentSecondAddSaleBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -32,8 +35,7 @@ class SecondAddSaleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonSecond.setOnClickListener {
+        binding.btnSale.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
     }

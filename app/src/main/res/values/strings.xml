@@ -3,28 +3,45 @@
     <string name="title_sales">Ventas</string>
     <string name="title_costumers">Clientes</string>
     <string name="title_graphs">Gráficas</string>
+    <string name="title_activity_add_sale">Generar Venta</string>
 
+    <!--Messages-->
     <string name="text_empty"> </string>
+    <string name="text_yes">Si</string>
+    <string name="text_no">No</string>
     <string name="list_sales_empty">No ha realizado su primera Venta</string>
     <string name="list_costumer_empty">No ha creado su primer Cliente</string>
     <string name="list_graph_empty">Debe realizar su primera Venta para cargar las gráficas</string>
+    <string name="error_field_empty">Campo vacío</string>
 
+    <!--Components-->
     <string name="btn_save">Guardar</string>
     <string name="btn_cancel">Cancelar</string>
+    <string name="btn_total">Totalizar</string>
+    <string name="btn_exit">Salir</string>
+    <string name="symbol_bolivar">Bs.</string>
+    <string name="symbol_dolar">$</string>
 
     <!--Costumers-->
     <string name="title_add_costumer">Agregar cliente</string>
     <string name="text_name_costumer">Nombre de cliente</string>
     <string name="text_id_costumer">RIF</string>
     <string name="text_location_costumer">Sucursal</string>
-    <string name="title_activity_add_sale">Generar Venta</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- Sales-->
+    <string name="text_quantity">Cantidad</string>
+    <string name="text_price">Precio</string>
+    <string name="text_invoice_number">#Fact.</string>
+    <string name="text_date">Fecha</string>
+    <string name="text_rg_invoice_paid">¿Factura cobrada?</string>
+    <string name="btn_sale">Generar Venta</string>
+    <string name="text_total">Total</string>
+    <string name="text_quantity_price">%1$s x %2$s</string>
+    <string name="text_total_amount">%1$s</string>
+    <string name="text_subtitle_details">Recibo de Venta</string>
+
+    <!--Dialog Exit-->
+    <string name="title_confirmation_dialog">Confirmar</string>
+    <string name="msg_exit_dialog">Se perderá toda la información.\n¿Desea salir?</string>
 
 </resources>

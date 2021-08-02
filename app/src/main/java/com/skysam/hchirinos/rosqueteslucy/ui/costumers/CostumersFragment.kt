@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentCostumersBinding
 
 class CostumersFragment : Fragment() {
 
-    private lateinit var costumersViewModel: CostumersViewModel
+    private lateinit var viewModel: CostumersViewModel
     private var _binding: FragmentCostumersBinding? = null
 
     // This property is only valid between onCreateView and
@@ -23,13 +22,10 @@ class CostumersFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        costumersViewModel =
+        viewModel =
             ViewModelProvider(this).get(CostumersViewModel::class.java)
 
         _binding = FragmentCostumersBinding.inflate(inflater, container, false)
-        costumersViewModel.text.observe(viewLifecycleOwner, {
-
-        })
         return binding.root
     }
 
