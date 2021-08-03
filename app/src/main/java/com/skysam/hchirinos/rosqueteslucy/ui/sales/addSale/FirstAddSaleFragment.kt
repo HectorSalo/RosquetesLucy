@@ -13,16 +13,9 @@ import com.skysam.hchirinos.rosqueteslucy.common.classView.ExitDialog
 import com.skysam.hchirinos.rosqueteslucy.common.classView.OnClickExit
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentFirstAddSaleBinding
 
-
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class FirstAddSaleFragment : Fragment(), OnClickExit {
 
     private var _binding: FragmentFirstAddSaleBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -61,5 +54,9 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
 
     override fun onClickExit() {
         requireActivity().finish()
+    }
+
+    private fun validateData() {
+
     }
 }

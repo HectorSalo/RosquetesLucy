@@ -13,4 +13,12 @@ class CostumersViewModel : ViewModel() {
     fun addCostumer(costumer: Costumer) {
         CostumerRepository.addCostumer(costumer)
     }
+
+    fun editCostumer(costumer: Costumer) {
+
+    }
+
+    fun deleteCostumer(id: String) {
+        CostumerRepository.deleteCostumer(id)
+    }
 }

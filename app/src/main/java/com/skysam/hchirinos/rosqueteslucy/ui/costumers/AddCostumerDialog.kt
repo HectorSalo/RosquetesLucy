@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -46,9 +47,9 @@ class AddCostumerDialog: DialogFragment() {
         buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
         buttonNegative.setOnClickListener { dialog.dismiss() }
         buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-        buttonPositive.setOnClickListener { validateProduct() }
+        buttonPositive.setOnClickListener { validateCostumer() }
 
-        binding.etNameCostumer.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        binding.etNameCostumer.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             Keyboard.close(binding.root)
             val nameSelected = parent.getItemAtPosition(position)
             var symbolIdentifier = ""
@@ -94,7 +95,7 @@ class AddCostumerDialog: DialogFragment() {
         })
     }
 
-    private fun validateProduct() {
+    private fun validateCostumer() {
         binding.tfNameCostumer.error = null
         binding.tfIdCostumer.error = null
         binding.tfLocationCostumer.error = null
@@ -118,8 +119,44 @@ class AddCostumerDialog: DialogFragment() {
             binding.etLocationCostumer.requestFocus()
             return
         }
+        var costumerExists = false
+        for (cos in costumers) {
+            if (cos.name == name) {
+                if (cos.identifier != identifier) {
+                    binding.tfNameCostumer.error = getString(R.string.error_costumer_exists)
+                    costumerExists = true
+                    break
+                }
+            }
+        }
+        if (costumerExists) return
+        var identifierExists = false
+        for (cos in costumers) {
+            if (cos.identifier == identifier) {
+                if (cos.name != name) {
+                    binding.tfIdCostumer.error = getString(R.string.error_identifier_exists)
+                    identifierExists = true
+                    break
+                }
+            }
+        }
+        if (identifierExists) return
+        var locationExists = false
+        for (cos in costumers) {
+            if (cos.name == name && cos.identifier == identifier) {
+                if (cos.location == location) {
+                    binding.tfLocationCostumer.error = getString(R.string.error_location_exists)
+                    locationExists = true
+                    break
+                }
+            }
+        }
+        if (locationExists) return
+
         Keyboard.close(binding.root)
         val costumer = Costumer("", name, identifier, location)
         viewModel.addCostumer(costumer)
+        Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
+        dialog?.dismiss()
     }
 }

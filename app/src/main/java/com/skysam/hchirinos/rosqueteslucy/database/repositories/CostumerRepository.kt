@@ -29,6 +29,14 @@ object CostumerRepository {
         getInstance().add(data)
     }
 
+    fun editCostumer(costumer: Costumer) {
+
+    }
+
+    fun deleteCostumer(id: String) {
+        getInstance().document(id).delete()
+    }
+
     fun getCostumers(): Flow<MutableList<Costumer>> {
         return callbackFlow {
             val request = getInstance()

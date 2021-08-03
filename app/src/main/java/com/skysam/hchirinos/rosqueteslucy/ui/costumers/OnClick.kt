@@ -1,0 +1,11 @@
+package com.skysam.hchirinos.rosqueteslucy.ui.costumers
+
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+
+/**
+ * Created by Hector Chirinos (Home) on 2/8/2021.
+ */
+interface OnClick {
+    fun edit(costumer: Costumer)
+    fun delete(id: String)
+}
