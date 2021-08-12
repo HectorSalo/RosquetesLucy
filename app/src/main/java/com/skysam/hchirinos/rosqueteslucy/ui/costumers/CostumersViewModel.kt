@@ -14,11 +14,19 @@ class CostumersViewModel : ViewModel() {
         CostumerRepository.addCostumer(costumer)
     }
 
-    fun editCostumer(costumer: Costumer) {
-
+    fun addLocation(id: String, location: String) {
+        CostumerRepository.addLocation(id, location)
     }
 
-    fun deleteCostumer(id: String) {
-        CostumerRepository.deleteCostumer(id)
+    fun editCostumer(costumer: Costumer) {
+        CostumerRepository.editCostumer(costumer)
+    }
+
+    fun deleteCostumer(costumer: Costumer) {
+        CostumerRepository.deleteCostumer(costumer)
+    }
+
+    fun deleteLocations(id: String, locations: MutableList<String>) {
+        CostumerRepository.deleteLocations(id, locations)
     }
 }

@@ -4,8 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
@@ -16,6 +18,7 @@ import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 class CostumersAdapter(private var costumers: MutableList<Costumer>, private val onClick: OnClick):
     RecyclerView.Adapter<CostumersAdapter.ViewHolder>() {
     private lateinit var context: Context
+    private lateinit var adapterLocations: LocationsAdapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CostumersAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -28,15 +31,35 @@ class CostumersAdapter(private var costumers: MutableList<Costumer>, private val
         val item = costumers[position]
         holder.name.text = item.name
         holder.identifier.text = item.identifier
-        holder.location.text = item.location
+
+        if (item.isExpanded) {
+            holder.expandable.visibility = View.VISIBLE
+            holder.locationTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_24, 0)
+        } else {
+            holder.expandable.visibility = View.GONE
+            holder.locationTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_24, 0)
+        }
+
+        holder.locations.setOnClickListener {
+            adapterLocations = LocationsAdapter(item.locations)
+            holder.recyclerView.apply {
+                setHasFixedSize(true)
+                adapter = adapterLocations
+            }
+            adapterLocations.updateList(item.locations)
+            item.isExpanded = !item.isExpanded
+            notifyItemChanged(position)
+        }
 
         holder.menu.setOnClickListener {
             val popMenu = PopupMenu(context, holder.menu)
             popMenu.inflate(R.menu.menu_costumers)
             popMenu.setOnMenuItemClickListener {
                 when(it.itemId) {
+                    R.id.menu_add_location-> onClick.addLocation(item)
+                    R.id.menu_delete_location-> onClick.deleteLocation(item)
                     R.id.menu_edit-> onClick.edit(item)
-                    R.id.menu_delete-> onClick.delete(item.id)
+                    R.id.menu_delete-> onClick.delete(item)
                 }
                false
             }
@@ -49,7 +72,10 @@ class CostumersAdapter(private var costumers: MutableList<Costumer>, private val
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tv_name)
         val identifier: TextView = view.findViewById(R.id.tv_identifier)
-        val location: TextView = view.findViewById(R.id.tv_location)
+        val locationTitle: TextView = view.findViewById(R.id.tv_location)
+        val locations: LinearLayout = view.findViewById(R.id.ll_locations)
+        val expandable: ConstraintLayout = view.findViewById(R.id.expandable)
+        val recyclerView: RecyclerView = view.findViewById(R.id.rv_locations)
         val menu: TextView = view.findViewById(R.id.tv_menu)
     }
 

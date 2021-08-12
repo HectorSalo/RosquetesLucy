@@ -3,7 +3,6 @@ package com.skysam.hchirinos.rosqueteslucy.ui.costumers
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Toast
@@ -49,27 +48,6 @@ class AddCostumerDialog: DialogFragment() {
         buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
         buttonPositive.setOnClickListener { validateCostumer() }
 
-        binding.etNameCostumer.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            Keyboard.close(binding.root)
-            val nameSelected = parent.getItemAtPosition(position)
-            var symbolIdentifier = ""
-            var numberIdentifier = ""
-            for (cos in costumers) {
-                if (cos.name == nameSelected) {
-                    val values: List<String> = cos.identifier.split("-")
-                    symbolIdentifier = "${values[0]}-"
-                    numberIdentifier = values[1]
-                }
-            }
-            when(symbolIdentifier) {
-                "J-" -> binding.spinner.setSelection(0)
-                "V-" -> binding.spinner.setSelection(1)
-                "E-" -> binding.spinner.setSelection(2)
-                "G-" -> binding.spinner.setSelection(3)
-            }
-            binding.etIdCostumer.setText(numberIdentifier)
-        }
-
         return dialog
     }
 
@@ -83,14 +61,6 @@ class AddCostumerDialog: DialogFragment() {
             if (_binding != null) {
                 costumers.clear()
                 costumers.addAll(it)
-                val names = mutableListOf<String>()
-                for (cos in costumers) {
-                    if (!names.contains(cos.name)) {
-                        names.add(cos.name)
-                    }
-                }
-                val adapterAutoComplete = ArrayAdapter(requireContext(), R.layout.list_autocomplete_text, names)
-                binding.etNameCostumer.setAdapter(adapterAutoComplete)
             }
         })
     }
@@ -122,11 +92,10 @@ class AddCostumerDialog: DialogFragment() {
         var costumerExists = false
         for (cos in costumers) {
             if (cos.name == name) {
-                if (cos.identifier != identifier) {
-                    binding.tfNameCostumer.error = getString(R.string.error_costumer_exists)
-                    costumerExists = true
-                    break
-                }
+                binding.tfNameCostumer.error = getString(R.string.error_costumer_exists)
+                binding.etNameCostumer.requestFocus()
+                costumerExists = true
+                break
             }
         }
         if (costumerExists) return
@@ -135,26 +104,18 @@ class AddCostumerDialog: DialogFragment() {
             if (cos.identifier == identifier) {
                 if (cos.name != name) {
                     binding.tfIdCostumer.error = getString(R.string.error_identifier_exists)
+                    binding.etIdCostumer.requestFocus()
                     identifierExists = true
                     break
                 }
             }
         }
         if (identifierExists) return
-        var locationExists = false
-        for (cos in costumers) {
-            if (cos.name == name && cos.identifier == identifier) {
-                if (cos.location == location) {
-                    binding.tfLocationCostumer.error = getString(R.string.error_location_exists)
-                    locationExists = true
-                    break
-                }
-            }
-        }
-        if (locationExists) return
+        val locations = mutableListOf<String>()
+        locations.add(location)
 
         Keyboard.close(binding.root)
-        val costumer = Costumer("", name, identifier, location)
+        val costumer = Costumer("", name, identifier, locations)
         viewModel.addCostumer(costumer)
         Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
         dialog?.dismiss()

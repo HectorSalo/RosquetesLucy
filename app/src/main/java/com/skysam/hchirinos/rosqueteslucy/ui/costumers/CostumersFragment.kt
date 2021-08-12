@@ -1,5 +1,6 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.costumers
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentCostumersBinding
+import java.util.*
 
 class CostumersFragment : Fragment(), OnClick {
 
@@ -95,18 +97,56 @@ class CostumersFragment : Fragment(), OnClick {
         })
     }
 
+    override fun addLocation(costumer: Costumer) {
+        val addLocationDialog = AddLocationDialog(costumer)
+        addLocationDialog.show(requireActivity().supportFragmentManager, tag)
+    }
+
+    override fun deleteLocation(costumer: Costumer) {
+        val locations = mutableListOf<String>()
+        val arrayLocations = costumer.locations.toTypedArray()
+        val arrayChecked = BooleanArray(costumer.locations.size)
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setTitle(getString(R.string.title_delete_locations))
+            .setMultiChoiceItems(arrayLocations, arrayChecked) { _, which, isChecked ->
+                if (isChecked) {
+                    locations.add(arrayLocations[which])
+                } else {
+                    locations.remove(arrayLocations[which])
+                }
+            }
+            .setPositiveButton(R.string.text_delete, null)
+            .setNegativeButton(R.string.btn_cancel, null)
+
+        val dialog = builder.create()
+        dialog.show()
+        val buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        buttonPositive.setOnClickListener {
+            if (locations.size == costumer.locations.size) {
+                Toast.makeText(requireContext(), getString(R.string.error_delete_all_locations), Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            Toast.makeText(requireContext(), getString(R.string.text_deleting), Toast.LENGTH_LONG).show()
+            dialog.dismiss()
+            for (loc in locations) {
+                costumer.locations.remove(loc)
+            }
+            viewModel.deleteLocations(costumer.id, locations)
+        }
+    }
+
     override fun edit(costumer: Costumer) {
         val editCostumerDialog = EditCostumerDialog(costumer)
         editCostumerDialog.show(requireActivity().supportFragmentManager, tag)
     }
 
-    override fun delete(id: String) {
+    override fun delete(costumer: Costumer) {
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.title_confirmation_dialog))
             .setMessage(getString(R.string.msg_delete_dialog))
             .setPositiveButton(R.string.text_delete) { _, _ ->
                 Toast.makeText(requireContext(), R.string.text_deleting, Toast.LENGTH_SHORT).show()
-                viewModel.deleteCostumer(id)
+                viewModel.deleteCostumer(costumer)
             }
             .setNegativeButton(R.string.btn_cancel, null)
 

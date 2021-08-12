@@ -23,18 +23,25 @@ object CostumerRepository {
     fun addCostumer(costumer: Costumer) {
         val data = hashMapOf(
             Constants.NAME to costumer.name,
-            Constants.COSTUMER_IDENTIFIER to costumer.identifier,
-            Constants.COSTUMER_LOCATION to costumer.location
+            Constants.COSTUMER_IDENTIFIER to costumer.identifier
         )
         getInstance().add(data)
+            .addOnSuccessListener {
+                val dataLocation = hashMapOf(
+                    Constants.COSTUMER_LOCATION to costumer.locations[0]
+                )
+                getInstance().document(it.id).collection(Constants.LOCATIONS)
+                    .add(dataLocation)
+            }
     }
 
     fun editCostumer(costumer: Costumer) {
-
-    }
-
-    fun deleteCostumer(id: String) {
-        getInstance().document(id).delete()
+        val data: Map<String, Any> = hashMapOf(
+            Constants.NAME to costumer.name,
+            Constants.COSTUMER_IDENTIFIER to costumer.identifier
+        )
+        getInstance().document(costumer.id)
+            .update(data)
     }
 
     fun getCostumers(): Flow<MutableList<Costumer>> {
@@ -49,17 +56,69 @@ object CostumerRepository {
 
                     val costumers: MutableList<Costumer> = mutableListOf()
                     for (doc in value!!) {
+                        val locations = mutableListOf<String>()
+                        getInstance().document(doc.id).collection(Constants.LOCATIONS)
+                            .get()
+                            .addOnSuccessListener {
+                                for (document in it) {
+                                    locations.add(document.getString(Constants.COSTUMER_LOCATION)!!)
+                                }
+                            }
                         val costumer = Costumer(
                             doc.id,
                             doc.getString(Constants.NAME)!!,
                             doc.getString(Constants.COSTUMER_IDENTIFIER)!!,
-                            doc.getString(Constants.COSTUMER_LOCATION)!!
+                            locations
                         )
                         costumers.add(costumer)
                     }
                     offer(costumers)
                 }
             awaitClose { request.remove() }
+        }
+    }
+
+    fun addLocation(id: String, location: String) {
+        val dataLocation = hashMapOf(
+            Constants.COSTUMER_LOCATION to location
+        )
+        getInstance().document(id).collection(Constants.LOCATIONS)
+            .add(dataLocation)
+    }
+
+    fun deleteLocations(id: String, locations: MutableList<String>) {
+        for (loc in locations) {
+            getInstance().document(id).collection(Constants.LOCATIONS)
+                .whereEqualTo(Constants.COSTUMER_LOCATION, loc)
+                .get()
+                .addOnSuccessListener {
+                    for (doc in it) {
+                        getInstance().document(id).collection(Constants.LOCATIONS)
+                            .document(doc.id)
+                            .delete()
+                    }
+                }
+        }
+    }
+
+    fun deleteCostumer(costumer: Costumer) {
+        for (loc in costumer.locations) {
+            getInstance().document(costumer.id).collection(Constants.LOCATIONS)
+                .whereEqualTo(Constants.COSTUMER_LOCATION, loc)
+                .get()
+                .addOnSuccessListener {
+                    for (doc in it) {
+                        getInstance().document(costumer.id).collection(Constants.LOCATIONS)
+                            .document(doc.id)
+                            .delete()
+                            .addOnSuccessListener {
+                                if (loc == costumer.locations.last()) {
+                                    getInstance().document(costumer.id)
+                                        .delete()
+                                }
+                            }
+                    }
+                }
         }
     }
 }

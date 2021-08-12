@@ -7,5 +7,6 @@ data class Costumer(
     var id: String,
     var name: String,
     var identifier: String,
-    var location: String
+    var locations: MutableList<String>,
+    var isExpanded: Boolean = false
 )

@@ -33,9 +33,16 @@
     <string name="text_name_costumer">Nombre de cliente</string>
     <string name="text_id_costumer">RIF</string>
     <string name="text_location_costumer">Sucursal</string>
-    <string name="error_costumer.exists">Este cliente está almacenado con otro RIF</string>
+    <string name="text_locations_costumer">Sucursales</string>
+    <string name="error_costumer.exists">Este cliente ya existe</string>
     <string name="error_identifier_exists">Este RIF está almacenado con otro cliente</string>
     <string name="error_location_exists">Sucursal ya existe para este cliente</string>
+    <string name="text_add_location">Agregar sucursal</string>
+    <string name="text_delete_location">Eliminar sucursal</string>
+    <string name="text_edit_costumer">Editar cliente</string>
+    <string name="text_delete_costumer">Eliminar cliente</string>
+    <string name="title_delete_locations">Seleccione las sucursales a eliminar</string>
+    <string name="error_delete_all_locations">No puede eliminar todas las sucursales</string>
 
     <!-- Sales-->
     <string name="text_quantity">Cantidad</string>
