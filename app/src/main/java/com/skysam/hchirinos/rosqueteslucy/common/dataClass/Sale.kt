@@ -3,9 +3,10 @@ package com.skysam.hchirinos.rosqueteslucy.common.dataClass
 /**
  * Created by Hector Chirinos (Home) on 3/8/2021.
  */
-data class Sales(
+data class Sale(
     var id: String,
     var idCostumer: String,
+    var idLocation: String,
     var price: Double,
     var quantity: Int,
     var isDolar: Boolean,

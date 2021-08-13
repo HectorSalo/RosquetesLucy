@@ -54,7 +54,7 @@ class AddLocationDialog(private val costumer: Costumer): DialogFragment() {
         }
         var locationExists = false
         for (loc in costumer.locations) {
-            if (loc == location) {
+            if (loc.name == location) {
                 binding.tfLocationCostumer.error = getString(R.string.error_location_exists)
                 binding.etLocationCostumer.requestFocus()
                 locationExists = true
@@ -64,7 +64,6 @@ class AddLocationDialog(private val costumer: Costumer): DialogFragment() {
         if (locationExists) return
 
         Keyboard.close(binding.root)
-        costumer.locations.add(location)
         viewModel.addLocation(costumer.id, location)
         Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
         dialog?.dismiss()

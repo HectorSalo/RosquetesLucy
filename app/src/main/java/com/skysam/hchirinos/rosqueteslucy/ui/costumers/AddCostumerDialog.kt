@@ -10,8 +10,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddCostumerBinding
 
 /**
@@ -111,8 +113,13 @@ class AddCostumerDialog: DialogFragment() {
             }
         }
         if (identifierExists) return
-        val locations = mutableListOf<String>()
-        locations.add(location)
+        val locations = mutableListOf<Location>()
+        val locationSend = Location(
+            Constants.COSTUMER_LOCATION,
+            location,
+            Constants.ID_COSTUMER
+        )
+        locations.add(locationSend)
 
         Keyboard.close(binding.root)
         val costumer = Costumer("", name, identifier, locations)

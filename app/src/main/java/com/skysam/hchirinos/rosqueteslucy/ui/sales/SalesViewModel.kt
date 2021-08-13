@@ -1,13 +1,18 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.sales
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
+import com.skysam.hchirinos.rosqueteslucy.database.repositories.CostumerRepository
+import com.skysam.hchirinos.rosqueteslucy.database.repositories.SalesRepository
 
 class SalesViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    val costumers: LiveData<MutableList<Costumer>> = CostumerRepository.getCostumers().asLiveData()
+
+    fun addSale(sale: Sale) {
+        SalesRepository.addSale(sale)
     }
-    val text: LiveData<String> = _text
 }

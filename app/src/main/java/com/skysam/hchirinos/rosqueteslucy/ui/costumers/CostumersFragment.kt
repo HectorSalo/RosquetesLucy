@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentCostumersBinding
 import java.util.*
 
@@ -103,16 +104,21 @@ class CostumersFragment : Fragment(), OnClick {
     }
 
     override fun deleteLocation(costumer: Costumer) {
-        val locations = mutableListOf<String>()
-        val arrayLocations = costumer.locations.toTypedArray()
+        val locations = mutableListOf<Location>()
+        val locationsToRead = mutableListOf<String>()
+        val locationsToDelete = mutableListOf<String>()
+        for (i in costumer.locations.indices) {
+            locationsToRead.add(costumer.locations[i].name)
+        }
+        val arrayLocations = locationsToRead.toTypedArray()
         val arrayChecked = BooleanArray(costumer.locations.size)
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.title_delete_locations))
             .setMultiChoiceItems(arrayLocations, arrayChecked) { _, which, isChecked ->
                 if (isChecked) {
-                    locations.add(arrayLocations[which])
+                    locationsToDelete.add(arrayLocations[which])
                 } else {
-                    locations.remove(arrayLocations[which])
+                    locationsToDelete.remove(arrayLocations[which])
                 }
             }
             .setPositiveButton(R.string.text_delete, null)
@@ -126,12 +132,24 @@ class CostumersFragment : Fragment(), OnClick {
                 Toast.makeText(requireContext(), getString(R.string.error_delete_all_locations), Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
+            if (locationsToDelete.isEmpty()) {
+                dialog.dismiss()
+            }
+            for (loc in locationsToDelete) {
+                for (i in costumer.locations.indices) {
+                    if (loc == costumer.locations[i].name) {
+                        val locToDelete = Location(
+                            costumer.locations[i].id,
+                            loc,
+                            costumer.id
+                        )
+                        locations.add(locToDelete)
+                    }
+                }
+            }
+            viewModel.deleteLocations(locations)
             Toast.makeText(requireContext(), getString(R.string.text_deleting), Toast.LENGTH_LONG).show()
             dialog.dismiss()
-            for (loc in locations) {
-                costumer.locations.remove(loc)
-            }
-            viewModel.deleteLocations(costumer.id, locations)
         }
     }
 

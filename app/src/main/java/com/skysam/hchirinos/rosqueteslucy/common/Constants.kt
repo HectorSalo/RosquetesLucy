@@ -16,5 +16,6 @@ object Constants {
     const val IS_DOLAR = "isDolar"
     const val QUANTITY = "quantity"
     const val NUMBER_INVOICE = "numberInvoice"
+    const val IS_PAID = "isPaid"
     const val DATE_DELIVERY = "dateDelivery"
 }

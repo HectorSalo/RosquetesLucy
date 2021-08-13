@@ -29,9 +29,6 @@ class SalesFragment : Fragment() {
 
         _binding = FragmentSalesBinding.inflate(inflater, container, false)
 
-        salesViewModel.text.observe(viewLifecycleOwner, {
-
-        })
         return binding.root
     }
 

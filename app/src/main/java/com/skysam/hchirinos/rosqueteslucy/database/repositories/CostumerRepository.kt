@@ -8,6 +8,7 @@ import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.Query
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -20,6 +21,10 @@ object CostumerRepository {
         return FirebaseFirestore.getInstance().collection(Constants.COSTUMERS)
     }
 
+    private fun getInstanceLocations(): CollectionReference {
+        return FirebaseFirestore.getInstance().collection(Constants.LOCATIONS)
+    }
+
     fun addCostumer(costumer: Costumer) {
         val data = hashMapOf(
             Constants.NAME to costumer.name,
@@ -28,9 +33,10 @@ object CostumerRepository {
         getInstance().add(data)
             .addOnSuccessListener {
                 val dataLocation = hashMapOf(
-                    Constants.COSTUMER_LOCATION to costumer.locations[0]
+                    Constants.COSTUMER_LOCATION to costumer.locations[0],
+                    Constants.ID_COSTUMER to it.id
                 )
-                getInstance().document(it.id).collection(Constants.LOCATIONS)
+                getInstanceLocations()
                     .add(dataLocation)
             }
     }
@@ -54,25 +60,37 @@ object CostumerRepository {
                         return@addSnapshotListener
                     }
 
-                    val costumers: MutableList<Costumer> = mutableListOf()
-                    for (doc in value!!) {
-                        val locations = mutableListOf<String>()
-                        getInstance().document(doc.id).collection(Constants.LOCATIONS)
-                            .get()
-                            .addOnSuccessListener {
-                                for (document in it) {
-                                    locations.add(document.getString(Constants.COSTUMER_LOCATION)!!)
-                                }
+                    val locations = mutableListOf<Location>()
+                    getInstanceLocations()
+                        .get()
+                        .addOnSuccessListener {
+                            for (document in it) {
+                                val location = Location(
+                                    document.id,
+                                    document.getString(Constants.COSTUMER_LOCATION)!!,
+                                    document.getString(Constants.ID_COSTUMER)!!
+                                )
+                                locations.add(location)
                             }
-                        val costumer = Costumer(
-                            doc.id,
-                            doc.getString(Constants.NAME)!!,
-                            doc.getString(Constants.COSTUMER_IDENTIFIER)!!,
-                            locations
-                        )
-                        costumers.add(costumer)
-                    }
-                    offer(costumers)
+
+                            val costumers: MutableList<Costumer> = mutableListOf()
+                            for (doc in value!!) {
+                                val listLocation = mutableListOf<Location>()
+                                for (i in locations.indices) {
+                                    if (doc.id == locations[i].idCostumer) {
+                                        listLocation.add(locations[i])
+                                    }
+                                }
+                                val costumer = Costumer(
+                                    doc.id,
+                                    doc.getString(Constants.NAME)!!,
+                                    doc.getString(Constants.COSTUMER_IDENTIFIER)!!,
+                                    listLocation
+                                )
+                                costumers.add(costumer)
+                            }
+                            offer(costumers)
+                        }
                 }
             awaitClose { request.remove() }
         }
@@ -80,43 +98,30 @@ object CostumerRepository {
 
     fun addLocation(id: String, location: String) {
         val dataLocation = hashMapOf(
-            Constants.COSTUMER_LOCATION to location
+            Constants.COSTUMER_LOCATION to location,
+            Constants.ID_COSTUMER to id
         )
-        getInstance().document(id).collection(Constants.LOCATIONS)
+        getInstanceLocations()
             .add(dataLocation)
     }
 
-    fun deleteLocations(id: String, locations: MutableList<String>) {
+    fun deleteLocations(locations: MutableList<Location>) {
         for (loc in locations) {
-            getInstance().document(id).collection(Constants.LOCATIONS)
-                .whereEqualTo(Constants.COSTUMER_LOCATION, loc)
-                .get()
-                .addOnSuccessListener {
-                    for (doc in it) {
-                        getInstance().document(id).collection(Constants.LOCATIONS)
-                            .document(doc.id)
-                            .delete()
-                    }
-                }
+            getInstanceLocations()
+                .document(loc.id)
+                .delete()
         }
     }
 
     fun deleteCostumer(costumer: Costumer) {
         for (loc in costumer.locations) {
-            getInstance().document(costumer.id).collection(Constants.LOCATIONS)
-                .whereEqualTo(Constants.COSTUMER_LOCATION, loc)
-                .get()
+            getInstanceLocations()
+                .document(loc.id)
+                .delete()
                 .addOnSuccessListener {
-                    for (doc in it) {
-                        getInstance().document(costumer.id).collection(Constants.LOCATIONS)
-                            .document(doc.id)
+                    if (loc == costumer.locations.last()) {
+                        getInstance().document(costumer.id)
                             .delete()
-                            .addOnSuccessListener {
-                                if (loc == costumer.locations.last()) {
-                                    getInstance().document(costumer.id)
-                                        .delete()
-                                }
-                            }
                     }
                 }
         }
