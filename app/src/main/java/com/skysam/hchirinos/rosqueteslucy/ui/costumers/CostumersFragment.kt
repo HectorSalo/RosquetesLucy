@@ -128,7 +128,7 @@ class CostumersFragment : Fragment(), OnClick {
         dialog.show()
         val buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
         buttonPositive.setOnClickListener {
-            if (locations.size == costumer.locations.size) {
+            if (locationsToDelete.size == costumer.locations.size) {
                 Toast.makeText(requireContext(), getString(R.string.error_delete_all_locations), Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }

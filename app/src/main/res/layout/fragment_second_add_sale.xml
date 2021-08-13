@@ -59,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_location_costumer"
-        tools:text="@string/text_subtitle_details" />
+        android:text="@string/text_subtitle_details" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide_line"
@@ -108,7 +108,7 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_sale"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/text_total" />
+        android:text="@string/text_total" />
 
     <TextView
         android:id="@+id/tv_total_monto"

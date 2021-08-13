@@ -12,5 +12,7 @@ data class Sale(
     var isDolar: Boolean,
     var invoice: Int,
     var isPaid: Boolean,
-    var date: Long
+    var date: Long,
+    var costumer: Costumer? = null,
+    var location: Location? = null
 )

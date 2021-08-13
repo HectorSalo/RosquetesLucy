@@ -17,11 +17,11 @@ import kotlinx.coroutines.flow.callbackFlow
  * Created by Hector Chirinos (Home) on 2/8/2021.
  */
 object CostumerRepository {
-    private fun getInstance(): CollectionReference {
+    fun getInstance(): CollectionReference {
         return FirebaseFirestore.getInstance().collection(Constants.COSTUMERS)
     }
 
-    private fun getInstanceLocations(): CollectionReference {
+    fun getInstanceLocations(): CollectionReference {
         return FirebaseFirestore.getInstance().collection(Constants.LOCATIONS)
     }
 

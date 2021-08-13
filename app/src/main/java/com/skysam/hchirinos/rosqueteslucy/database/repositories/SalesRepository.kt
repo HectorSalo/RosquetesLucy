@@ -1,9 +1,18 @@
 package com.skysam.hchirinos.rosqueteslucy.database.repositories
 
+import android.content.ContentValues
+import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.MetadataChanges
+import com.google.firebase.firestore.Query
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import java.util.*
 
 /**
@@ -26,5 +35,60 @@ object SalesRepository {
             Constants.DATE_DELIVERY to Date(sale.date)
         )
         getInstance().add(data)
+    }
+
+    fun getSales(): Flow<Sale> {
+        return callbackFlow {
+            val request = getInstance()
+                .orderBy(Constants.DATE_DELIVERY, Query.Direction.ASCENDING)
+                .addSnapshotListener(MetadataChanges.INCLUDE) { value, error ->
+                    if (error != null) {
+                        Log.w(ContentValues.TAG, "Listen failed.", error)
+                        return@addSnapshotListener
+                    }
+
+                    for (sale in value!!) {
+                        CostumerRepository.getInstance()
+                            .document(sale.getString(Constants.ID_COSTUMER)!!)
+                            .get()
+                            .addOnSuccessListener {
+                                val costumer = Costumer(
+                                    it.id,
+                                    it.getString(Constants.NAME)!!,
+                                    it.getString(Constants.COSTUMER_IDENTIFIER)!!,
+                                    mutableListOf()
+                                )
+
+                                CostumerRepository.getInstanceLocations()
+                                    .document(sale.getString(Constants.COSTUMER_LOCATION)!!)
+                                    .get()
+                                    .addOnSuccessListener { result->
+                                        val location = Location(
+                                            result.id,
+                                            result.getString(Constants.COSTUMER_LOCATION)!!,
+                                            costumer.id
+                                        )
+
+                                        val saleNew = Sale(
+                                            sale.id,
+                                            sale.getString(Constants.ID_COSTUMER)!!,
+                                            sale.getString(Constants.COSTUMER_LOCATION)!!,
+                                            sale.getDouble(Constants.PRICE)!!,
+                                            sale.getDouble(Constants.QUANTITY)!!.toInt(),
+                                            sale.getBoolean(Constants.IS_DOLAR)!!,
+                                            sale.getDouble(Constants.NUMBER_INVOICE)!!.toInt(),
+                                            sale.getBoolean(Constants.IS_PAID)!!,
+                                            sale.getDate(Constants.DATE_DELIVERY)!!.time,
+                                            costumer,
+                                            location
+                                        )
+
+                                        offer(saleNew)
+                                    }
+                            }
+                    }
+                }
+            awaitClose { request.remove() }
+        }
     }
 }
