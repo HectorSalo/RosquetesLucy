@@ -2,7 +2,6 @@ package com.skysam.hchirinos.rosqueteslucy.ui.sales
 
 import androidx.lifecycle.*
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.CostumerRepository
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.SalesRepository
@@ -10,18 +9,13 @@ import com.skysam.hchirinos.rosqueteslucy.database.repositories.SalesRepository
 class SalesViewModel : ViewModel() {
 
     val costumers: LiveData<MutableList<Costumer>> = CostumerRepository.getCostumers().asLiveData()
-    val sale: LiveData<Sale> = SalesRepository.getSales().asLiveData()
-
-    private val _sales = MutableLiveData<MutableList<Sale>>().apply {
-        value = mutableListOf()
-    }
-    val sales: LiveData<MutableList<Sale>> get() = _sales
+    val sales: LiveData<MutableList<Sale>> = SalesRepository.getSales().asLiveData()
 
     private val _costumer = MutableLiveData<Costumer>()
     val costumer: LiveData<Costumer> get() = _costumer
 
-    private val _location = MutableLiveData<Location>()
-    val location: LiveData<Location> get() = _location
+    private val _location = MutableLiveData<String>()
+    val location: LiveData<String> get() = _location
 
     private val _price = MutableLiveData<Double>()
     val price: LiveData<Double> get() = _price
@@ -41,7 +35,7 @@ class SalesViewModel : ViewModel() {
     private val _date = MutableLiveData<Long>()
     val date: LiveData<Long> get() = _date
 
-    fun reviewInvoice(costumer: Costumer, location: Location, price: Double, quantity: Int,
+    fun reviewInvoice(costumer: Costumer, location: String, price: Double, quantity: Int,
                       isDolar: Boolean, invoice: Int, isPaid: Boolean, date: Long) {
         _costumer.value = costumer
         _location.value = location
@@ -55,12 +49,5 @@ class SalesViewModel : ViewModel() {
 
     fun addSale(sale: Sale) {
         SalesRepository.addSale(sale)
-    }
-
-    fun addSaleToList(sale: Sale) {
-        if (!_sales.value!!.contains(sale)) {
-            _sales.value?.add(sale)
-            _sales.value = _sales.value
-        }
     }
 }

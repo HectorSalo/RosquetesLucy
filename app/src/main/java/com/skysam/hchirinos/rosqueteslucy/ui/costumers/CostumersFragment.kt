@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentCostumersBinding
 import java.util.*
 
@@ -104,13 +103,8 @@ class CostumersFragment : Fragment(), OnClick {
     }
 
     override fun deleteLocation(costumer: Costumer) {
-        val locations = mutableListOf<Location>()
-        val locationsToRead = mutableListOf<String>()
         val locationsToDelete = mutableListOf<String>()
-        for (i in costumer.locations.indices) {
-            locationsToRead.add(costumer.locations[i].name)
-        }
-        val arrayLocations = locationsToRead.toTypedArray()
+        val arrayLocations = costumer.locations.toTypedArray()
         val arrayChecked = BooleanArray(costumer.locations.size)
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.title_delete_locations))
@@ -134,20 +128,9 @@ class CostumersFragment : Fragment(), OnClick {
             }
             if (locationsToDelete.isEmpty()) {
                 dialog.dismiss()
+                return@setOnClickListener
             }
-            for (loc in locationsToDelete) {
-                for (i in costumer.locations.indices) {
-                    if (loc == costumer.locations[i].name) {
-                        val locToDelete = Location(
-                            costumer.locations[i].id,
-                            loc,
-                            costumer.id
-                        )
-                        locations.add(locToDelete)
-                    }
-                }
-            }
-            viewModel.deleteLocations(locations)
+            viewModel.deleteLocations(costumer.id, locationsToDelete)
             Toast.makeText(requireContext(), getString(R.string.text_deleting), Toast.LENGTH_LONG).show()
             dialog.dismiss()
         }

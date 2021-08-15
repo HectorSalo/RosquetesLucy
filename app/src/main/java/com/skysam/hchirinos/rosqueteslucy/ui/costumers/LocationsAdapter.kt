@@ -6,12 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 
 /**
  * Created by Hector Chirinos (Home) on 11/8/2021.
  */
-class LocationsAdapter(private var locations: MutableList<Location>):
+class LocationsAdapter(private var locations: MutableList<String>):
     RecyclerView.Adapter<LocationsAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationsAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -20,7 +19,7 @@ class LocationsAdapter(private var locations: MutableList<Location>):
     }
 
     override fun onBindViewHolder(holder: LocationsAdapter.ViewHolder, position: Int) {
-        holder.location.text = locations[position].name
+        holder.location.text = locations[position]
     }
 
     override fun getItemCount(): Int = locations.size
@@ -29,7 +28,7 @@ class LocationsAdapter(private var locations: MutableList<Location>):
         val location: TextView = view.findViewById(R.id.tv_location)
     }
 
-    fun updateList(newList: MutableList<Location>) {
+    fun updateList(newList: MutableList<String>) {
         locations = newList
         notifyDataSetChanged()
     }

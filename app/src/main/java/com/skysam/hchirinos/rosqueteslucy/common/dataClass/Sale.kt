@@ -6,13 +6,12 @@ package com.skysam.hchirinos.rosqueteslucy.common.dataClass
 data class Sale(
     var id: String,
     var idCostumer: String,
-    var idLocation: String,
+    var nameCostumer: String,
+    var location: String,
     var price: Double,
     var quantity: Int,
     var isDolar: Boolean,
     var invoice: Int,
     var isPaid: Boolean,
-    var date: Long,
-    var costumer: Costumer? = null,
-    var location: Location? = null
+    var date: Long
 )

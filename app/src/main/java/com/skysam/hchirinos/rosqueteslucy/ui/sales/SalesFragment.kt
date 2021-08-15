@@ -7,17 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSalesBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.addSale.AddSaleActivity
 
-class SalesFragment : Fragment() {
+class SalesFragment : Fragment(), OnClick {
 
     private lateinit var viewModel: SalesViewModel
     private var _binding: FragmentSalesBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapaterSales: SalesAdapter
     private val sales = mutableListOf<Sale>()
+    private val costumers = mutableListOf<Costumer>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,10 +35,20 @@ class SalesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapaterSales = SalesAdapter(sales)
+        adapaterSales = SalesAdapter(sales, this)
         binding.rvSales.apply {
             setHasFixedSize(true)
             adapter = adapaterSales
+            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (dy > 0) {
+                        binding.floatingActionButton.hide()
+                    } else {
+                        binding.floatingActionButton.show()
+                    }
+                    super.onScrolled(recyclerView, dx, dy)
+                }
+            })
         }
         binding.floatingActionButton.setOnClickListener {
             startActivity(Intent(requireContext(), AddSaleActivity::class.java))
@@ -60,8 +73,9 @@ class SalesFragment : Fragment() {
     }
 
     private fun loadViewModel() {
-        viewModel.sale.observe(viewLifecycleOwner, {
-            viewModel.addSaleToList(it)
+        viewModel.costumers.observe(viewLifecycleOwner, {
+            costumers.clear()
+            costumers.addAll(it)
         })
         viewModel.sales.observe(viewLifecycleOwner, {
             if (_binding != null) {
@@ -78,5 +92,15 @@ class SalesFragment : Fragment() {
                 binding.progressBar.visibility = View.GONE
             }
         })
+    }
+
+    override fun viewSale(sale: Sale) {
+        for (cos in costumers) {
+            if (cos.id == sale.idCostumer) {
+                sale.idCostumer = cos.identifier
+            }
+        }
+        val viewDetailsSale = ViewDetailsSale(sale)
+        viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
     }
 }

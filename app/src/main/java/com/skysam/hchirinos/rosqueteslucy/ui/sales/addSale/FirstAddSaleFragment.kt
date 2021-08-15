@@ -16,7 +16,6 @@ import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
 import com.skysam.hchirinos.rosqueteslucy.common.classView.ExitDialog
 import com.skysam.hchirinos.rosqueteslucy.common.classView.OnClickExit
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentFirstAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 import java.text.DateFormat
@@ -30,7 +29,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
     private val costumersLocation = mutableListOf<String>()
     private val costumers = mutableListOf<Costumer>()
     private lateinit var costumer: Costumer
-    private lateinit var location: Location
+    private lateinit var location: String
     private var dateSelected: Long = 0
 
     override fun onCreateView(
@@ -61,7 +60,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
                 if (cos.name == name) {
                     costumer = cos
                     for (loc in cos.locations) {
-                        if (loc.name == locationS) {
+                        if (loc == locationS) {
                             location = loc
                         }
                     }
@@ -99,7 +98,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
                     costumers.addAll(it)
                     for (cos in it) {
                         for (i in cos.locations.indices) {
-                            val location = "${cos.name}-${cos.locations[i].name}"
+                            val location = "${cos.name}-${cos.locations[i]}"
                             costumersLocation.add(location)
                         }
                     }

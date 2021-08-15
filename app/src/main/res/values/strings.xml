@@ -55,6 +55,7 @@
     <string name="text_quantity_price">%1$s x %2$s</string>
     <string name="text_total_amount">%1$s</string>
     <string name="text_subtitle_details">Recibo de Venta</string>
+    <string name="text_costumer_location">%1$s - %2$s</string>
 
     <!--Dialogs Common-->
     <string name="title_confirmation_dialog">Confirmar</string>

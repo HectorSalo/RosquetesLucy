@@ -29,6 +29,11 @@ class CostumersAdapter(private var costumers: MutableList<Costumer>, private val
 
     override fun onBindViewHolder(holder: CostumersAdapter.ViewHolder, position: Int) {
         val item = costumers[position]
+        adapterLocations = LocationsAdapter(item.locations)
+        holder.recyclerView.apply {
+            setHasFixedSize(true)
+            adapter = adapterLocations
+        }
         holder.name.text = item.name
         holder.identifier.text = item.identifier
 
@@ -41,11 +46,6 @@ class CostumersAdapter(private var costumers: MutableList<Costumer>, private val
         }
 
         holder.locations.setOnClickListener {
-            adapterLocations = LocationsAdapter(item.locations)
-            holder.recyclerView.apply {
-                setHasFixedSize(true)
-                adapter = adapterLocations
-            }
             adapterLocations.updateList(item.locations)
             item.isExpanded = !item.isExpanded
             notifyItemChanged(position)

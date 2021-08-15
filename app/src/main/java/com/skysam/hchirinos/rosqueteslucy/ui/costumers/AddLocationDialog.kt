@@ -54,7 +54,7 @@ class AddLocationDialog(private val costumer: Costumer): DialogFragment() {
         }
         var locationExists = false
         for (loc in costumer.locations) {
-            if (loc.name == location) {
+            if (loc == location) {
                 binding.tfLocationCostumer.error = getString(R.string.error_location_exists)
                 binding.etLocationCostumer.requestFocus()
                 locationExists = true

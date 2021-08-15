@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
@@ -27,7 +26,7 @@ class SecondAddSaleFragment : Fragment(){
     private var invoice = 0
     private var date: Long = 0
     private lateinit var costumer: Costumer
-    private lateinit var location: Location
+    private lateinit var location: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +42,8 @@ class SecondAddSaleFragment : Fragment(){
             val sale = Sale(
                 Constants.SALES,
                 costumer.id,
-                location.id,
+                costumer.name,
+                location,
                 price,
                 quantity,
                 isDolar,
@@ -67,7 +67,7 @@ class SecondAddSaleFragment : Fragment(){
         })
         viewModel.location.observe(viewLifecycleOwner, {
             location = it
-            binding.tvLocationCostumer.text = it.name
+            binding.tvLocationCostumer.text = it
         })
         viewModel.price.observe(viewLifecycleOwner, {
             price = it
@@ -91,7 +91,7 @@ class SecondAddSaleFragment : Fragment(){
         })
     }
 
-    fun showTotal() {
+    private fun showTotal() {
         binding.tvQuantityPrice.text = getString(R.string.text_quantity_price,
             price.toString(), quantity.toString())
         val total = quantity * price

@@ -7,8 +7,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.Query
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +24,8 @@ object SalesRepository {
     fun addSale(sale: Sale) {
         val data = hashMapOf(
             Constants.ID_COSTUMER to sale.idCostumer,
-            Constants.COSTUMER_LOCATION to sale.idLocation,
+            Constants.NAME to sale.nameCostumer,
+            Constants.COSTUMER_LOCATION to sale.location,
             Constants.PRICE to sale.price,
             Constants.QUANTITY to sale.quantity,
             Constants.IS_DOLAR to sale.isDolar,
@@ -37,7 +36,7 @@ object SalesRepository {
         getInstance().add(data)
     }
 
-    fun getSales(): Flow<Sale> {
+    fun getSales(): Flow<MutableList<Sale>> {
         return callbackFlow {
             val request = getInstance()
                 .orderBy(Constants.DATE_DELIVERY, Query.Direction.ASCENDING)
@@ -47,46 +46,23 @@ object SalesRepository {
                         return@addSnapshotListener
                     }
 
+                    val sales = mutableListOf<Sale>()
                     for (sale in value!!) {
-                        CostumerRepository.getInstance()
-                            .document(sale.getString(Constants.ID_COSTUMER)!!)
-                            .get()
-                            .addOnSuccessListener {
-                                val costumer = Costumer(
-                                    it.id,
-                                    it.getString(Constants.NAME)!!,
-                                    it.getString(Constants.COSTUMER_IDENTIFIER)!!,
-                                    mutableListOf()
-                                )
-
-                                CostumerRepository.getInstanceLocations()
-                                    .document(sale.getString(Constants.COSTUMER_LOCATION)!!)
-                                    .get()
-                                    .addOnSuccessListener { result->
-                                        val location = Location(
-                                            result.id,
-                                            result.getString(Constants.COSTUMER_LOCATION)!!,
-                                            costumer.id
-                                        )
-
-                                        val saleNew = Sale(
-                                            sale.id,
-                                            sale.getString(Constants.ID_COSTUMER)!!,
-                                            sale.getString(Constants.COSTUMER_LOCATION)!!,
-                                            sale.getDouble(Constants.PRICE)!!,
-                                            sale.getDouble(Constants.QUANTITY)!!.toInt(),
-                                            sale.getBoolean(Constants.IS_DOLAR)!!,
-                                            sale.getDouble(Constants.NUMBER_INVOICE)!!.toInt(),
-                                            sale.getBoolean(Constants.IS_PAID)!!,
-                                            sale.getDate(Constants.DATE_DELIVERY)!!.time,
-                                            costumer,
-                                            location
-                                        )
-
-                                        offer(saleNew)
-                                    }
-                            }
+                        val saleNew = Sale(
+                            sale.id,
+                            sale.getString(Constants.ID_COSTUMER)!!,
+                            sale.getString(Constants.NAME)!!,
+                            sale.getString(Constants.COSTUMER_LOCATION)!!,
+                            sale.getDouble(Constants.PRICE)!!,
+                            sale.getDouble(Constants.QUANTITY)!!.toInt(),
+                            sale.getBoolean(Constants.IS_DOLAR)!!,
+                            sale.getDouble(Constants.NUMBER_INVOICE)!!.toInt(),
+                            sale.getBoolean(Constants.IS_PAID)!!,
+                            sale.getDate(Constants.DATE_DELIVERY)!!.time
+                        )
+                        sales.add(saleNew)
                     }
+                    offer(sales)
                 }
             awaitClose { request.remove() }
         }

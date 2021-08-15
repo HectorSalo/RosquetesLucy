@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Location
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.CostumerRepository
 
 class CostumersViewModel : ViewModel() {
@@ -27,7 +26,7 @@ class CostumersViewModel : ViewModel() {
         CostumerRepository.deleteCostumer(costumer)
     }
 
-    fun deleteLocations(locations: MutableList<Location>) {
-        CostumerRepository.deleteLocations(locations)
+    fun deleteLocations(id: String, locations: MutableList<String>) {
+        CostumerRepository.deleteLocations(id, locations)
     }
 }
