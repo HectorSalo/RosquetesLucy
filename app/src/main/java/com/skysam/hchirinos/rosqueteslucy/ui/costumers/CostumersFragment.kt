@@ -97,9 +97,9 @@ class CostumersFragment : Fragment(), OnClick {
         })
     }
 
-    override fun addLocation(costumer: Costumer) {
-        val addLocationDialog = AddLocationDialog(costumer)
-        addLocationDialog.show(requireActivity().supportFragmentManager, tag)
+    override fun viewCostumer(costumer: Costumer) {
+        val viewDetailsCostumerFragment = ViewDetailsCostumerFragment(costumer)
+        viewDetailsCostumerFragment.show(requireActivity().supportFragmentManager, tag)
     }
 
     override fun deleteLocation(costumer: Costumer) {

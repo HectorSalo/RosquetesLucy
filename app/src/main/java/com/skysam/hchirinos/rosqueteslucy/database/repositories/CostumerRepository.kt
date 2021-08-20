@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.callbackFlow
  * Created by Hector Chirinos (Home) on 2/8/2021.
  */
 object CostumerRepository {
-    fun getInstance(): CollectionReference {
+    private fun getInstance(): CollectionReference {
         return FirebaseFirestore.getInstance().collection(Constants.COSTUMERS)
     }
 
@@ -21,6 +21,7 @@ object CostumerRepository {
         val data = hashMapOf(
             Constants.NAME to costumer.name,
             Constants.COSTUMER_IDENTIFIER to costumer.identifier,
+            Constants.COSTUMER_ADDRESS to costumer.address,
             Constants.LOCATIONS to costumer.locations
         )
         getInstance().add(data)
@@ -30,6 +31,7 @@ object CostumerRepository {
         val data: Map<String, Any> = hashMapOf(
             Constants.NAME to costumer.name,
             Constants.COSTUMER_IDENTIFIER to costumer.identifier,
+            Constants.COSTUMER_ADDRESS to costumer.address,
             Constants.LOCATIONS to costumer.locations
         )
         getInstance().document(costumer.id)
@@ -57,6 +59,7 @@ object CostumerRepository {
                             doc.id,
                             doc.getString(Constants.NAME)!!,
                             doc.getString(Constants.COSTUMER_IDENTIFIER)!!,
+                            doc.getString(Constants.COSTUMER_ADDRESS)!!,
                             listLocation
                         )
                         costumers.add(costumer)

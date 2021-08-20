@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -12,10 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
 import com.skysam.hchirinos.rosqueteslucy.common.classView.ExitDialog
 import com.skysam.hchirinos.rosqueteslucy.common.classView.OnClickExit
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentFirstAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 import java.text.DateFormat
@@ -26,10 +23,6 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
     private var _binding: FragmentFirstAddSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
-    private val costumersLocation = mutableListOf<String>()
-    private val costumers = mutableListOf<Costumer>()
-    private lateinit var costumer: Costumer
-    private lateinit var location: String
     private var dateSelected: Long = 0
 
     override fun onCreateView(
@@ -49,25 +42,8 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
-        binding.etNameCostumer.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            Keyboard.close(binding.root)
-            val costumerSelected = parent.getItemAtPosition(position).toString()
-            val values: List<String> = costumerSelected.split("-")
-            val name = values[0]
-            val locationS = values[1]
-
-            for (cos in costumers) {
-                if (cos.name == name) {
-                    costumer = cos
-                    for (loc in cos.locations) {
-                        if (loc == locationS) {
-                            location = loc
-                        }
-                    }
-                }
-            }
-        }
-
+        dateSelected = Date().time
+        binding.etDate.setText(DateFormat.getDateInstance().format(Date()))
         binding.etDate.setOnClickListener { selecDate() }
         binding.btnExit.setOnClickListener { getOut() }
         binding.btnTotal.setOnClickListener { validateData() }
@@ -90,38 +66,19 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
     }
 
     private fun loadViewModel() {
-        viewModel.costumers.observe(viewLifecycleOwner, {
-            if (_binding != null) {
-                if (it.isNotEmpty()) {
-                    costumersLocation.clear()
-                    costumers.clear()
-                    costumers.addAll(it)
-                    for (cos in it) {
-                        for (i in cos.locations.indices) {
-                            val location = "${cos.name}-${cos.locations[i]}"
-                            costumersLocation.add(location)
-                        }
-                    }
-                    val adapterSearchProduct = ArrayAdapter(requireContext(), R.layout.list_autocomplete_text, costumersLocation.sorted())
-                    binding.etNameCostumer.setAdapter(adapterSearchProduct)
-                }
-            }
+        viewModel.costumer.observe(viewLifecycleOwner, {
+            binding.tvNameCostumer.text = it.name
+            val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, it.locations)
+            binding.spinner.adapter = adapterLocations
         })
     }
 
     private fun validateData() {
-        binding.tfNameCostumer.error = null
         binding.tfPrice.error = null
         binding.tfQuantity.error = null
         binding.tfDate.error = null
         binding.tfInvoice.error = null
 
-        val costumerName = binding.etNameCostumer.text.toString()
-        if (costumerName.isEmpty()) {
-            binding.tfNameCostumer.error = getString(R.string.error_field_empty)
-            binding.etNameCostumer.requestFocus()
-            return
-        }
         val price = binding.etPrice.text.toString()
         if (price.isEmpty()) {
             binding.tfPrice.error = getString(R.string.error_field_empty)
@@ -147,7 +104,8 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
             return
         }
 
-        viewModel.reviewInvoice(costumer, location, price.toDouble(), quantity.toInt(),
+        viewModel.reviewInvoice(binding.spinner.selectedItem.toString(),
+            price.toDouble(), quantity.toInt(),
             binding.rbDolar.isChecked, invoice.toInt(), binding.rbPaidYes.isChecked, dateSelected)
         findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
     }

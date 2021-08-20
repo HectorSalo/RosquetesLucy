@@ -1,17 +1,14 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.sales
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSalesBinding
-import com.skysam.hchirinos.rosqueteslucy.ui.sales.addSale.AddSaleActivity
 
 class SalesFragment : Fragment(), OnClick {
 
@@ -39,19 +36,6 @@ class SalesFragment : Fragment(), OnClick {
         binding.rvSales.apply {
             setHasFixedSize(true)
             adapter = adapaterSales
-            addOnScrollListener(object: RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (dy > 0) {
-                        binding.floatingActionButton.hide()
-                    } else {
-                        binding.floatingActionButton.show()
-                    }
-                    super.onScrolled(recyclerView, dx, dy)
-                }
-            })
-        }
-        binding.floatingActionButton.setOnClickListener {
-            startActivity(Intent(requireContext(), AddSaleActivity::class.java))
         }
 
         loadViewModel()
@@ -60,16 +44,6 @@ class SalesFragment : Fragment(), OnClick {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.floatingActionButton.show()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.floatingActionButton.hide()
     }
 
     private fun loadViewModel() {
@@ -100,7 +74,7 @@ class SalesFragment : Fragment(), OnClick {
                 sale.idCostumer = cos.identifier
             }
         }
-        val viewDetailsSale = ViewDetailsSale(sale)
+        val viewDetailsSale = ViewDetailsSaleDialog(sale)
         viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
     }
 }

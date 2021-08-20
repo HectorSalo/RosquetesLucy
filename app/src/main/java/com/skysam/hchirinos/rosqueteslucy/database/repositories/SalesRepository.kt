@@ -39,7 +39,7 @@ object SalesRepository {
     fun getSales(): Flow<MutableList<Sale>> {
         return callbackFlow {
             val request = getInstance()
-                .orderBy(Constants.DATE_DELIVERY, Query.Direction.ASCENDING)
+                .orderBy(Constants.DATE_DELIVERY, Query.Direction.DESCENDING)
                 .addSnapshotListener(MetadataChanges.INCLUDE) { value, error ->
                     if (error != null) {
                         Log.w(ContentValues.TAG, "Listen failed.", error)

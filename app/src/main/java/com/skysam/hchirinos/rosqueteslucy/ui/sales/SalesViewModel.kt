@@ -35,9 +35,12 @@ class SalesViewModel : ViewModel() {
     private val _date = MutableLiveData<Long>()
     val date: LiveData<Long> get() = _date
 
-    fun reviewInvoice(costumer: Costumer, location: String, price: Double, quantity: Int,
-                      isDolar: Boolean, invoice: Int, isPaid: Boolean, date: Long) {
+    fun addCostumer(costumer: Costumer) {
         _costumer.value = costumer
+    }
+
+    fun reviewInvoice(location: String, price: Double, quantity: Int,
+                      isDolar: Boolean, invoice: Int, isPaid: Boolean, date: Long) {
         _location.value = location
         _price.value = price
         _quantity.value = quantity

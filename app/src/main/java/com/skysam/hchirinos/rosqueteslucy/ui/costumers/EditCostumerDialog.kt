@@ -42,8 +42,11 @@ class EditCostumerDialog(private val costumer: Costumer): DialogFragment() {
             "E-" -> binding.spinner.setSelection(2)
             "G-" -> binding.spinner.setSelection(3)
         }
+        binding.etAddressCostumer.setText(costumer.address)
         binding.etIdCostumer.setText(numberIdentifier)
         binding.tfLocationCostumer.visibility = View.GONE
+        binding.btnCancel.visibility = View.GONE
+        binding.btnSave.visibility = View.GONE
 
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.title_edit_costumer))
@@ -94,6 +97,12 @@ class EditCostumerDialog(private val costumer: Costumer): DialogFragment() {
             binding.etIdCostumer.requestFocus()
             return
         }
+        val address = binding.etAddressCostumer.text.toString()
+        if (address.isEmpty()) {
+            binding.tfAddressCostumer.error = getString(R.string.error_field_empty)
+            binding.etAddressCostumer.requestFocus()
+            return
+        }
         val identifier = "${binding.spinner.selectedItem}$rif"
         if (name != costumer.name) {
             var costumerExists = false
@@ -123,7 +132,7 @@ class EditCostumerDialog(private val costumer: Costumer): DialogFragment() {
         }
 
         Keyboard.close(binding.root)
-        val costumerUpdate = Costumer(costumer.id, name, identifier, costumer.locations)
+        val costumerUpdate = Costumer(costumer.id, name, identifier, address, costumer.locations)
         viewModel.editCostumer(costumerUpdate)
         Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
         dialog?.dismiss()

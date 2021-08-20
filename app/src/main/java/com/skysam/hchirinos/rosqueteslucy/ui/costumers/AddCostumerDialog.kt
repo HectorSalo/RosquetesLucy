@@ -1,18 +1,18 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.costumers
 
-import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddCostumerBinding
+
 
 /**
  * Created by Hector Chirinos (Home) on 1/8/2021.
@@ -22,33 +22,31 @@ class AddCostumerDialog: DialogFragment() {
     private val binding get() = _binding!!
     private val viewModel: CostumersViewModel by activityViewModels()
     private val costumers = mutableListOf<Costumer>()
-    private lateinit var buttonPositive: Button
-    private lateinit var buttonNegative: Button
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = DialogAddCostumerBinding.inflate(layoutInflater)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Window_Fullscreen)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = DialogAddCostumerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val listUnits = listOf(*resources.getStringArray(R.array.identificador))
         val adapterUnits = ArrayAdapter(requireContext(), R.layout.layout_spinner, listUnits)
         binding.spinner.adapter = adapterUnits
-
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle(getString(R.string.title_add_costumer))
-            .setView(binding.root)
-            .setPositiveButton(R.string.btn_save, null)
-            .setNegativeButton(R.string.btn_cancel, null)
-
-        val dialog = builder.create()
-        dialog.show()
+        binding.btnSave.setOnClickListener { validateCostumer() }
+        binding.btnCancel.setOnClickListener { dialog?.dismiss() }
 
         loadViewModel()
-
-        buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-        buttonNegative.setOnClickListener { dialog.dismiss() }
-        buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-        buttonPositive.setOnClickListener { validateCostumer() }
-
-        return dialog
     }
 
     override fun onDestroyView() {
@@ -83,6 +81,12 @@ class AddCostumerDialog: DialogFragment() {
             return
         }
         val identifier = "${binding.spinner.selectedItem}$rif"
+        val address = binding.etAddressCostumer.text.toString()
+        if (address.isEmpty()) {
+            binding.tfAddressCostumer.error = getString(R.string.error_field_empty)
+            binding.etAddressCostumer.requestFocus()
+            return
+        }
         val location = binding.etLocationCostumer.text.toString()
         if (location.isEmpty()) {
             binding.tfLocationCostumer.error = getString(R.string.error_field_empty)
@@ -115,7 +119,7 @@ class AddCostumerDialog: DialogFragment() {
         locations.add(location)
 
         Keyboard.close(binding.root)
-        val costumer = Costumer("", name, identifier, locations)
+        val costumer = Costumer("", name, identifier, address, locations)
         viewModel.addCostumer(costumer)
         Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
         dialog?.dismiss()

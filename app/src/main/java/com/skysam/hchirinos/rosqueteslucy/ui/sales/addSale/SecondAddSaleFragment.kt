@@ -13,6 +13,7 @@ import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
+import java.text.DateFormat
 
 class SecondAddSaleFragment : Fragment(){
 
@@ -71,14 +72,21 @@ class SecondAddSaleFragment : Fragment(){
         })
         viewModel.price.observe(viewLifecycleOwner, {
             price = it
+            binding.tvPriceUnit.text = it.toString()
             showTotal()
         })
         viewModel.quantity.observe(viewLifecycleOwner, {
             quantity = it
+            binding.tvQuantity.text = it.toString()
             showTotal()
         })
         viewModel.isDolar.observe(viewLifecycleOwner, {
             isDolar = it
+            if (it) {
+                binding.tvTitleAmount.text = getString(R.string.title_amount_total, "$")
+            } else {
+                binding.tvTitleAmount.text = getString(R.string.title_amount_total, "Bs.")
+            }
         })
         viewModel.isPaid.observe(viewLifecycleOwner, {
             isPaid = it
@@ -88,14 +96,17 @@ class SecondAddSaleFragment : Fragment(){
         })
         viewModel.date.observe(viewLifecycleOwner, {
             date = it
+            binding.tvDate.text = DateFormat.getDateInstance().format(it)
         })
     }
 
     private fun showTotal() {
-        binding.tvQuantityPrice.text = getString(R.string.text_quantity_price,
-            price.toString(), quantity.toString())
         val total = quantity * price
-        binding.tvTotalMonto.text = getString(R.string.text_total_amount, total.toString())
+        binding.tvAmount.text = getString(R.string.text_total_amount, total.toString())
+        val iva = total * 0.16
+        binding.tvTotalIva.text = getString(R.string.text_total_amount, iva.toString())
+        val totalAmount = total + iva
+        binding.tvTotalMonto.text = getString(R.string.text_total_amount, totalAmount.toString())
     }
 
     override fun onDestroyView() {

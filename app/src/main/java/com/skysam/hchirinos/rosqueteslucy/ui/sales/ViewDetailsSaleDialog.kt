@@ -12,7 +12,7 @@ import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBindi
 /**
  * Created by Hector Chirinos (Home) on 15/8/2021.
  */
-class ViewDetailsSale(private val sale: Sale): DialogFragment() {
+class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
     private var _binding: FragmentSecondAddSaleBinding? = null
     private val binding get() = _binding!!
 
@@ -37,8 +37,6 @@ class ViewDetailsSale(private val sale: Sale): DialogFragment() {
         binding.tvNameCostumer.text = sale.nameCostumer
         binding.tvRif.text = sale.idCostumer
         binding.tvLocationCostumer.text = sale.location
-        binding.tvQuantityPrice.text = getString(R.string.text_quantity_price,
-            sale.price.toString(), sale.quantity.toString())
         val total = sale.quantity * sale.price
         binding.tvTotalMonto.text = getString(R.string.text_total_amount, total.toString())
     }

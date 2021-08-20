@@ -7,6 +7,7 @@ object Constants {
     const val COSTUMERS = "costumers"
     const val NAME = "name"
     const val COSTUMER_IDENTIFIER = "docId"
+    const val COSTUMER_ADDRESS = "address"
     const val COSTUMER_LOCATION = "location"
     const val LOCATIONS = "locations"
 
