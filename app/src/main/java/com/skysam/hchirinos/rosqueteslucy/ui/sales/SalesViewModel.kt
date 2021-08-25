@@ -10,6 +10,8 @@ class SalesViewModel : ViewModel() {
 
     val costumers: LiveData<MutableList<Costumer>> = CostumerRepository.getCostumers().asLiveData()
     val sales: LiveData<MutableList<Sale>> = SalesRepository.getSales().asLiveData()
+    private val _indexPage = MutableLiveData<Int>().apply { value = 0 }
+    val indexPage: LiveData<Int> get() = _indexPage
 
     private val _costumer = MutableLiveData<Costumer>()
     val costumer: LiveData<Costumer> get() = _costumer
@@ -35,6 +37,9 @@ class SalesViewModel : ViewModel() {
     private val _date = MutableLiveData<Long>()
     val date: LiveData<Long> get() = _date
 
+    private val _badge = MutableLiveData<Int>()
+    val badge: LiveData<Int> get() = _badge
+
     fun addCostumer(costumer: Costumer) {
         _costumer.value = costumer
     }
@@ -52,5 +57,15 @@ class SalesViewModel : ViewModel() {
 
     fun addSale(sale: Sale) {
         SalesRepository.addSale(sale)
+    }
+
+    fun changePage(index: Int) {
+        _indexPage.value = index
+        _indexPage.value = _indexPage.value
+    }
+
+    fun updateBadge(number: Int) {
+        _badge.value = number
+        _badge.value = _badge.value
     }
 }

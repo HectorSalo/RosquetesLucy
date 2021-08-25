@@ -18,7 +18,9 @@ import java.util.*
  */
 class SalesAdapter(private var sales: MutableList<Sale>, private val onClick: OnClick):
     RecyclerView.Adapter<SalesAdapter.ViewHolder>() {
+
     private lateinit var context: Context
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_sale_item, parent, false)
@@ -35,9 +37,14 @@ class SalesAdapter(private var sales: MutableList<Sale>, private val onClick: On
         holder.price.text = context.getString(R.string.text_price_item, symbol,
             String.format(Locale.GERMANY, "%,.2f", total))
         val daysBetween = getTimeDistance(Date(item.date), Date())
-        holder.date.text = context.getString(R.string.text_date_days_between,
+        holder.date.text = if (item.isPaid) {
             DateFormat.getDateInstance()
-            .format(item.date), daysBetween.toString())
+                .format(item.date)
+        } else {
+            context.getString(R.string.text_date_days_between,
+                DateFormat.getDateInstance()
+                    .format(item.date), daysBetween.toString())
+        }
         val image = if (item.isPaid) R.drawable.ic_cash_check_56dp else R.drawable.ic_cash_remove_56dp
         holder.ivPaid.setImageResource(image)
         holder.invoice.text = context.getString(R.string.text_invoice_item, item.invoice.toString())
@@ -61,7 +68,7 @@ class SalesAdapter(private var sales: MutableList<Sale>, private val onClick: On
         notifyDataSetChanged()
     }
 
-    private fun getTimeDistance(beginDate: Date, endDate: Date): Int {
+    fun getTimeDistance(beginDate: Date, endDate: Date): Int {
         val fromCalendar = Calendar.getInstance()
         fromCalendar.time = beginDate
         fromCalendar[Calendar.HOUR_OF_DAY] = fromCalendar.getMinimum(Calendar.HOUR_OF_DAY)
