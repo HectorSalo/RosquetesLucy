@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_sales"
-        android:name="com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesFragment"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.sales.ContainerPagesSalesFragment"
         android:label="@string/title_sales"
-        tools:layout="@layout/fragment_sales" />
+        tools:layout="@layout/fragment_container_pages_sales" />
 
     <fragment
         android:id="@+id/navigation_costumers"

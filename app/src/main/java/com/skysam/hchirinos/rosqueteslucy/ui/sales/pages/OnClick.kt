@@ -1,4 +1,4 @@
-package com.skysam.hchirinos.rosqueteslucy.ui.sales
+package com.skysam.hchirinos.rosqueteslucy.ui.sales.pages
 
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 

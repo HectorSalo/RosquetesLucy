@@ -62,6 +62,20 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_location_costumer" />
 
     <TextView
+        android:id="@+id/tv_invoice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        tools:text="@string/text_invoice_number"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_date" />
+
+    <TextView
         android:id="@+id/tv_subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -72,7 +86,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_date"
+        app:layout_constraintTop_toBottomOf="@+id/tv_invoice"
         android:text="@string/text_subtitle_details" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -109,16 +123,14 @@
 
     <TextView
         android:id="@+id/tv_quantity"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        tools:text="@string/text_quantity"
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/guide_line"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title_quantity" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_quantity"
+        tools:text="@string/text_quantity" />
 
     <TextView
         android:id="@+id/tv_title_price_unit"
@@ -141,12 +153,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:gravity="end"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@id/guide_line2"
-        app:layout_constraintStart_toStartOf="@+id/guide_line"
+        app:layout_constraintStart_toEndOf="@+id/tv_quantity"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_price_unit"
-        tools:text="@string/title_price_unit"
-        android:gravity="end"/>
+        tools:text="@string/title_price_unit" />
 
     <TextView
         android:id="@+id/tv_title_amount"
@@ -166,15 +178,14 @@
         android:id="@+id/tv_amount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:gravity="end"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guide_line2"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_amount"
-        tools:text="@string/title_amount_total"
-        android:gravity="end"/>
+        tools:text="@string/title_amount_total" />
 
     <TextView
         android:id="@+id/tv_text_iva"

@@ -1,6 +1,8 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.sales.addSale
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +20,7 @@ import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 import java.text.DateFormat
 import java.util.*
 
-class FirstAddSaleFragment : Fragment(), OnClickExit {
+class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
 
     private var _binding: FragmentFirstAddSaleBinding? = null
     private val binding get() = _binding!!
@@ -42,6 +44,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
+        binding.etPrice.addTextChangedListener(this)
         dateSelected = Date().time
         binding.etDate.setText(DateFormat.getDateInstance().format(Date()))
         binding.etDate.setOnClickListener { selecDate() }
@@ -79,12 +82,18 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
         binding.tfDate.error = null
         binding.tfInvoice.error = null
 
-        val price = binding.etPrice.text.toString()
+        var price = binding.etPrice.text.toString()
         if (price.isEmpty()) {
             binding.tfPrice.error = getString(R.string.error_field_empty)
             binding.etPrice.requestFocus()
             return
         }
+        if (price == "0,00") {
+            binding.tfPrice.error = getString(R.string.error_price_zero)
+            binding.etPrice.requestFocus()
+            return
+        }
+        price = price.replace(".", "").replace(",", ".")
         val quantity = binding.etQuantity.text.toString()
         if (quantity.isEmpty()) {
             binding.tfQuantity.error = getString(R.string.error_field_empty)
@@ -121,5 +130,25 @@ class FirstAddSaleFragment : Fragment(), OnClickExit {
             binding.etDate.setText(DateFormat.getDateInstance().format(dateSelected))
         }
         picker.show(requireActivity().supportFragmentManager, picker.toString())
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+        var cadena = s.toString()
+        cadena = cadena.replace(",", "").replace(".", "")
+        val cantidad: Double = cadena.toDouble() / 100
+        cadena = String.format(Locale.GERMANY, "%,.2f", cantidad)
+
+        binding.etPrice.removeTextChangedListener(this)
+        binding.etPrice.setText(cadena)
+        binding.etPrice.setSelection(cadena.length)
+        binding.etPrice.addTextChangedListener(this)
     }
 }

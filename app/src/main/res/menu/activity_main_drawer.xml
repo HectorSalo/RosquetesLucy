@@ -17,9 +17,8 @@
 
         <item
             android:id="@+id/navigation_purchase"
-            android:icon="@drawable/ic_graphs_24"
-            android:title="@string/title_purchase"
-            android:visible="false"/>
+            android:icon="@drawable/ic_shops_24"
+            android:title="@string/title_purchase"/>
 
         <item
             android:id="@+id/navigation_storage"
@@ -30,8 +29,7 @@
         <item
             android:id="@+id/navigation_graphs"
             android:icon="@drawable/ic_graphs_24"
-            android:title="@string/title_graphs"
-            android:visible="false"/>
+            android:title="@string/title_graphs"/>
 
     </group>
 

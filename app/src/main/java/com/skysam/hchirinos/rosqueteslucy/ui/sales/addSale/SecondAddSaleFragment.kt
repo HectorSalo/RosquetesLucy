@@ -14,6 +14,7 @@ import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 import java.text.DateFormat
+import java.util.*
 
 class SecondAddSaleFragment : Fragment(){
 
@@ -72,7 +73,7 @@ class SecondAddSaleFragment : Fragment(){
         })
         viewModel.price.observe(viewLifecycleOwner, {
             price = it
-            binding.tvPriceUnit.text = it.toString()
+            binding.tvPriceUnit.text = convertFormatNumber(it)
             showTotal()
         })
         viewModel.quantity.observe(viewLifecycleOwner, {
@@ -93,6 +94,7 @@ class SecondAddSaleFragment : Fragment(){
         })
         viewModel.invoice.observe(viewLifecycleOwner, {
             invoice = it
+            binding.tvInvoice.text = getString(R.string.text_invoice_item, it.toString())
         })
         viewModel.date.observe(viewLifecycleOwner, {
             date = it
@@ -102,11 +104,15 @@ class SecondAddSaleFragment : Fragment(){
 
     private fun showTotal() {
         val total = quantity * price
-        binding.tvAmount.text = getString(R.string.text_total_amount, total.toString())
+        binding.tvAmount.text = getString(R.string.text_total_amount, convertFormatNumber(total))
         val iva = total * 0.16
-        binding.tvTotalIva.text = getString(R.string.text_total_amount, iva.toString())
+        binding.tvTotalIva.text = getString(R.string.text_total_amount, convertFormatNumber(iva))
         val totalAmount = total + iva
-        binding.tvTotalMonto.text = getString(R.string.text_total_amount, totalAmount.toString())
+        binding.tvTotalMonto.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmount))
+    }
+
+    private fun convertFormatNumber(amount: Double): String {
+        return String.format(Locale.GERMANY, "%,.2f", amount)
     }
 
     override fun onDestroyView() {

@@ -52,6 +52,7 @@
     <!-- Sales-->
     <string name="text_quantity">Cantidad</string>
     <string name="text_price">Precio</string>
+    <string name="text_price_init">0,00</string>
     <string name="text_invoice_number">#Fact.</string>
     <string name="text_date">Fecha</string>
     <string name="text_rg_invoice_paid">¿Factura cobrada?</string>
@@ -63,6 +64,10 @@
     <string name="text_subtitle_details">Resumen de Venta</string>
     <string name="text_costumer_location">%1$s - %2$s</string>
     <string name="title_iva">IVA 16%</string>
+    <string name="error_price_zero">Precio debe ser mayor a cero</string>
+    <string name="text_date_days_between">%1$s (%2$s días vencidos)</string>
+    <string name="text_price_item">%1$s %2$s</string>
+    <string name="text_invoice_item">#Fact. asociada: %1$s</string>
 
     <!--Dialogs Common-->
     <string name="title_confirmation_dialog">Confirmar</string>

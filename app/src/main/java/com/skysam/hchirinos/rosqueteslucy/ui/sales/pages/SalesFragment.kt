@@ -1,4 +1,4 @@
-package com.skysam.hchirinos.rosqueteslucy.ui.sales
+package com.skysam.hchirinos.rosqueteslucy.ui.sales.pages
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSalesBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
+import com.skysam.hchirinos.rosqueteslucy.ui.sales.ViewDetailsSaleDialog
 
 class SalesFragment : Fragment(), OnClick {
 
@@ -18,6 +20,19 @@ class SalesFragment : Fragment(), OnClick {
     private lateinit var adapaterSales: SalesAdapter
     private val sales = mutableListOf<Sale>()
     private val costumers = mutableListOf<Costumer>()
+
+    companion object {
+        private const val ARG_SECTION_NUMBER = "section_number"
+
+        @JvmStatic
+        fun newInstance(sectionNumber: Int): SalesFragment {
+            return SalesFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_SECTION_NUMBER, sectionNumber)
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
