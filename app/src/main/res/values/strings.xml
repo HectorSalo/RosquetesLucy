@@ -1,30 +1,77 @@
 <resources>
     <string name="app_name">Rosquetes Lucy</string>
-    <string name="title_sales">Ventas</string>
+    <string name="title_sales">Facturas</string>
     <string name="title_costumers">Clientes</string>
-    <string name="title_graphs">Gráficas</string>
+    <string name="title_purchase">Compras</string>
+    <string name="title_storage">Inventario</string>
+    <string name="title_graphs">Estadísticas</string>
+    <string name="title_activity_add_sale">Generar Factura</string>
 
+    <!--Messages-->
     <string name="text_empty"> </string>
-    <string name="list_sales_empty">No ha realizado su primera Venta</string>
+    <string name="text_yes">Si</string>
+    <string name="text_no">No</string>
+    <string name="list_sales_empty">No ha realizado su primera Factura</string>
     <string name="list_costumer_empty">No ha creado su primer Cliente</string>
     <string name="list_graph_empty">Debe realizar su primera Venta para cargar las gráficas</string>
+    <string name="error_field_empty">Campo vacío</string>
+    <string name="text_saving">Guardando&#8230;</string>
+    <string name="text_editing">Actualizando&#8230;</string>
+    <string name="text_deleting">Eliminando&#8230;</string>
+    <string name="text_edit">Editar</string>
+    <string name="text_delete">Eliminar</string>
 
+    <!--Components-->
     <string name="btn_save">Guardar</string>
     <string name="btn_cancel">Cancelar</string>
+    <string name="btn_total">Totalizar</string>
+    <string name="btn_exit">Salir</string>
+    <string name="btn_close">Cerrar</string>
+    <string name="symbol_bolivar">Bs.</string>
+    <string name="symbol_dolar">$</string>
 
     <!--Costumers-->
     <string name="title_add_costumer">Agregar cliente</string>
-    <string name="text_name_costumer">Nombre de cliente</string>
+    <string name="title_edit_costumer">Editar cliente</string>
+    <string name="title_details_costumer">Detalles cliente</string>
+    <string name="text_name_costumer">Razón Social</string>
     <string name="text_id_costumer">RIF</string>
+    <string name="text_address_costumer">Dirección Fiscal</string>
     <string name="text_location_costumer">Sucursal</string>
-    <string name="title_activity_add_sale">Generar Venta</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="text_locations_costumer">Sucursales</string>
+    <string name="error_costumer.exists">Este cliente ya existe</string>
+    <string name="error_identifier_exists">Este RIF está almacenado con otro cliente</string>
+    <string name="error_location_exists">Sucursal ya existe para este cliente</string>
+    <string name="text_add_location">Agregar sucursal</string>
+    <string name="text_delete_location">Eliminar sucursal</string>
+    <string name="text_edit_costumer">Editar cliente</string>
+    <string name="text_delete_costumer">Eliminar cliente</string>
+    <string name="title_delete_locations">Seleccione las sucursales a eliminar</string>
+    <string name="error_delete_all_locations">No puede eliminar todas las sucursales</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- Sales-->
+    <string name="text_quantity">Cantidad</string>
+    <string name="text_price">Precio</string>
+    <string name="text_price_init">0,00</string>
+    <string name="text_invoice_number">#Fact.</string>
+    <string name="text_date">Fecha</string>
+    <string name="text_rg_invoice_paid">¿Factura cobrada?</string>
+    <string name="btn_sale">Generar Factura</string>
+    <string name="text_total">Total</string>
+    <string name="text_total_amount">%1$s</string>
+    <string name="title_price_unit">Precio unit.</string>
+    <string name="title_amount_total">Monto %1$s</string>
+    <string name="text_subtitle_details">Resumen de Venta</string>
+    <string name="text_costumer_location">%1$s - %2$s</string>
+    <string name="title_iva">IVA 16%</string>
+    <string name="error_price_zero">Precio debe ser mayor a cero</string>
+    <string name="text_date_days_between">%1$s (%2$s días vencidos)</string>
+    <string name="text_price_item">%1$s %2$s</string>
+    <string name="text_invoice_item">#Fact. asociada: %1$s</string>
+
+    <!--Dialogs Common-->
+    <string name="title_confirmation_dialog">Confirmar</string>
+    <string name="msg_exit_dialog">Se perderá toda la información.\n¿Desea salir?</string>
+    <string name="msg_delete_dialog">¿Desea eliminar esta información?</string>
 
 </resources>

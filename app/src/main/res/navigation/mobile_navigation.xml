@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_costumers">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesFragment"
+        android:id="@+id/navigation_sales"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.sales.ContainerPagesSalesFragment"
         android:label="@string/title_sales"
-        tools:layout="@layout/fragment_sales" />
+        tools:layout="@layout/fragment_container_pages_sales" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_costumers"
         android:name="com.skysam.hchirinos.rosqueteslucy.ui.costumers.CostumersFragment"
         android:label="@string/title_costumers"
         tools:layout="@layout/fragment_costumers" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_graphs"
         android:name="com.skysam.hchirinos.rosqueteslucy.ui.graphs.GraphsFragment"
         android:label="@string/title_graphs"
         tools:layout="@layout/fragment_graphs" />
