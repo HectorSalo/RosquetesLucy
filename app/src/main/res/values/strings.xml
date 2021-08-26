@@ -56,7 +56,9 @@
     <string name="text_invoice_number">#Fact.</string>
     <string name="text_date">Fecha</string>
     <string name="text_rg_invoice_paid">¿Factura cobrada?</string>
+    <string name="text_rate">Tasa de cambio (Bs. / $)</string>
     <string name="btn_sale">Generar Factura</string>
+    <string name="btn_paid">Pagar Factura</string>
     <string name="text_total">Total</string>
     <string name="text_total_amount">%1$s</string>
     <string name="title_price_unit">Precio unit.</string>
@@ -66,6 +68,7 @@
     <string name="title_iva">IVA 16%</string>
     <string name="error_price_zero">Precio debe ser mayor a cero</string>
     <string name="text_date_days_between">%1$s (%2$s días vencidos)</string>
+    <string name="text_date_paid">Factura pagada en %1$s</string>
     <string name="text_price_item">%1$s %2$s</string>
     <string name="text_invoice_item">#Fact. asociada: %1$s</string>
 

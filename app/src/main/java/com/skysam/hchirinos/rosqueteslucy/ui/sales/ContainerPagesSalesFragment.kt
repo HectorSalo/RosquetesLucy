@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentContainerPagesSalesBinding
@@ -15,14 +15,12 @@ class ContainerPagesSalesFragment : Fragment() {
 
     private var _binding: FragmentContainerPagesSalesBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: SalesViewModel
+    private val viewModel: SalesViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel =
-            ViewModelProvider(this).get(SalesViewModel::class.java)
         _binding = FragmentContainerPagesSalesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,12 +40,7 @@ class ContainerPagesSalesFragment : Fragment() {
         }.attach()
         val badge = binding.tabs.getTabAt(0)?.orCreateBadge
         viewModel.badge.observe(viewLifecycleOwner, {
-            if (it > 0) {
-                badge?.number = it
-            }
-        })
-        viewModel.indexPage.observe(viewLifecycleOwner, {
-            badge?.number = it
+           badge?.number = it
         })
         binding.viewPager.registerOnPageChangeCallback(callback)
 

@@ -51,6 +51,7 @@ class SecondAddSaleFragment : Fragment(){
                 isDolar,
                 invoice,
                 isPaid,
+                date,
                 date
             )
             viewModel.addSale(sale)

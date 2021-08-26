@@ -19,4 +19,5 @@ object Constants {
     const val NUMBER_INVOICE = "numberInvoice"
     const val IS_PAID = "isPaid"
     const val DATE_DELIVERY = "dateDelivery"
+    const val DATE_PAID = "datePaid"
 }

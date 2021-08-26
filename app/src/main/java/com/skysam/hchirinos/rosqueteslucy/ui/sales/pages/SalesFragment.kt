@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSalesBinding
@@ -15,7 +15,7 @@ import java.util.*
 
 class SalesFragment : Fragment(), OnClick {
 
-    private lateinit var viewModel: SalesViewModel
+    private val viewModel: SalesViewModel by activityViewModels()
     private var _binding: FragmentSalesBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapaterSales: SalesAdapter
@@ -37,14 +37,6 @@ class SalesFragment : Fragment(), OnClick {
                 }
             }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel =
-            ViewModelProvider(this).get(SalesViewModel::class.java).apply {
-                changePage(arguments?.getInt(ARG_SECTION_NUMBER) ?: 0)
-            }
     }
 
     override fun onCreateView(
@@ -86,7 +78,7 @@ class SalesFragment : Fragment(), OnClick {
                     sales.clear()
                     sales.addAll(it)
                     for (sale in sales) {
-                        val daysBetween = adapaterSales.getTimeDistance(Date(sale.date), Date())
+                        val daysBetween = adapaterSales.getTimeDistance(Date(sale.dateDelivery), Date())
                         if (sale.isPaid) salesPaid.add(sale) else salesNotPaid.add(sale)
                         if (!sale.isPaid && daysBetween >= 7) listExpiredSevenDays.add(sale)
                     }
