@@ -74,6 +74,9 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
             val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, it.locations)
             binding.spinner.adapter = adapterLocations
         })
+        viewModel.valueWeb.observe(viewLifecycleOwner, {
+            binding.etRate.setText(it)
+        })
     }
 
     private fun validateData() {

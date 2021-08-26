@@ -10,6 +10,7 @@ class SalesViewModel : ViewModel() {
 
     val costumers: LiveData<MutableList<Costumer>> = CostumerRepository.getCostumers().asLiveData()
     val sales: LiveData<MutableList<Sale>> = SalesRepository.getSales().asLiveData()
+    val valueWeb: LiveData<String> = SalesRepository.getValueWeb().asLiveData()
     private val _indexPage = MutableLiveData<Int>()
     val indexPage: LiveData<Int> get() = _indexPage
 

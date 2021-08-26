@@ -8,9 +8,11 @@ import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.Query
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import java.util.*
 
@@ -27,9 +29,15 @@ object SalesRepository {
             var valor: String? = null
             val url = "https://monitordolarvenezuela.com/"
 
-            val doc = Jsoup.connect(url).get()
-            val data = doc.select("div.back-white-tabla")
-            valor = data.select("h6.text-center").text()
+            withContext(Dispatchers.IO) {
+               try {
+                    val doc = Jsoup.connect(url).get()
+                    val data = doc.select("div.back-white-tabla")
+                    valor = data.select("h6.text-center").text()
+                } catch (e: Exception) {
+                    Log.e("Error", e.toString())
+                }
+            }
 
             if (valor != null) {
                 val valor1: String = valor!!.replace("Bs.S ", "")
@@ -37,10 +45,12 @@ object SalesRepository {
                 val values: List<String> = valor2.split(" ")
                 val valor3 = values[0]
                 val valorNeto = valor3.replace(",", ".")
-
-                val values2: List<String> = valor1.split(" ")
-                valor = values2[0]
+                offer(valorNeto)
+            } else {
+                offer("0,00")
             }
+
+            awaitClose { }
         }
     }
 
