@@ -14,6 +14,7 @@ object Constants {
     const val SALES = "sales"
     const val ID_COSTUMER = "idCostumer"
     const val PRICE = "price"
+    const val RATE = "rate"
     const val IS_DOLAR = "isDolar"
     const val QUANTITY = "quantity"
     const val NUMBER_INVOICE = "numberInvoice"

@@ -38,9 +38,14 @@ class ContainerPagesSalesFragment : Fragment() {
                 else -> "Facturas"
             }
         }.attach()
-        val badge = binding.tabs.getTabAt(0)?.orCreateBadge
+
         viewModel.badge.observe(viewLifecycleOwner, {
-           badge?.number = it
+            if (it > 0) {
+                val badge = binding.tabs.getTabAt(0)?.orCreateBadge
+                badge?.number = it
+            } else {
+                binding.tabs.getTabAt(0)?.removeBadge()
+            }
         })
         binding.viewPager.registerOnPageChangeCallback(callback)
 

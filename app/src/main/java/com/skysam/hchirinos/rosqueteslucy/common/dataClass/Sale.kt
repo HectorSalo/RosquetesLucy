@@ -9,6 +9,7 @@ data class Sale(
     var nameCostumer: String,
     var location: String,
     var price: Double,
+    var rate: Double,
     var quantity: Int,
     var isDolar: Boolean,
     var invoice: Int,

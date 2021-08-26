@@ -76,18 +76,32 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_date" />
 
     <TextView
+        android:id="@+id/tv_rate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        tools:text="@string/text_rate_view"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_invoice" />
+
+    <TextView
         android:id="@+id/tv_subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
+        android:text="@string/text_subtitle_details"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_invoice"
-        android:text="@string/text_subtitle_details" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_rate" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide_line"
@@ -188,31 +202,80 @@
         tools:text="@string/title_amount_total" />
 
     <TextView
-        android:id="@+id/tv_text_iva"
+        android:id="@+id/tv_text_iva_bs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/title_iva"
+        android:text="@string/title_iva_bs"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_text_total"
+        app:layout_constraintBottom_toTopOf="@+id/tv_text_total_bs"
         app:layout_constraintEnd_toStartOf="@+id/guide_line2" />
 
     <TextView
-        android:id="@+id/tv_total_iva"
+        android:id="@+id/tv_total_iva_bs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tv_text_total"
+        app:layout_constraintBottom_toTopOf="@+id/tv_text_total_bs"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="@string/text_total_amount" />
 
     <TextView
-        android:id="@+id/tv_text_total"
+        android:id="@+id/tv_text_total_bs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_text_iva_dolar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/text_total_bs" />
+
+    <TextView
+        android:id="@+id/tv_total_monto_bs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_text_iva_dolar"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/text_total_amount" />
+
+
+    <TextView
+        android:id="@+id/tv_text_iva_dolar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/title_iva_dolar"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_text_total_dolar"
+        app:layout_constraintEnd_toStartOf="@+id/guide_line2" />
+
+    <TextView
+        android:id="@+id/tv_total_iva_dolar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_text_total_dolar"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/text_total_amount" />
+
+    <TextView
+        android:id="@+id/tv_text_total_dolar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -221,10 +284,10 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_sale"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/text_total" />
+        android:text="@string/text_total_dolar" />
 
     <TextView
-        android:id="@+id/tv_total_monto"
+        android:id="@+id/tv_total_monto_dolar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

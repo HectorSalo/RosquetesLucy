@@ -23,6 +23,9 @@ class SalesViewModel : ViewModel() {
     private val _price = MutableLiveData<Double>()
     val price: LiveData<Double> get() = _price
 
+    private val _rate = MutableLiveData<Double>()
+    val rate: LiveData<Double> get() = _rate
+
     private val _quantity = MutableLiveData<Int>()
     val quantity: LiveData<Int> get() = _quantity
 
@@ -45,10 +48,11 @@ class SalesViewModel : ViewModel() {
         _costumer.value = costumer
     }
 
-    fun reviewInvoice(location: String, price: Double, quantity: Int,
+    fun reviewInvoice(location: String, price: Double, rate: Double, quantity: Int,
                       isDolar: Boolean, invoice: Int, isPaid: Boolean, date: Long) {
         _location.value = location
         _price.value = price
+        _rate.value = rate
         _quantity.value = quantity
         _isDolar.value = isDolar
         _invoice.value = invoice

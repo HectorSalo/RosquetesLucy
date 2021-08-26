@@ -45,6 +45,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding.etPrice.addTextChangedListener(this)
+        binding.etRate.addTextChangedListener(this)
         dateSelected = Date().time
         binding.etDate.setText(DateFormat.getDateInstance().format(Date()))
         binding.etDate.setOnClickListener { selecDate() }
@@ -75,6 +76,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
             binding.spinner.adapter = adapterLocations
         })
         viewModel.valueWeb.observe(viewLifecycleOwner, {
+            binding.tfRate.hint = getString(R.string.text_rate)
             binding.etRate.setText(it)
         })
     }
@@ -84,6 +86,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         binding.tfQuantity.error = null
         binding.tfDate.error = null
         binding.tfInvoice.error = null
+        binding.tfRate.error = null
 
         var price = binding.etPrice.text.toString()
         if (price.isEmpty()) {
@@ -115,9 +118,16 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
             binding.etInvoice.requestFocus()
             return
         }
+        var rate = binding.etRate.text.toString()
+        if (rate.isEmpty()) {
+            binding.tfRate.error = getString(R.string.error_field_empty)
+            binding.etRate.requestFocus()
+            return
+        }
+        rate = rate.replace(".", "").replace(",", ".")
 
         viewModel.reviewInvoice(binding.spinner.selectedItem.toString(),
-            price.toDouble(), quantity.toInt(),
+            price.toDouble(), rate.toDouble(), quantity.toInt(),
             binding.rbDolar.isChecked, invoice.toInt(), binding.rbPaidYes.isChecked, dateSelected)
         findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
     }
@@ -149,9 +159,17 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         val cantidad: Double = cadena.toDouble() / 100
         cadena = String.format(Locale.GERMANY, "%,.2f", cantidad)
 
-        binding.etPrice.removeTextChangedListener(this)
-        binding.etPrice.setText(cadena)
-        binding.etPrice.setSelection(cadena.length)
-        binding.etPrice.addTextChangedListener(this)
+        if (s.toString() == binding.etPrice.text.toString()) {
+            binding.etPrice.removeTextChangedListener(this)
+            binding.etPrice.setText(cadena)
+            binding.etPrice.setSelection(cadena.length)
+            binding.etPrice.addTextChangedListener(this)
+        }
+        if (s.toString() == binding.etRate.text.toString()) {
+            binding.etRate.removeTextChangedListener(this)
+            binding.etRate.setText(cadena)
+            binding.etRate.setSelection(cadena.length)
+            binding.etRate.addTextChangedListener(this)
+        }
     }
 }

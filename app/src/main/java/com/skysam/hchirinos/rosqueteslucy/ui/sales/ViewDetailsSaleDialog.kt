@@ -20,6 +20,7 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
     private var _binding: FragmentSecondAddSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
+    private var rateFinal = 1.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +39,18 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.valueWeb.observe(viewLifecycleOwner, {
+            val price = it.replace(",", ".")
+            if (price.toDouble() >= sale.rate) {
+                binding.tvRate.text = getString(R.string.text_rate_view, convertFormatNumber(price.toDouble()))
+                rateFinal = it.toDouble()
+            } else {
+                binding.tvRate.text = getString(R.string.text_rate_view, convertFormatNumber(sale.rate))
+                rateFinal = sale.rate
+            }
+            showTotal()
+        })
+
         if (sale.isPaid) {
             binding.btnSale.visibility = View.GONE
         }
@@ -51,16 +64,17 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
         binding.tvPriceUnit.text = convertFormatNumber(sale.price)
         if (sale.isDolar) {
             binding.tvTitleAmount.text = getString(R.string.title_amount_total, "$")
+            binding.tvTotalMontoBs.visibility = View.GONE
+            binding.tvTotalIvaBs.visibility = View.GONE
+            binding.tvTextIvaBs.visibility = View.GONE
+            binding.tvTextTotalBs.visibility = View.GONE
+            binding.tvRate.visibility = View.GONE
         } else {
             binding.tvTitleAmount.text = getString(R.string.title_amount_total, "Bs.")
+            binding.tvTextIvaDolar.visibility = View.GONE
+            binding.tvTotalIvaDolar.visibility = View.GONE
         }
-        val total = sale.quantity * sale.price
-        binding.tvAmount.text = getString(R.string.text_total_amount, convertFormatNumber(total))
-        val iva = total * 0.16
-        binding.tvTotalIva.text = getString(R.string.text_total_amount, convertFormatNumber(iva))
-        val totalAmount = total + iva
-        binding.tvTotalMonto.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmount))
-
+        showTotal()
         binding.btnSale.setOnClickListener { paidSale() }
     }
 
@@ -69,9 +83,28 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
         _binding = null
     }
 
+    private fun showTotal() {
+        val total = sale.quantity * sale.price
+        binding.tvAmount.text = getString(R.string.text_total_amount, convertFormatNumber(total))
+        if (!sale.isDolar) {
+            val ivaBs = total * 0.16
+            binding.tvTotalIvaBs.text = getString(R.string.text_total_amount, convertFormatNumber(ivaBs))
+            val totalAmountBs = total + ivaBs
+            binding.tvTotalMontoBs.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountBs))
+            val totalAmountDolar = total / rateFinal
+            binding.tvTotalMontoDolar.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountDolar))
+        } else {
+            val ivaDolar = total * 0.16
+            binding.tvTotalIvaDolar.text = getString(R.string.text_total_amount, convertFormatNumber(ivaDolar))
+            val totalAmountDolar = total + ivaDolar
+            binding.tvTotalMontoDolar.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountDolar))
+        }
+    }
+
     private fun paidSale() {
         sale.datePaid = Date().time
         sale.isPaid = true
+        sale.rate = rateFinal
 
         viewModel.paidSale(sale)
         Toast.makeText(requireContext(), getString(R.string.text_editing), Toast.LENGTH_SHORT).show()

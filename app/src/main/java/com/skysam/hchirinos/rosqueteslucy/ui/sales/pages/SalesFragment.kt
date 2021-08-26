@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSalesBinding
@@ -71,11 +72,11 @@ class SalesFragment : Fragment(), OnClick {
         })
         viewModel.sales.observe(viewLifecycleOwner, {
             if (_binding != null) {
+                listExpiredSevenDays.clear()
+                salesNotPaid.clear()
+                salesPaid.clear()
+                sales.clear()
                 if (it.isNotEmpty()) {
-                    listExpiredSevenDays.clear()
-                    salesNotPaid.clear()
-                    salesPaid.clear()
-                    sales.clear()
                     sales.addAll(it)
                     for (sale in sales) {
                         val daysBetween = adapaterSales.getTimeDistance(Date(sale.dateDelivery), Date())
@@ -83,7 +84,6 @@ class SalesFragment : Fragment(), OnClick {
                         if (!sale.isPaid && daysBetween >= 7) listExpiredSevenDays.add(sale)
                     }
                     loadList(index)
-                    updateBadge(listExpiredSevenDays.size)
                 } else {
                     binding.rvSales.visibility = View.GONE
                     binding.textListEmpty.visibility = View.VISIBLE
@@ -98,13 +98,42 @@ class SalesFragment : Fragment(), OnClick {
     }
 
     private fun loadList(index: Int) {
+        viewModel.updateBadge(listExpiredSevenDays.size)
         when(index) {
-            0 -> adapaterSales.updateList(salesNotPaid)
-            1 -> adapaterSales.updateList(salesPaid)
-            2 -> adapaterSales.updateList(sales)
+            0 -> {
+                if (salesNotPaid.isNotEmpty()) {
+                    adapaterSales.updateList(salesNotPaid)
+                    binding.rvSales.visibility = View.VISIBLE
+                    binding.textListEmpty.visibility = View.GONE
+                } else {
+                    binding.rvSales.visibility = View.GONE
+                    binding.textListEmpty.visibility = View.VISIBLE
+                    binding.textListEmpty.text = getString(R.string.list_sales_not_paid_empty)
+                }
+            }
+            1 -> {
+                if (salesPaid.isNotEmpty()) {
+                    adapaterSales.updateList(salesPaid)
+                    binding.rvSales.visibility = View.VISIBLE
+                    binding.textListEmpty.visibility = View.GONE
+                } else {
+                    binding.rvSales.visibility = View.GONE
+                    binding.textListEmpty.visibility = View.VISIBLE
+                    binding.textListEmpty.text = getString(R.string.list_sales_paid_empty)
+                }
+            }
+            2 -> {
+                if (sales.isNotEmpty()) {
+                    adapaterSales.updateList(sales)
+                    binding.rvSales.visibility = View.VISIBLE
+                    binding.textListEmpty.visibility = View.GONE
+                } else {
+                    binding.rvSales.visibility = View.GONE
+                    binding.textListEmpty.visibility = View.VISIBLE
+                    binding.textListEmpty.text = getString(R.string.list_sales_empty)
+                }
+            }
         }
-        binding.rvSales.visibility = View.VISIBLE
-        binding.textListEmpty.visibility = View.GONE
     }
 
     override fun viewSale(sale: Sale) {
@@ -115,9 +144,5 @@ class SalesFragment : Fragment(), OnClick {
         }
         val viewDetailsSale = ViewDetailsSaleDialog(sale)
         viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
-    }
-
-    private fun updateBadge(number: Int) {
-        if (number > 0) viewModel.updateBadge(number)
     }
 }

@@ -47,7 +47,7 @@ object SalesRepository {
                 val valorNeto = valor3.replace(",", ".")
                 offer(valorNeto)
             } else {
-                offer("0,00")
+                offer("1,00")
             }
 
             awaitClose { }
@@ -60,6 +60,7 @@ object SalesRepository {
             Constants.NAME to sale.nameCostumer,
             Constants.COSTUMER_LOCATION to sale.location,
             Constants.PRICE to sale.price,
+            Constants.RATE to sale.rate,
             Constants.QUANTITY to sale.quantity,
             Constants.IS_DOLAR to sale.isDolar,
             Constants.NUMBER_INVOICE to sale.invoice,
@@ -88,6 +89,7 @@ object SalesRepository {
                             sale.getString(Constants.NAME)!!,
                             sale.getString(Constants.COSTUMER_LOCATION)!!,
                             sale.getDouble(Constants.PRICE)!!,
+                            sale.getDouble(Constants.RATE)!!,
                             sale.getDouble(Constants.QUANTITY)!!.toInt(),
                             sale.getBoolean(Constants.IS_DOLAR)!!,
                             sale.getDouble(Constants.NUMBER_INVOICE)!!.toInt(),

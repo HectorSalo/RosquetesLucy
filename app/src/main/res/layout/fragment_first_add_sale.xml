@@ -226,7 +226,7 @@
             android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:hint="@string/text_rate"
+            android:hint="@string/text_loading_rate"
             android:inputType="number"
             tools:text="@string/text_price_init" />
     </com.google.android.material.textfield.TextInputLayout>

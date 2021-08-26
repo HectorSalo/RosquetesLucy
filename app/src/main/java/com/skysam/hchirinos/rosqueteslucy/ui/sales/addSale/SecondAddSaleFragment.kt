@@ -22,6 +22,7 @@ class SecondAddSaleFragment : Fragment(){
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
     private var price = 0.0
+    private var rate = 0.0
     private var quantity = 0
     private var isDolar = false
     private var isPaid = false
@@ -47,6 +48,7 @@ class SecondAddSaleFragment : Fragment(){
                 costumer.name,
                 location,
                 price,
+                rate,
                 quantity,
                 isDolar,
                 invoice,
@@ -77,6 +79,11 @@ class SecondAddSaleFragment : Fragment(){
             binding.tvPriceUnit.text = convertFormatNumber(it)
             showTotal()
         })
+        viewModel.rate.observe(viewLifecycleOwner, {
+            rate = it
+            binding.tvRate.text = getString(R.string.text_rate_view, convertFormatNumber(it))
+            showTotal()
+        })
         viewModel.quantity.observe(viewLifecycleOwner, {
             quantity = it
             binding.tvQuantity.text = it.toString()
@@ -86,9 +93,17 @@ class SecondAddSaleFragment : Fragment(){
             isDolar = it
             if (it) {
                 binding.tvTitleAmount.text = getString(R.string.title_amount_total, "$")
+                binding.tvTotalMontoBs.visibility = View.GONE
+                binding.tvTotalIvaBs.visibility = View.GONE
+                binding.tvTextIvaBs.visibility = View.GONE
+                binding.tvTextTotalBs.visibility = View.GONE
+                binding.tvRate.visibility = View.GONE
             } else {
                 binding.tvTitleAmount.text = getString(R.string.title_amount_total, "Bs.")
+                binding.tvTextIvaDolar.visibility = View.GONE
+                binding.tvTotalIvaDolar.visibility = View.GONE
             }
+            showTotal()
         })
         viewModel.isPaid.observe(viewLifecycleOwner, {
             isPaid = it
@@ -106,10 +121,19 @@ class SecondAddSaleFragment : Fragment(){
     private fun showTotal() {
         val total = quantity * price
         binding.tvAmount.text = getString(R.string.text_total_amount, convertFormatNumber(total))
-        val iva = total * 0.16
-        binding.tvTotalIva.text = getString(R.string.text_total_amount, convertFormatNumber(iva))
-        val totalAmount = total + iva
-        binding.tvTotalMonto.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmount))
+        if (!isDolar) {
+            val ivaBs = total * 0.16
+            binding.tvTotalIvaBs.text = getString(R.string.text_total_amount, convertFormatNumber(ivaBs))
+            val totalAmountBs = total + ivaBs
+            binding.tvTotalMontoBs.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountBs))
+            val totalAmountDolar = total / rate
+            binding.tvTotalMontoDolar.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountDolar))
+        } else {
+            val ivaDolar = total * 0.16
+            binding.tvTotalIvaDolar.text = getString(R.string.text_total_amount, convertFormatNumber(ivaDolar))
+            val totalAmountDolar = total + ivaDolar
+            binding.tvTotalMontoDolar.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountDolar))
+        }
     }
 
     private fun convertFormatNumber(amount: Double): String {
