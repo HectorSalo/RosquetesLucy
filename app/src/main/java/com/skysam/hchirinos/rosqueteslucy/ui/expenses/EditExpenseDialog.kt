@@ -1,4 +1,4 @@
-package com.skysam.hchirinos.rosqueteslucy.ui.sales.addSale
+package com.skysam.hchirinos.rosqueteslucy.ui.expenses
 
 import android.os.Bundle
 import android.text.Editable
@@ -6,52 +6,60 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
+import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.classView.ExitDialog
-import com.skysam.hchirinos.rosqueteslucy.common.classView.OnClickExit
-import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentFirstAddSaleBinding
-import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
+import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddExpenseBinding
 import java.text.DateFormat
 import java.util.*
 
-class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
-
-    private var _binding: FragmentFirstAddSaleBinding? = null
+/**
+ * Created by Hector Chirinos on 27/08/2021.
+ */
+class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWatcher {
+    private var _binding: DialogAddExpenseBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SalesViewModel by activityViewModels()
+    private val viewModel: ExpensesViewModel by activityViewModels()
     private var dateSelected: Long = 0
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Window_Fullscreen)
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFirstAddSaleBinding.inflate(inflater, container, false)
+        _binding = DialogAddExpenseBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                getOut()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-
         binding.etPrice.addTextChangedListener(this)
         binding.etRate.addTextChangedListener(this)
-        dateSelected = Date().time
-        binding.etDate.setText(DateFormat.getDateInstance().format(Date()))
-        binding.etDate.setOnClickListener { selecDate() }
-        binding.btnExit.setOnClickListener { getOut() }
-        binding.btnTotal.setOnClickListener { validateData() }
+        binding.etName.setText(expense.name)
+        binding.etPrice.setText(expense.price.toString())
+        if (expense.isDolar) {
+            binding.rbDolar.isChecked = true
+            binding.tfRate.visibility = View.GONE
+        } else {
+            binding.rbBolivar.isChecked = true
+        }
+        val quantity = expense.quantity.toString().replace(".", ",")
+        binding.etQuantity.setText(quantity)
+        dateSelected = expense.date
+        binding.etDate.setText(DateFormat.getDateInstance().format(expense.date))
 
+        binding.etDate.setOnClickListener { selecDate() }
+        binding.btnExpense.text = getString(R.string.text_edit)
+        binding.btnExpense.setOnClickListener { validateData() }
+        binding.btnExit.setOnClickListener { dialog?.dismiss() }
         binding.rgMoneda.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId == R.id.rb_dolar) {
                 binding.tfRate.visibility = View.GONE
@@ -59,8 +67,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
                 binding.tfRate.visibility = View.VISIBLE
             }
         }
-
-        loadViewModel()
+        binding.etRate.setText(expense.rate.toString())
     }
 
     override fun onDestroyView() {
@@ -68,34 +75,19 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         _binding = null
     }
 
-    private fun getOut() {
-        val exitDialog = ExitDialog(this)
-        exitDialog.show(requireActivity().supportFragmentManager, tag)
-    }
-
-    override fun onClickExit() {
-        requireActivity().finish()
-    }
-
-    private fun loadViewModel() {
-        viewModel.costumer.observe(viewLifecycleOwner, {
-            binding.tvNameCostumer.text = it.name
-            val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, it.locations)
-            binding.spinner.adapter = adapterLocations
-        })
-        viewModel.valueWeb.observe(viewLifecycleOwner, {
-            binding.tfRate.hint = getString(R.string.text_rate)
-            binding.etRate.setText(it)
-        })
-    }
-
     private fun validateData() {
+        binding.tfName.error = null
         binding.tfPrice.error = null
         binding.tfQuantity.error = null
         binding.tfDate.error = null
-        binding.tfInvoice.error = null
         binding.tfRate.error = null
 
+        val name = binding.etName.text.toString()
+        if (name.isEmpty()) {
+            binding.tfName.error = getString(R.string.error_field_empty)
+            binding.etName.requestFocus()
+            return
+        }
         var price = binding.etPrice.text.toString()
         if (price.isEmpty()) {
             binding.tfPrice.error = getString(R.string.error_field_empty)
@@ -108,22 +100,17 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
             return
         }
         price = price.replace(".", "").replace(",", ".")
-        val quantity = binding.etQuantity.text.toString()
+        var quantity = binding.etQuantity.text.toString()
         if (quantity.isEmpty()) {
             binding.tfQuantity.error = getString(R.string.error_field_empty)
             binding.etQuantity.requestFocus()
             return
         }
+        quantity = quantity.replace(",", ".")
         val dateSelectedS = binding.etDate.text.toString()
         if (dateSelectedS.isEmpty()) {
             binding.tfDate.error = getString(R.string.error_field_empty)
             binding.etDate.requestFocus()
-            return
-        }
-        val invoice = binding.etInvoice.text.toString()
-        if (invoice.isEmpty()) {
-            binding.tfInvoice.error = getString(R.string.error_field_empty)
-            binding.etInvoice.requestFocus()
             return
         }
         var rate: String
@@ -144,10 +131,18 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         }
         rate = rate.replace(".", "").replace(",", ".")
 
-        viewModel.reviewInvoice(binding.spinner.selectedItem.toString(),
-            price.toDouble(), rate.toDouble(), quantity.toInt(),
-            binding.rbDolar.isChecked, invoice.toInt(), binding.rbPaidYes.isChecked, dateSelected)
-        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        val expenseUpdate = Expense(
+            expense.id,
+            name,
+            price.toDouble(),
+            rate.toDouble(),
+            quantity.toDouble(),
+            binding.rbDolar.isChecked,
+            dateSelected
+        )
+        viewModel.editExpense(expenseUpdate)
+        Toast.makeText(requireContext(), getString(R.string.text_editing), Toast.LENGTH_SHORT).show()
+        dialog?.dismiss()
     }
 
     private fun selecDate() {

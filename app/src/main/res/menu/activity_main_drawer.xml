@@ -16,9 +16,9 @@
             android:title="@string/title_sales" />
 
         <item
-            android:id="@+id/navigation_purchase"
+            android:id="@+id/navigation_expenses"
             android:icon="@drawable/ic_shops_24"
-            android:title="@string/title_purchase"/>
+            android:title="@string/title_expenses"/>
 
         <item
             android:id="@+id/navigation_storage"

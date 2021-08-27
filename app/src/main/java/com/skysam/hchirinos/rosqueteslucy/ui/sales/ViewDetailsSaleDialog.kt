@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.CloseDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.PaidDialog
 import java.text.DateFormat
 import java.util.*
@@ -17,10 +16,9 @@ import java.util.*
 /**
  * Created by Hector Chirinos (Home) on 15/8/2021.
  */
-class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
+class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment(), CloseDialog {
     private var _binding: FragmentSecondAddSaleBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SalesViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,8 +78,16 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
             binding.tvTotalIvaBs.text = getString(R.string.text_total_amount, convertFormatNumber(ivaBs))
             val totalAmountBs = total + ivaBs
             binding.tvTotalMontoBs.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountBs))
-            val totalAmountDolar = total / sale.ratePaid
+            val totalAmountDolar = total / sale.rateDelivery
             binding.tvTotalMontoDolar.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountDolar))
+            if (sale.isPaid) {
+                binding.tvTextIvaDolar.visibility = View.VISIBLE
+                binding.tvTotalIvaDolar.visibility = View.VISIBLE
+                binding.tvTextIvaDolar.text = getString(R.string.title_waste)
+                val totalWaste = total / sale.ratePaid
+                binding.tvTotalIvaDolar.text = getString(R.string.text_total_amount,
+                    convertFormatNumber(totalAmountDolar - totalWaste))
+            }
         } else {
             val ivaDolar = total * 0.16
             binding.tvTotalIvaDolar.text = getString(R.string.text_total_amount, convertFormatNumber(ivaDolar))
@@ -91,19 +97,15 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
     }
 
     private fun paidSale() {
-        if (sale.isDolar) {
-            sale.datePaid = Date().time
-            sale.isPaid = true
-            viewModel.paidSale(sale)
-            Toast.makeText(requireContext(), getString(R.string.text_editing), Toast.LENGTH_SHORT).show()
-            dialog?.dismiss()
-        } else {
-            val paidDialog = PaidDialog(sale)
-            paidDialog.show(requireActivity().supportFragmentManager, tag)
-        }
+        val paidDialog = PaidDialog(sale, this)
+        paidDialog.show(requireActivity().supportFragmentManager, tag)
     }
 
     private fun convertFormatNumber(amount: Double): String {
         return String.format(Locale.GERMANY, "%,.2f", amount)
+    }
+
+    override fun close() {
+        dialog?.dismiss()
     }
 }

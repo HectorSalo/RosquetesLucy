@@ -2,7 +2,7 @@
     <string name="app_name">Rosquetes Lucy</string>
     <string name="title_sales">Facturas</string>
     <string name="title_costumers">Clientes</string>
-    <string name="title_purchase">Compras</string>
+    <string name="title_expenses">Compras</string>
     <string name="title_storage">Inventario</string>
     <string name="title_graphs">Estadísticas</string>
     <string name="title_activity_add_sale">Generar Factura</string>
@@ -15,6 +15,7 @@
     <string name="list_sales_not_paid_empty">No tiene Facturas por cobrar</string>
     <string name="list_sales_paid_empty">No tiene Facturas pagadas</string>
     <string name="list_costumer_empty">No ha creado su primer Cliente</string>
+    <string name="list_expenses_empty">No ha realizado su primera Compra</string>
     <string name="list_graph_empty">Debe realizar su primera Venta para cargar las gráficas</string>
     <string name="error_field_empty">Campo vacío</string>
     <string name="text_saving">Guardando&#8230;</string>
@@ -72,12 +73,17 @@
     <string name="text_costumer_location">%1$s - %2$s</string>
     <string name="title_iva_bs">IVA 16% (Bs.)</string>
     <string name="title_iva_dolar">IVA 16% ($)</string>
+    <string name="title_waste">Pérdida ($)</string>
     <string name="error_price_zero">Precio debe ser mayor a cero</string>
     <string name="text_date_days_between">%1$s (%2$s días vencidos)</string>
     <string name="text_date_paid">Factura pagada en %1$s</string>
     <string name="text_price_item">%1$s %2$s</string>
     <string name="text_invoice_item">#Fact. asociada: %1$s</string>
     <string name="title_dialog_paid">Datos de pago</string>
+
+    <!-- Expenses-->
+    <string name="btn_expense">Comprar</string>
+    <string name="text_name_expense">Producto</string>
 
     <!--Dialogs Common-->
     <string name="title_confirmation_dialog">Confirmar</string>

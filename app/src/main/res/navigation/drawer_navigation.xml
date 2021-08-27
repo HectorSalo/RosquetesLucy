@@ -22,4 +22,9 @@
         android:name="com.skysam.hchirinos.rosqueteslucy.ui.graphs.GraphsFragment"
         android:label="@string/title_graphs"
         tools:layout="@layout/fragment_graphs" />
+    <fragment
+        android:id="@+id/navigation_expenses"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.expenses.ExpensesFragment"
+        android:label="@string/title_expenses"
+        tools:layout="@layout/fragment_expenses"/>
 </navigation>
