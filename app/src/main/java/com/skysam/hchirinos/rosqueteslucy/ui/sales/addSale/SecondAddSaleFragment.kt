@@ -49,6 +49,7 @@ class SecondAddSaleFragment : Fragment(){
                 location,
                 price,
                 rate,
+                rate,
                 quantity,
                 isDolar,
                 invoice,

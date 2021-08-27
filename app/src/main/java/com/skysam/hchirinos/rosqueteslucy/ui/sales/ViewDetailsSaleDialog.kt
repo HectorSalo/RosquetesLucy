@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.PaidDialog
 import java.text.DateFormat
 import java.util.*
 
@@ -20,7 +21,6 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
     private var _binding: FragmentSecondAddSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
-    private var rateFinal = 1.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,18 +39,6 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.valueWeb.observe(viewLifecycleOwner, {
-            val price = it.replace(",", ".")
-            if (price.toDouble() >= sale.rate) {
-                binding.tvRate.text = getString(R.string.text_rate_view, convertFormatNumber(price.toDouble()))
-                rateFinal = it.toDouble()
-            } else {
-                binding.tvRate.text = getString(R.string.text_rate_view, convertFormatNumber(sale.rate))
-                rateFinal = sale.rate
-            }
-            showTotal()
-        })
-
         if (sale.isPaid) {
             binding.btnSale.visibility = View.GONE
         }
@@ -60,6 +48,7 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
         binding.tvLocationCostumer.text = sale.location
         binding.tvDate.text = DateFormat.getDateInstance().format(sale.dateDelivery)
         binding.tvInvoice.text = getString(R.string.text_invoice_item, sale.invoice.toString())
+        binding.tvRate.text = getString(R.string.text_rate_view, convertFormatNumber(sale.ratePaid))
         binding.tvQuantity.text = sale.quantity.toString()
         binding.tvPriceUnit.text = convertFormatNumber(sale.price)
         if (sale.isDolar) {
@@ -91,7 +80,7 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
             binding.tvTotalIvaBs.text = getString(R.string.text_total_amount, convertFormatNumber(ivaBs))
             val totalAmountBs = total + ivaBs
             binding.tvTotalMontoBs.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountBs))
-            val totalAmountDolar = total / rateFinal
+            val totalAmountDolar = total / sale.ratePaid
             binding.tvTotalMontoDolar.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountDolar))
         } else {
             val ivaDolar = total * 0.16
@@ -102,13 +91,16 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment() {
     }
 
     private fun paidSale() {
-        sale.datePaid = Date().time
-        sale.isPaid = true
-        sale.rate = rateFinal
-
-        viewModel.paidSale(sale)
-        Toast.makeText(requireContext(), getString(R.string.text_editing), Toast.LENGTH_SHORT).show()
-        dialog?.dismiss()
+        if (sale.isDolar) {
+            sale.datePaid = Date().time
+            sale.isPaid = true
+            viewModel.paidSale(sale)
+            Toast.makeText(requireContext(), getString(R.string.text_editing), Toast.LENGTH_SHORT).show()
+            dialog?.dismiss()
+        } else {
+            val paidDialog = PaidDialog(sale)
+            paidDialog.show(requireActivity().supportFragmentManager, tag)
+        }
     }
 
     private fun convertFormatNumber(amount: Double): String {

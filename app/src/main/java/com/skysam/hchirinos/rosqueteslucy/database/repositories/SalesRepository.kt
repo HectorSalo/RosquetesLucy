@@ -60,7 +60,8 @@ object SalesRepository {
             Constants.NAME to sale.nameCostumer,
             Constants.COSTUMER_LOCATION to sale.location,
             Constants.PRICE to sale.price,
-            Constants.RATE to sale.rate,
+            Constants.RATE_DELIVERY to sale.rateDelivery,
+            Constants.RATE_PAID to sale.ratePaid,
             Constants.QUANTITY to sale.quantity,
             Constants.IS_DOLAR to sale.isDolar,
             Constants.NUMBER_INVOICE to sale.invoice,
@@ -89,7 +90,8 @@ object SalesRepository {
                             sale.getString(Constants.NAME)!!,
                             sale.getString(Constants.COSTUMER_LOCATION)!!,
                             sale.getDouble(Constants.PRICE)!!,
-                            sale.getDouble(Constants.RATE)!!,
+                            sale.getDouble(Constants.RATE_DELIVERY)!!,
+                            sale.getDouble(Constants.RATE_PAID)!!,
                             sale.getDouble(Constants.QUANTITY)!!.toInt(),
                             sale.getBoolean(Constants.IS_DOLAR)!!,
                             sale.getDouble(Constants.NUMBER_INVOICE)!!.toInt(),
@@ -108,7 +110,8 @@ object SalesRepository {
     fun paidSale(sale: Sale) {
         val data: Map<String, Any> = hashMapOf(
             Constants.IS_PAID to true,
-            Constants.DATE_PAID to Date(sale.datePaid)
+            Constants.DATE_PAID to Date(sale.datePaid),
+            Constants.RATE_PAID to sale.ratePaid
         )
         getInstance().document(sale.id)
             .update(data)

@@ -10,20 +10,20 @@ import androidx.fragment.app.DialogFragment
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
-import com.skysam.hchirinos.rosqueteslucy.databinding.ViewDetailsCostumerDialogBinding
+import com.skysam.hchirinos.rosqueteslucy.databinding.DialogViewDetailsCostumerBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.addSale.AddSaleActivity
 
 /**
  * Created by Hector Chirinos (Home) on 19/8/2021.
  */
 class ViewDetailsCostumerFragment(private val costumer: Costumer): DialogFragment() {
-    private var _binding: ViewDetailsCostumerDialogBinding? = null
+    private var _binding: DialogViewDetailsCostumerBinding? = null
     private val binding get() = _binding!!
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = ViewDetailsCostumerDialogBinding.inflate(layoutInflater)
+        _binding = DialogViewDetailsCostumerBinding.inflate(layoutInflater)
 
         binding.tvRif.text = costumer.identifier
         binding.tvAddress.text = costumer.address

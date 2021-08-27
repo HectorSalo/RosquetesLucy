@@ -52,6 +52,14 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         binding.btnExit.setOnClickListener { getOut() }
         binding.btnTotal.setOnClickListener { validateData() }
 
+        binding.rgMoneda.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.rb_dolar) {
+                binding.tfRate.visibility = View.GONE
+            } else {
+                binding.tfRate.visibility = View.VISIBLE
+            }
+        }
+
         loadViewModel()
     }
 
@@ -118,11 +126,21 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
             binding.etInvoice.requestFocus()
             return
         }
-        var rate = binding.etRate.text.toString()
-        if (rate.isEmpty()) {
-            binding.tfRate.error = getString(R.string.error_field_empty)
-            binding.etRate.requestFocus()
-            return
+        var rate: String
+        if (binding.rbDolar.isChecked) {
+            rate = "1,00"
+        } else {
+            rate = binding.etRate.text.toString()
+            if (rate.isEmpty()) {
+                binding.tfRate.error = getString(R.string.error_field_empty)
+                binding.etRate.requestFocus()
+                return
+            }
+            if (rate == "0,00") {
+                binding.tfRate.error = getString(R.string.error_price_zero)
+                binding.etRate.requestFocus()
+                return
+            }
         }
         rate = rate.replace(".", "").replace(",", ".")
 
