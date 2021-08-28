@@ -68,6 +68,10 @@ class SalesViewModel : ViewModel() {
         SalesRepository.paidSale(sale)
     }
 
+    fun deleteSale(sale: Sale) {
+        SalesRepository.deleteSale(sale)
+    }
+
     fun changePage(index: Int) {
         _indexPage.value = index
     }

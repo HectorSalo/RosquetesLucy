@@ -7,4 +7,5 @@ import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
  */
 interface OnClick {
     fun viewSale(sale: Sale)
+    fun deleteSale(sale: Sale)
 }

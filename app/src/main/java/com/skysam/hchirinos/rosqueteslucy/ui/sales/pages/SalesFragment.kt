@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
@@ -144,5 +146,19 @@ class SalesFragment : Fragment(), OnClick {
         }
         val viewDetailsSale = ViewDetailsSaleDialog(sale)
         viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
+    }
+
+    override fun deleteSale(sale: Sale) {
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setTitle(getString(R.string.title_confirmation_dialog))
+            .setMessage(getString(R.string.msg_delete_dialog))
+            .setPositiveButton(R.string.text_delete) { _, _ ->
+                Toast.makeText(requireContext(), R.string.text_deleting, Toast.LENGTH_SHORT).show()
+                viewModel.deleteSale(sale)
+            }
+            .setNegativeButton(R.string.btn_cancel, null)
+
+        val dialog = builder.create()
+        dialog.show()
     }
 }

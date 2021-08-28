@@ -116,4 +116,9 @@ object SalesRepository {
         getInstance().document(sale.id)
             .update(data)
     }
+
+    fun deleteSale(sale: Sale) {
+        getInstance().document(sale.id)
+            .delete()
+    }
 }

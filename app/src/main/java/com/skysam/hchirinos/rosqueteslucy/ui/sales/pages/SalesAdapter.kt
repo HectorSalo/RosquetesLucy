@@ -62,6 +62,10 @@ class SalesAdapter(private var sales: MutableList<Sale>, private val onClick: On
         }
 
         holder.card.setOnClickListener { onClick.viewSale(item) }
+        holder.card.setOnLongClickListener {
+            onClick.deleteSale(item)
+            false
+        }
     }
 
     override fun getItemCount(): Int = sales.size
