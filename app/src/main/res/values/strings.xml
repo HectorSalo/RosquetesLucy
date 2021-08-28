@@ -90,4 +90,9 @@
     <string name="msg_exit_dialog">Se perderá toda la información.\n¿Desea salir?</string>
     <string name="msg_delete_dialog">¿Desea eliminar esta información?</string>
 
+    <!-- Graphs -->
+    <string name="text_sales_paid">Pagadas</string>
+    <string name="text_sales_not_paid">Por cobrar</string>
+    <string name="text_waste">Pérdidas</string>
+
 </resources>
