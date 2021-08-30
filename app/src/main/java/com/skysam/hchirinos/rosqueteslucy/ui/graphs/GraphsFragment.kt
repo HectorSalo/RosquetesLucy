@@ -13,12 +13,9 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.IValueFormatter
-import com.github.mikephil.charting.utils.ViewPortHandler
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
@@ -237,12 +234,6 @@ class GraphsFragment : Fragment() {
         val typedValue = TypedValue()
         theme.resolveAttribute(attrRes, typedValue, true)
         return typedValue
-    }
-
-    private fun convertNumber(number: String): String {
-        val cadena = number.replace(",", "").replace(".", "")
-        val cantidad: Double = cadena.toDouble() / 100
-        return String.format(Locale.GERMANY, "%,.2f", cantidad)
     }
 
     private fun getWeeksOfYear() {
