@@ -78,15 +78,15 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment(), CloseDial
             binding.tvTotalIvaBs.text = getString(R.string.text_total_amount, convertFormatNumber(ivaBs))
             val totalAmountBs = total + ivaBs
             binding.tvTotalMontoBs.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountBs))
-            val totalAmountDolar = total / sale.rateDelivery
+            val totalAmountDolar = total / sale.ratePaid
             binding.tvTotalMontoDolar.text = getString(R.string.text_total_amount, convertFormatNumber(totalAmountDolar))
             if (sale.isPaid) {
                 binding.tvTextIvaDolar.visibility = View.VISIBLE
                 binding.tvTotalIvaDolar.visibility = View.VISIBLE
                 binding.tvTextIvaDolar.text = getString(R.string.title_waste)
-                val totalWaste = total / sale.ratePaid
+                val totalWaste = (total / sale.rateDelivery) - totalAmountDolar
                 binding.tvTotalIvaDolar.text = getString(R.string.text_total_amount,
-                    convertFormatNumber(totalAmountDolar - totalWaste))
+                    convertFormatNumber(totalWaste))
             }
         } else {
             val ivaDolar = total * 0.16

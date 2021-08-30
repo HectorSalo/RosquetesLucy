@@ -94,5 +94,8 @@
     <string name="text_sales_paid">Pagadas</string>
     <string name="text_sales_not_paid">Por cobrar</string>
     <string name="text_waste">Pérdidas</string>
+    <string name="title_chart">Balance\n($)</string>
+    <string name="chip_week">Semanal</string>
+    <string name="chip_month">Mensual</string>
 
 </resources>
