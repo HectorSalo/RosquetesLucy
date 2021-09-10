@@ -45,7 +45,7 @@
     <string name="error_costumer.exists">Este cliente ya existe</string>
     <string name="error_identifier_exists">Este RIF está almacenado con otro cliente</string>
     <string name="error_location_exists">Sucursal ya existe para este cliente</string>
-    <string name="text_add_location">Agregar sucursal</string>
+    <string name="text_add_location">Nueva sucursal</string>
     <string name="text_delete_location">Eliminar sucursal</string>
     <string name="text_edit_costumer">Editar cliente</string>
     <string name="text_delete_costumer">Eliminar cliente</string>

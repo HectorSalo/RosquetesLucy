@@ -5,6 +5,17 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_add_costumer_24.xml" value="0.23125" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_cash_remove_56dp.xml" value="0.23125" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/side_nav_bar.xml" value="0.23125" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_first_add_sale.xml" value="0.25" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/menu/menu_costumers.xml" value="0.21510416666666668" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

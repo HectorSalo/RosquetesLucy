@@ -12,6 +12,7 @@ import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddLocationBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 
 /**
  * Created by Hector Chirinos (Home) on 11/8/2021.
@@ -19,7 +20,7 @@ import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddLocationBinding
 class AddLocationDialog(private val costumer: Costumer): DialogFragment() {
     private var _binding: DialogAddLocationBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: CostumersViewModel by activityViewModels()
+    private val viewModel: SalesViewModel by activityViewModels()
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
 

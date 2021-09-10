@@ -15,7 +15,9 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.classView.ExitDialog
 import com.skysam.hchirinos.rosqueteslucy.common.classView.OnClickExit
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentFirstAddSaleBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.costumers.AddLocationDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 import java.text.DateFormat
 import java.util.*
@@ -26,6 +28,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
     private var dateSelected: Long = 0
+    private lateinit var costumer: Costumer
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,6 +63,11 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
             }
         }
 
+        binding.extendedFab.setOnClickListener {
+            val addLocationDialog = AddLocationDialog(costumer)
+            addLocationDialog.show(requireActivity().supportFragmentManager, tag)
+        }
+
         loadViewModel()
     }
 
@@ -79,6 +87,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
 
     private fun loadViewModel() {
         viewModel.costumer.observe(viewLifecycleOwner, {
+            costumer = it
             binding.tvNameCostumer.text = it.name
             val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, it.locations)
             binding.spinner.adapter = adapterLocations
@@ -86,6 +95,13 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         viewModel.valueWeb.observe(viewLifecycleOwner, {
             binding.tfRate.hint = getString(R.string.text_rate)
             binding.etRate.setText(it)
+        })
+        viewModel.addLocation.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                if (it) {
+                    binding.spinner.setSelection(costumer.locations.size - 1)
+                }
+            }
         })
     }
 

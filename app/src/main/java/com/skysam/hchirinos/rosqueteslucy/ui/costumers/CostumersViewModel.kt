@@ -14,10 +14,6 @@ class CostumersViewModel : ViewModel() {
         CostumerRepository.addCostumer(costumer)
     }
 
-    fun addLocation(id: String, location: String) {
-        CostumerRepository.addLocation(id, location)
-    }
-
     fun editCostumer(costumer: Costumer) {
         CostumerRepository.editCostumer(costumer)
     }
