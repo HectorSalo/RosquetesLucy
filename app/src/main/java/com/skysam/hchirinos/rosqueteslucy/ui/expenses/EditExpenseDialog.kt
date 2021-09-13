@@ -57,7 +57,7 @@ class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWat
         binding.etDate.setText(DateFormat.getDateInstance().format(expense.date))
 
         binding.etDate.setOnClickListener { selecDate() }
-        binding.btnExpense.text = getString(R.string.text_edit)
+        binding.btnExpense.text = getString(R.string.btn_save)
         binding.btnExpense.setOnClickListener { validateData() }
         binding.btnExit.setOnClickListener { dialog?.dismiss() }
         binding.rgMoneda.setOnCheckedChangeListener { _, checkedId ->

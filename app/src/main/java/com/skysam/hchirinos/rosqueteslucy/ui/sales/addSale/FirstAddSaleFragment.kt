@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -51,6 +52,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         binding.etRate.addTextChangedListener(this)
         dateSelected = Date().time
         binding.etDate.setText(DateFormat.getDateInstance().format(Date()))
+        binding.etQuantity.doAfterTextChanged { binding.tfQuantity.error = null }
         binding.etDate.setOnClickListener { selecDate() }
         binding.btnExit.setOnClickListener { getOut() }
         binding.btnTotal.setOnClickListener { validateData() }

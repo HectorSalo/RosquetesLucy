@@ -2,11 +2,11 @@ package com.skysam.hchirinos.rosqueteslucy.ui.costumers
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,13 +17,14 @@ import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentCostumersBinding
 import java.util.*
 
-class CostumersFragment : Fragment(), OnClick {
+class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
 
     private lateinit var viewModel: CostumersViewModel
     private var _binding: FragmentCostumersBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapterCostumer: CostumersAdapter
     private val costumers = mutableListOf<Costumer>()
+    private val listSearch = mutableListOf<Costumer>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +33,6 @@ class CostumersFragment : Fragment(), OnClick {
     ): View {
         viewModel =
             ViewModelProvider(this).get(CostumersViewModel::class.java)
-
         _binding = FragmentCostumersBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -61,6 +61,7 @@ class CostumersFragment : Fragment(), OnClick {
             dialog.show(requireActivity().supportFragmentManager, tag)
         }
 
+        configurarToolbar()
         loadViewModel()
     }
 
@@ -77,6 +78,16 @@ class CostumersFragment : Fragment(), OnClick {
     override fun onPause() {
         super.onPause()
         binding.floatingActionButton.hide()
+    }
+
+    private fun configurarToolbar() {
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
+        toolbar.menu.clear()
+        toolbar.inflateMenu(R.menu.menu_top_bar_main)
+        val menu: Menu = toolbar.menu
+        val itemBuscar = menu.findItem(R.id.action_search)
+        val searchView = itemBuscar.actionView as SearchView
+        searchView.setOnQueryTextListener(this)
     }
 
     private fun loadViewModel() {
@@ -153,5 +164,32 @@ class CostumersFragment : Fragment(), OnClick {
 
         val dialog = builder.create()
         dialog.show()
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        if (costumers.isEmpty()) {
+            Toast.makeText(context, getString(R.string.list_costumer_empty), Toast.LENGTH_SHORT).show()
+        } else {
+            val userInput: String = newText!!.lowercase()
+            listSearch.clear()
+
+            for (costumer in costumers) {
+                if (costumer.name.lowercase().contains(userInput)) {
+                    listSearch.add(costumer)
+                }
+            }
+            if (listSearch.isEmpty()) {
+                binding.lottieAnimationView.visibility = View.VISIBLE
+                binding.lottieAnimationView.playAnimation()
+            } else {
+                binding.lottieAnimationView.visibility = View.GONE
+            }
+            adapterCostumer.updateList(listSearch)
+        }
+        return false
     }
 }

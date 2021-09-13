@@ -51,7 +51,7 @@ class EditCostumerDialog(private val costumer: Costumer): DialogFragment() {
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.title_edit_costumer))
             .setView(binding.root)
-            .setPositiveButton(R.string.text_edit, null)
+            .setPositiveButton(R.string.btn_save, null)
             .setNegativeButton(R.string.btn_cancel, null)
 
         val dialog = builder.create()

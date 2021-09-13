@@ -1,18 +1,18 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.expenses
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentExpensesBinding
 
-class ExpensesFragment : Fragment(), OnClick {
+class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
 
     private var _binding: FragmentExpensesBinding? = null
     private val binding get() = _binding!!
@@ -39,6 +39,7 @@ class ExpensesFragment : Fragment(), OnClick {
             val addExpenseDialog = AddExpenseDialog()
             addExpenseDialog.show(requireActivity().supportFragmentManager, tag)
         }
+        configurarToolbar()
         loadViewModel()
     }
 
@@ -75,6 +76,16 @@ class ExpensesFragment : Fragment(), OnClick {
         _binding = null
     }
 
+    private fun configurarToolbar() {
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
+        toolbar.menu.clear()
+        toolbar.inflateMenu(R.menu.menu_top_bar_main)
+        val menu: Menu = toolbar.menu
+        val itemBuscar = menu.findItem(R.id.action_search)
+        val searchView = itemBuscar.actionView as SearchView
+        searchView.setOnQueryTextListener(this)
+    }
+
     override fun edit(expense: Expense) {
         val editExpenseDialog = EditExpenseDialog(expense)
         editExpenseDialog.show(requireActivity().supportFragmentManager, tag)
@@ -92,5 +103,33 @@ class ExpensesFragment : Fragment(), OnClick {
 
         val dialog = builder.create()
         dialog.show()
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        val listSearch = mutableListOf<Expense>()
+        if (expenses.isEmpty()) {
+            Toast.makeText(context, getString(R.string.list_expenses_empty), Toast.LENGTH_SHORT).show()
+        } else {
+            val userInput: String = newText!!.lowercase()
+            listSearch.clear()
+
+            for (expense in expenses) {
+                if (expense.name.lowercase().contains(userInput)) {
+                    listSearch.add(expense)
+                }
+            }
+            if (listSearch.isEmpty()) {
+                binding.lottieAnimationView.visibility = View.VISIBLE
+                binding.lottieAnimationView.playAnimation()
+            } else {
+                binding.lottieAnimationView.visibility = View.GONE
+            }
+            adapterExpense.updateList(listSearch)
+        }
+        return false
     }
 }

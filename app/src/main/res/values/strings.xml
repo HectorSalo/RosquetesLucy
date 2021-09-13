@@ -33,6 +33,9 @@
     <string name="symbol_bolivar">Bs.</string>
     <string name="symbol_dolar">$</string>
 
+    <!--Menus-->
+    <string name="menu_search">Buscar</string>
+
     <!--Costumers-->
     <string name="title_add_costumer">Agregar cliente</string>
     <string name="title_edit_costumer">Editar cliente</string>

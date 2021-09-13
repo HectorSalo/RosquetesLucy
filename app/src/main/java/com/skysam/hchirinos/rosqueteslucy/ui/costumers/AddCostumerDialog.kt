@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
@@ -40,6 +41,10 @@ class AddCostumerDialog: DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.etNameCostumer.doAfterTextChanged { binding.tfNameCostumer.error = null }
+        binding.etIdCostumer.doAfterTextChanged { binding.tfIdCostumer.error = null }
+        binding.etLocationCostumer.doAfterTextChanged { binding.tfLocationCostumer.error = null }
+        binding.etAddressCostumer.doAfterTextChanged { binding.tfAddressCostumer.error = null }
         val listUnits = listOf(*resources.getStringArray(R.array.identificador))
         val adapterUnits = ArrayAdapter(requireContext(), R.layout.layout_spinner, listUnits)
         binding.spinner.adapter = adapterUnits
@@ -67,6 +72,7 @@ class AddCostumerDialog: DialogFragment() {
         binding.tfNameCostumer.error = null
         binding.tfIdCostumer.error = null
         binding.tfLocationCostumer.error = null
+        binding.etAddressCostumer.error = null
 
         val name = binding.etNameCostumer.text.toString()
         if (name.isEmpty()) {
