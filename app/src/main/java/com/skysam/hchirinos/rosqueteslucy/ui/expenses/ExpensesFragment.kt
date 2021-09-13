@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
@@ -19,12 +18,14 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
     private val viewModel: ExpensesViewModel by activityViewModels()
     private lateinit var adapterExpense: ExpensesAdapter
     private val expenses = mutableListOf<Expense>()
+    private lateinit var search: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentExpensesBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -39,8 +40,15 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
             val addExpenseDialog = AddExpenseDialog()
             addExpenseDialog.show(requireActivity().supportFragmentManager, tag)
         }
-        configurarToolbar()
         loadViewModel()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        requireActivity().menuInflater.inflate(R.menu.menu_top_bar_main, menu)
+        val item = menu.findItem(R.id.action_search)
+        search = item.actionView as SearchView
+        search.setOnQueryTextListener(this)
     }
 
     private fun loadViewModel() {
@@ -74,16 +82,6 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun configurarToolbar() {
-        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
-        toolbar.menu.clear()
-        toolbar.inflateMenu(R.menu.menu_top_bar_main)
-        val menu: Menu = toolbar.menu
-        val itemBuscar = menu.findItem(R.id.action_search)
-        val searchView = itemBuscar.actionView as SearchView
-        searchView.setOnQueryTextListener(this)
     }
 
     override fun edit(expense: Expense) {
@@ -130,6 +128,6 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
             }
             adapterExpense.updateList(listSearch)
         }
-        return false
+        return true
     }
 }

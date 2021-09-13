@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
@@ -16,7 +14,7 @@ import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.ViewDetailsSaleDialog
 import java.util.*
 
-class SalesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
+class SalesFragment : Fragment(), OnClick {
 
     private val viewModel: SalesViewModel by activityViewModels()
     private var _binding: FragmentSalesBinding? = null
@@ -58,24 +56,12 @@ class SalesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
             setHasFixedSize(true)
             adapter = adapaterSales
         }
-
-        configurarToolbar()
         loadViewModel()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun configurarToolbar() {
-        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
-        toolbar.menu.clear()
-        toolbar.inflateMenu(R.menu.menu_top_bar_main)
-        val menu: Menu = toolbar.menu
-        val itemBuscar = menu.findItem(R.id.action_search)
-        val searchView = itemBuscar.actionView as SearchView
-        searchView.setOnQueryTextListener(this)
     }
 
     private fun loadViewModel() {
@@ -107,6 +93,9 @@ class SalesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
         viewModel.indexPage.observe(viewLifecycleOwner, {
             index = it
             loadList(it)
+        })
+        viewModel.textSearch.observe(viewLifecycleOwner, {
+            searchFromText(it)
         })
     }
 
@@ -173,16 +162,12 @@ class SalesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
         dialog.show()
     }
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        return false
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
+    private fun searchFromText(text: String) {
         val listSearch = mutableListOf<Sale>()
         if (sales.isEmpty()) {
             Toast.makeText(context, getString(R.string.list_sales_empty), Toast.LENGTH_SHORT).show()
         } else {
-            val userInput: String = newText!!.lowercase()
+            val userInput: String = text.lowercase()
             listSearch.clear()
 
             when(index) {
@@ -217,6 +202,5 @@ class SalesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
             }
             adapaterSales.updateList(listSearch)
         }
-        return false
     }
 }

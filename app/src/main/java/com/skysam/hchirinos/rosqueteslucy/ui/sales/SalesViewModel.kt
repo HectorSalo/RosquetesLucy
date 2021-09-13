@@ -47,6 +47,9 @@ class SalesViewModel : ViewModel() {
     private val _badge = MutableLiveData<Int>()
     val badge: LiveData<Int> get() = _badge
 
+    private val _textSearch = MutableLiveData<String>()
+    val textSearch: LiveData<String> get() = _textSearch
+
     fun addCostumer(costumer: Costumer) {
         _costumer.value = costumer
     }
@@ -87,5 +90,9 @@ class SalesViewModel : ViewModel() {
 
     fun updateBadge(number: Int) {
         _badge.value = number
+    }
+
+    fun newTextSearch(text: String) {
+        _textSearch.value = text
     }
 }

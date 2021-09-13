@@ -3,7 +3,6 @@ package com.skysam.hchirinos.rosqueteslucy
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -22,7 +21,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        installSplashScreen()
+        //installSplashScreen()
+        setTheme(R.style.Theme_RosquetesLucy)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
