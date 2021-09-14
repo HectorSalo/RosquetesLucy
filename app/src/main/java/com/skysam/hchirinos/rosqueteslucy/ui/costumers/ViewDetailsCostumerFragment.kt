@@ -20,7 +20,7 @@ class ViewDetailsCostumerFragment(private val costumer: Costumer): DialogFragmen
     private var _binding: DialogViewDetailsCostumerBinding? = null
     private val binding get() = _binding!!
     private lateinit var buttonPositive: Button
-    private lateinit var buttonNegative: Button
+    private lateinit var buttonNeutral: Button
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogViewDetailsCostumerBinding.inflate(layoutInflater)
@@ -32,17 +32,24 @@ class ViewDetailsCostumerFragment(private val costumer: Costumer): DialogFragmen
         builder.setTitle(getString(R.string.title_details_costumer))
             .setView(binding.root)
             .setPositiveButton(R.string.btn_sale, null)
-            .setNegativeButton(R.string.btn_close, null)
+            .setNeutralButton(R.string.btn_note_sale, null)
 
         val dialog = builder.create()
         dialog.show()
 
-        buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-        buttonNegative.setOnClickListener { dialog.dismiss() }
+        buttonNeutral = dialog.getButton(DialogInterface.BUTTON_NEUTRAL)
         buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        buttonNeutral.setOnClickListener {
+            val intent = Intent(requireContext(), AddSaleActivity::class.java)
+            intent.putExtra(Constants.ID_COSTUMER, costumer)
+            intent.putExtra(Constants.IS_SALE, false)
+            startActivity(intent)
+            dismiss()
+        }
         buttonPositive.setOnClickListener {
             val intent = Intent(requireContext(), AddSaleActivity::class.java)
             intent.putExtra(Constants.ID_COSTUMER, costumer)
+            intent.putExtra(Constants.IS_SALE, true)
             startActivity(intent)
             dismiss()
         }

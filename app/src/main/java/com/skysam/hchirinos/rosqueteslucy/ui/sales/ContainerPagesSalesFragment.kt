@@ -34,7 +34,7 @@ class ContainerPagesSalesFragment : Fragment(), SearchView.OnQueryTextListener {
         TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
             tab.text = when(position) {
                 0 -> "Por Cobrar"
-                1 -> "Pagadas"
+                1 -> "Cobradas"
                 2 -> "Todas"
                 else -> "Facturas"
             }

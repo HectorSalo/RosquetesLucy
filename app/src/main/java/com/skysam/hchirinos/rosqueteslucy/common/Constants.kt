@@ -23,6 +23,10 @@ object Constants {
     const val DATE_DELIVERY = "dateDelivery"
     const val DATE_PAID = "datePaid"
 
+    const val IS_SALE = "isSale"
+    const val NOTE_SALES = "notesSale"
+    const val NUMBER_NOTE_SALE = "numberNoteSale"
+
     const val EXPENSES = "expenses"
 
     const val PREFERENCES = "preferences"

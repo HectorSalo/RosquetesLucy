@@ -38,6 +38,7 @@ class AddSaleActivity : AppCompatActivity() {
         if (bundle != null) {
             val costumer = bundle.get(Constants.ID_COSTUMER) as Costumer
             viewModel.addCostumer(costumer)
+            viewModel.changeIsSale(bundle.getBoolean(Constants.IS_SALE))
         }
     }
 

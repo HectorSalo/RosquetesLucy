@@ -2,14 +2,17 @@ package com.skysam.hchirinos.rosqueteslucy.ui.sales
 
 import androidx.lifecycle.*
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.CostumerRepository
+import com.skysam.hchirinos.rosqueteslucy.database.repositories.NoteSaleRepository
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.SalesRepository
 
 class SalesViewModel : ViewModel() {
 
     val costumers: LiveData<MutableList<Costumer>> = CostumerRepository.getCostumers().asLiveData()
     val sales: LiveData<MutableList<Sale>> = SalesRepository.getSales().asLiveData()
+    val notesSales: LiveData<MutableList<NoteSale>> = NoteSaleRepository.getNotesSale().asLiveData()
     val valueWeb: LiveData<String> = SalesRepository.getValueWeb().asLiveData()
     private val _indexPage = MutableLiveData<Int>()
     val indexPage: LiveData<Int> get() = _indexPage
@@ -50,6 +53,9 @@ class SalesViewModel : ViewModel() {
     private val _textSearch = MutableLiveData<String>()
     val textSearch: LiveData<String> get() = _textSearch
 
+    private val _isSale = MutableLiveData<Boolean>()
+    val isSale: LiveData<Boolean> get() = _isSale
+
     fun addCostumer(costumer: Costumer) {
         _costumer.value = costumer
     }
@@ -84,6 +90,10 @@ class SalesViewModel : ViewModel() {
         SalesRepository.deleteSale(sale)
     }
 
+    fun addNoteSale(noteSale: NoteSale) {
+        NoteSaleRepository.addNoteSale(noteSale)
+    }
+
     fun changePage(index: Int) {
         _indexPage.value = index
     }
@@ -94,5 +104,9 @@ class SalesViewModel : ViewModel() {
 
     fun newTextSearch(text: String) {
         _textSearch.value = text
+    }
+
+    fun changeIsSale(isSale: Boolean) {
+        _isSale.value = isSale
     }
 }

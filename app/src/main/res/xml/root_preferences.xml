@@ -10,7 +10,7 @@
 
         <ListPreference
             app:defaultValue="7"
-            app:entries="@array/days_expired_entries"
+            app:entries="@array/days_expired_values"
             app:entryValues="@array/days_expired_values"
             app:key="days_expired"
             app:title="@string/days_expired_title"

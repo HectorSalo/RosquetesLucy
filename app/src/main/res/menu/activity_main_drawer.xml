@@ -16,6 +16,11 @@
             android:title="@string/title_sales" />
 
         <item
+            android:id="@+id/navigation_notes_sales"
+            android:icon="@drawable/ic_notes_sale_24"
+            android:title="@string/title_notes_sales"/>
+
+        <item
             android:id="@+id/navigation_expenses"
             android:icon="@drawable/ic_shops_24"
             android:title="@string/title_expenses"/>

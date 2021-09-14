@@ -30,6 +30,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
     private val viewModel: SalesViewModel by activityViewModels()
     private var dateSelected: Long = 0
     private lateinit var costumer: Costumer
+    private var isSale = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +54,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         dateSelected = Date().time
         binding.etDate.setText(DateFormat.getDateInstance().format(Date()))
         binding.etQuantity.doAfterTextChanged { binding.tfQuantity.error = null }
+        binding.etInvoice.doAfterTextChanged { binding.tfInvoice.error = null }
         binding.etDate.setOnClickListener { selecDate() }
         binding.btnExit.setOnClickListener { getOut() }
         binding.btnTotal.setOnClickListener { validateData() }
@@ -89,19 +91,47 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
 
     private fun loadViewModel() {
         viewModel.costumer.observe(viewLifecycleOwner, {
-            costumer = it
-            binding.tvNameCostumer.text = it.name
-            val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, it.locations)
-            binding.spinner.adapter = adapterLocations
+            if (_binding != null) {
+                costumer = it
+                binding.tvNameCostumer.text = it.name
+                val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, it.locations)
+                binding.spinner.adapter = adapterLocations
+            }
         })
         viewModel.valueWeb.observe(viewLifecycleOwner, {
-            binding.tfRate.hint = getString(R.string.text_rate)
-            binding.etRate.setText(it)
+            if (_binding != null) {
+                binding.tfRate.hint = getString(R.string.text_rate)
+                binding.etRate.setText(it)
+            }
         })
         viewModel.addLocation.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 if (it) {
                     binding.spinner.setSelection(costumer.locations.size - 1)
+                }
+            }
+        })
+        viewModel.isSale.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                if (!it) {
+                    binding.tfInvoice.hint = getString(R.string.text_note_sale_number)
+                    binding.rgInvoicePaid.visibility = View.GONE
+                    binding.tvInvoicePaid.visibility = View.GONE
+                    binding.rbPaidYes.isChecked = true
+                    isSale = false
+                }
+            }
+        })
+        viewModel.notesSales.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                if (!isSale) {
+                    var number = 0
+                    for (noteSale in it) {
+                        if (noteSale.noteNumber > number) {
+                            number = noteSale.noteNumber
+                        }
+                    }
+                    binding.etInvoice.setText((number + 1).toString())
                 }
             }
         })

@@ -4,6 +4,7 @@
     <string name="title_costumers">Clientes</string>
     <string name="title_expenses">Compras</string>
     <string name="title_storage">Inventario</string>
+    <string name="title_notes_sales">Notas de Venta</string>
     <string name="title_graphs">Estadísticas</string>
     <string name="title_activity_add_sale">Generar Factura</string>
     <string name="title_activity_settings">Configuración</string>
@@ -17,6 +18,7 @@
     <string name="list_sales_paid_empty">No tiene Facturas pagadas</string>
     <string name="list_costumer_empty">No ha creado su primer Cliente</string>
     <string name="list_expenses_empty">No ha realizado su primera Compra</string>
+    <string name="list_note_sale_empty">No ha realizado su primera Note de Venta</string>
     <string name="list_graph_empty">Debe realizar su primera Venta para cargar las gráficas</string>
     <string name="error_field_empty">Campo vacío</string>
     <string name="text_saving">Guardando&#8230;</string>
@@ -67,7 +69,8 @@
     <string name="text_rate_view">(Bs. / $) %1$s</string>
     <string name="text_loading_rate">Cargando tasa de cambio</string>
     <string name="btn_sale">Generar Factura</string>
-    <string name="btn_paid">Pagar Factura</string>
+    <string name="btn_note_sale">Generar Nota de Venta</string>
+    <string name="btn_paid">Cobrar Factura</string>
     <string name="text_total_bs">Total (Bs.)</string>
     <string name="text_total_dolar">Total ($)</string>
     <string name="text_total_amount">%1$s</string>
@@ -80,10 +83,13 @@
     <string name="title_waste">Pérdida ($)</string>
     <string name="error_price_zero">Precio debe ser mayor a cero</string>
     <string name="text_date_days_between">%1$s (%2$s días vencidos)</string>
-    <string name="text_date_paid">Factura pagada en %1$s</string>
+    <string name="text_date_paid">Factura cobrada el %1$s</string>
+    <string name="text_date_note_sale">Venta realizada el %1$s</string>
     <string name="text_price_item">%1$s %2$s</string>
     <string name="text_invoice_item">#Fact. asociada: %1$s</string>
-    <string name="title_dialog_paid">Datos de pago</string>
+    <string name="text_note_sale_item">#Nota de Venta: %1$s</string>
+    <string name="title_dialog_paid">Datos de cobro</string>
+    <string name="text_note_sale_number">#Nota de Venta</string>
 
     <!-- Expenses-->
     <string name="btn_expense">Comprar</string>
@@ -95,7 +101,7 @@
     <string name="msg_delete_dialog">¿Desea eliminar esta información?</string>
 
     <!-- Graphs -->
-    <string name="text_sales_paid">Pagadas</string>
+    <string name="text_sales_paid">Cobradas</string>
     <string name="text_sales_not_paid">Por cobrar</string>
     <string name="text_waste">Pérdidas</string>
     <string name="title_chart">Balance\n($)</string>

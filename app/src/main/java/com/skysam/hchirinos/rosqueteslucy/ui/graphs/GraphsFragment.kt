@@ -165,7 +165,8 @@ class GraphsFragment : Fragment() {
                     } else {
                         total / sale.ratePaid
                     }
-                    if (!sale.isDolar) totalWaste += (total / sale.rateDelivery) - (total / sale.ratePaid)
+                    val rest = (total / sale.rateDelivery) - (total / sale.ratePaid)
+                    if (!sale.isDolar) totalWaste += if (rest > 0) rest else 0.0
                 }
             } else {
                 if (calendar[Calendar.MONTH] == selection) {
@@ -175,7 +176,8 @@ class GraphsFragment : Fragment() {
                     } else {
                         total / sale.ratePaid
                     }
-                    if (!sale.isDolar) totalWaste += (total / sale.rateDelivery) - (total / sale.ratePaid)
+                    val rest = (total / sale.rateDelivery) - (total / sale.ratePaid)
+                    if (!sale.isDolar) totalWaste += if (rest > 0) rest else 0.0
                 }
             }
         }
