@@ -11,11 +11,13 @@ import android.widget.ArrayAdapter
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
@@ -33,10 +35,10 @@ class GraphsFragment : Fragment() {
     private val salesNotPaid = mutableListOf<Sale>()
     private val salesPaid = mutableListOf<Sale>()
     private val expenses = mutableListOf<Expense>()
-    private val datesWeeks = mutableListOf<String>()
-    private var isByWeek = true
-    private var weekByDefault = 0
+    private var isByRange = true
     private var monthByDefault = 0
+    private lateinit var dateStart: Date
+    private lateinit var dateFinal: Date
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,21 +52,28 @@ class GraphsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val calendar = Calendar.getInstance()
-        weekByDefault = calendar[Calendar.WEEK_OF_YEAR]
+        dateStart = calendar.time
+        dateFinal = calendar.time
         monthByDefault = calendar[Calendar.MONTH]
-        getWeeksOfYear()
         loadViewModel()
 
+        binding.etDate.setText(getString(R.string.text_date_range,
+            formatDate(dateStart), formatDate(dateFinal)))
+        binding.etDate.setOnClickListener { selecDate() }
         binding.chipMonth.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                isByWeek = false
-                configAdapter(false)
+                isByRange = false
+                configAdapter()
+                binding.spinner.visibility = View.VISIBLE
+                binding.tfDate.visibility = View.INVISIBLE
             }
         }
         binding.chipWeek.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                isByWeek = true
-                configAdapter(true)
+                isByRange = true
+                binding.spinner.visibility = View.GONE
+                binding.tfDate.visibility = View.VISIBLE
+                loadChart(true, -1)
             }
         }
         binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -74,11 +83,7 @@ class GraphsFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                if (isByWeek) {
-                    loadChart(true, position + 1)
-                } else {
-                    loadChart(false, position)
-                }
+                loadChart(false, position)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -97,19 +102,48 @@ class GraphsFragment : Fragment() {
                 for (sale in sales) {
                     if (sale.isPaid) salesPaid.add(sale) else salesNotPaid.add(sale)
                 }
-                loadChart(true, weekByDefault)
+                loadChart(true, -1)
             }
         })
         viewModel.expenses.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 expenses.clear()
                 expenses.addAll(it)
-                loadChart(true, weekByDefault)
+                loadChart(true, -1)
             }
         })
     }
 
-    private fun loadChart(isByWeek: Boolean, selection: Int) {
+    private fun selecDate() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        val calendar = Calendar.getInstance()
+
+        val picker = builder.build()
+        picker.addOnPositiveButtonClickListener { selection: Pair<Long, Long> ->
+            val timeZone = TimeZone.getDefault()
+            val offset = timeZone.getOffset(Date().time) * -1
+            calendar.timeInMillis = selection.first
+            calendar.timeInMillis = calendar.timeInMillis + offset
+            dateStart = calendar.time
+            calendar.timeInMillis = selection.second
+            calendar[Calendar.HOUR_OF_DAY] = 23
+            calendar[Calendar.MINUTE] = 59
+            calendar.timeInMillis = calendar.timeInMillis + offset
+            dateFinal = calendar.time
+            binding.etDate.setText(getString(R.string.text_date_range,
+                    formatDate(dateStart), formatDate(dateFinal)))
+            loadChart(true, -1)
+        }
+        picker.show(requireActivity().supportFragmentManager, picker.toString())
+    }
+
+    private fun loadChart(isByRange: Boolean, selection: Int) {
+        val calendarStartRange = Calendar.getInstance()
+        val calendarFinalRange = Calendar.getInstance()
+        calendarStartRange.time = dateStart
+        calendarFinalRange.time = dateFinal
+        calendarStartRange.add(Calendar.DAY_OF_YEAR, -1)
+        calendarFinalRange.add(Calendar.DAY_OF_YEAR, 1)
         val pieBalance = binding.pieBalance
         pieBalance.description = null
         pieBalance.centerText = getString(R.string.title_chart)
@@ -122,8 +156,9 @@ class GraphsFragment : Fragment() {
         for (sale in salesPaid) {
             val calendar = Calendar.getInstance()
             calendar.time = Date(sale.datePaid)
-            if (isByWeek) {
-                if (calendar[Calendar.WEEK_OF_YEAR] == selection) {
+            val dateSale = Date(sale.datePaid)
+            if (isByRange) {
+                if (dateSale.after(calendarStartRange.time) && dateSale.before(calendarFinalRange.time)) {
                     val total = sale.quantity * sale.price
                     totalSalesPaid += if (sale.isDolar) {
                         total
@@ -148,8 +183,9 @@ class GraphsFragment : Fragment() {
         for (sale in salesNotPaid) {
             val calendar = Calendar.getInstance()
             calendar.time = Date(sale.datePaid)
-            if (isByWeek) {
-                if (calendar[Calendar.WEEK_OF_YEAR] == selection) {
+            val dateSale = Date(sale.datePaid)
+            if (isByRange) {
+                if (dateSale.after(calendarStartRange.time) && dateSale.before(calendarFinalRange.time)) {
                     totalSalesNotPaid += if (sale.isDolar) {
                         (sale.quantity * sale.price)
                     } else {
@@ -170,8 +206,9 @@ class GraphsFragment : Fragment() {
         for (expense in expenses) {
             val calendar = Calendar.getInstance()
             calendar.time = Date(expense.date)
-            if (isByWeek) {
-                if (calendar[Calendar.WEEK_OF_YEAR] == selection) {
+            val dateExpense = Date(expense.date)
+            if (isByRange) {
+                if (dateExpense.after(calendarStartRange.time) && dateExpense.before(calendarFinalRange.time)) {
                     totalExpenses += if (expense.isDolar) {
                         (expense.quantity * expense.price)
                     } else {
@@ -188,10 +225,6 @@ class GraphsFragment : Fragment() {
                 }
             }
         }
-
-        val testL = mutableListOf<String>()
-        testL.add(totalSalesPaid.toString())
-        testL.add(totalSalesNotPaid.toString())
 
         val pieEntries = mutableListOf<PieEntry>()
         pieEntries.add(PieEntry(totalSalesPaid.toFloat(), getString(R.string.text_sales_paid)))
@@ -210,7 +243,11 @@ class GraphsFragment : Fragment() {
         pieDataSet.formSize = 16f
         val pieData = PieData(pieDataSet)
         pieData.setValueFormatter { value, _, _, _ ->
-            String.format(Locale.GERMANY, "%,.2f", value)
+            if (value == 0.0f) {
+                String.format("", value)
+            } else {
+                String.format(Locale.GERMANY, "%,.2f", value)
+            }
         }
 
         pieBalance.data = pieData
@@ -236,39 +273,13 @@ class GraphsFragment : Fragment() {
         return typedValue
     }
 
-    private fun getWeeksOfYear() {
-        val calendar = Calendar.getInstance()
-        calendar.set(calendar[Calendar.YEAR], 0, 1)
-        calendar.add(Calendar.DAY_OF_YEAR, (-1 * (calendar[Calendar.DAY_OF_WEEK] - 1)))
-        val firstDayYear = formatDate(calendar.time)
-        calendar.add(Calendar.DAY_OF_YEAR, 6)
-        val lastDayFirstWeek = formatDate(calendar.time)
-        val date1 = "$firstDayYear - $lastDayFirstWeek"
-        datesWeeks.add(date1)
-
-        var numberWeek = calendar[Calendar.WEEK_OF_YEAR]
-        var count = 1
-        while (numberWeek >= count) {
-            calendar.add(Calendar.DAY_OF_YEAR, 1)
-            val firstDay = formatDate(calendar.time)
-            calendar.add(Calendar.DAY_OF_YEAR, 6)
-            val lastDay = formatDate(calendar.time)
-            val date = "$firstDay - $lastDay"
-            datesWeeks.add(date)
-            numberWeek = calendar[Calendar.WEEK_OF_YEAR]
-            count++
-        }
-
-        configAdapter(true)
-    }
-
     private fun formatDate(date: Date): String {
         return DateFormat.getDateInstance().format(date)
     }
 
-    private fun configAdapter(isByWeek: Boolean) {
-        val selectionSpinner = if (isByWeek) weekByDefault -1  else monthByDefault
-        val listSpinner = if (isByWeek) datesWeeks else listOf(*resources.getStringArray(R.array.months))
+    private fun configAdapter() {
+        val selectionSpinner = monthByDefault
+        val listSpinner = listOf(*resources.getStringArray(R.array.months))
 
         val adapterUnits = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSpinner)
         binding.spinner.apply {

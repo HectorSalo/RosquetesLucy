@@ -24,4 +24,7 @@ object Constants {
     const val DATE_PAID = "datePaid"
 
     const val EXPENSES = "expenses"
+
+    const val PREFERENCES = "preferences"
+    const val PREFERENCES_DAYS_EXPIRED = "days_expired"
 }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
+import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
 import java.text.DateFormat
 import java.util.*
 
@@ -55,7 +56,7 @@ class SalesAdapter(private var sales: MutableList<Sale>, private val onClick: On
         holder.ivPaid.setImageResource(image)
         holder.invoice.text = context.getString(R.string.text_invoice_item, item.invoice.toString())
 
-        if (!item.isPaid && daysBetween >= 7) {
+        if (!item.isPaid && daysBetween >= SharedPref.getDaysExpired()) {
             holder.date.setTextColor(ContextCompat.getColor(context, R.color.red))
         } else {
             holder.date.setTextColor(context.resolveColorAttr(android.R.attr.textColorSecondary))

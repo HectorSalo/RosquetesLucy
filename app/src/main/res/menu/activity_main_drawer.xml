@@ -31,6 +31,16 @@
             android:icon="@drawable/ic_graphs_24"
             android:title="@string/title_graphs"/>
 
-    </group>
+        <item android:title="@string/text_empty">
+            <menu>
+                <item
+                    android:id="@+id/navigation_settings"
+                    android:icon="@drawable/ic_settings_24"
+                    android:title="@string/title_activity_settings"
+                    />
 
+            </menu>
+        </item>
+
+    </group>
 </menu>

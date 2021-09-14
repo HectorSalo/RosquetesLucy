@@ -22,15 +22,17 @@
         <item>Noviembre</item>
         <item>Diciembre</item>
     </string-array>
-    <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
+
+    <string-array name="days_expired_entries">
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
     </string-array>
 
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
+    <string-array name="days_expired_values">
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
     </string-array>
 
 </resources>

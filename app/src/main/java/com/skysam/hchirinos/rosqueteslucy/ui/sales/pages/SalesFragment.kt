@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
+import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSalesBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.ViewDetailsSaleDialog
@@ -80,7 +81,7 @@ class SalesFragment : Fragment(), OnClick {
                     for (sale in sales) {
                         val daysBetween = adapaterSales.getTimeDistance(Date(sale.dateDelivery), Date())
                         if (sale.isPaid) salesPaid.add(sale) else salesNotPaid.add(sale)
-                        if (!sale.isPaid && daysBetween >= 7) listExpiredSevenDays.add(sale)
+                        if (!sale.isPaid && daysBetween >= SharedPref.getDaysExpired()) listExpiredSevenDays.add(sale)
                     }
                     loadList(index)
                 } else {

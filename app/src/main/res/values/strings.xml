@@ -6,6 +6,7 @@
     <string name="title_storage">Inventario</string>
     <string name="title_graphs">Estadísticas</string>
     <string name="title_activity_add_sale">Generar Factura</string>
+    <string name="title_activity_settings">Configuración</string>
 
     <!--Messages-->
     <string name="text_empty"> </string>
@@ -98,18 +99,20 @@
     <string name="text_sales_not_paid">Por cobrar</string>
     <string name="text_waste">Pérdidas</string>
     <string name="title_chart">Balance\n($)</string>
-    <string name="chip_week">Semanal</string>
+    <string name="chip_week">Rango de Fecha</string>
     <string name="chip_month">Mensual</string>
-    <!-- Settings Activity Title -->
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="text_date_range">%1$s - %2$s</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
+    <string name="personalizacion_header">Personalización</string>
     <string name="sync_header">Sync</string>
+    <string name="text_about">Información de la App</string>
+    <string name="about_title">Desarrollado por&#8230;</string>
+    <string name="version_name">Versión %1$s</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <string name="days_expired_title">Alerta de días vencidos</string>
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
