@@ -23,4 +23,8 @@ object InitSession {
     fun initSession(email: String, password: String): Task<AuthResult> {
         return getInstance().signInWithEmailAndPassword(email, password)
     }
+
+    fun signOut() {
+        getInstance().signOut()
+    }
 }

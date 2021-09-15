@@ -4,17 +4,29 @@
 
         <EditTextPreference
             app:key="signature"
-            app:title="@string/signature_title"
+            app:title="@string/title_costumers"
             app:useSimpleSummaryProvider="true"
             app:isPreferenceVisible="false"/>
 
         <ListPreference
             app:defaultValue="7"
-            app:entries="@array/days_expired_values"
+            app:entries="@array/days_expired_entries"
             app:entryValues="@array/days_expired_values"
             app:key="days_expired"
             app:title="@string/days_expired_title"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_campaign_24"/>
+
+        <SwitchPreferenceCompat
+            app:key="lock"
+            app:summaryOff="@string/lock_summary_off"
+            app:summaryOn="@string/lock_summary_on"
+            app:title="@string/lock_title"
+            app:icon="@drawable/ic_lock_open_24"/>
+
+        <PreferenceScreen
+            app:key="pinLock"
+            app:title="@string/title_change_pin_lock"/>
 
     </PreferenceCategory>
 

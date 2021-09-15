@@ -116,10 +116,16 @@
     <string name="text_about">Información de la App</string>
     <string name="about_title">Desarrollado por&#8230;</string>
     <string name="version_name">Versión %1$s</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
     <string name="days_expired_title">Alerta de días vencidos</string>
+
+    <!-- Lock Preferences -->
+    <string name="lock_title">Bloquear acceso a la aplicación</string>
+    <string name="lock_summary_on">Acceso bloqueado</string>
+    <string name="lock_summary_off">Sin bloqueo</string>
+    <string name="title_change_pin_lock">Cambiar PIN de bloqueo</string>
+    <string name="text_type_pin">Ingrese Pin</string>
+    <string name="text_type_pin_again">Repetir Pin</string>
+    <string name="error_pin_match">Códigos no coinciden</string>
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
@@ -132,8 +138,7 @@
     <string name="text_email_user">Correo electrónico</string>
     <string name="text_password">Contraseña</string>
     <string name="btn_init_session">Iniciar Sesión</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="error_pin_code">Pin Incorrecto</string>
+    <string name="title_dialog_fingerprint">Bienvenido a Rosquetes Lucy App</string>
+    <string name="btn_dialog_fingerprint">Acceder con PIN de respaldo</string>
 </resources>

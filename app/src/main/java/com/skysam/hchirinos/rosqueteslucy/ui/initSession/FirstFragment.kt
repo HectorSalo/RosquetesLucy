@@ -6,14 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.skysam.hchirinos.rosqueteslucy.MainActivity
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
+import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.InitSession
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentFirstLoginBinding
 
@@ -34,6 +35,13 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finishAffinity()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         viewModel.messageSession.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 binding.progressBar.visibility = View.GONE
@@ -43,8 +51,8 @@ class FirstFragment : Fragment() {
                     binding.tfUser.isEnabled = true
                     binding.tfPassword.isEnabled = true
                 } else {
-                    requireActivity().finish()
                     startActivity(Intent(requireContext(), MainActivity::class.java))
+                    requireActivity().finish()
                 }
             }
         })
@@ -64,8 +72,12 @@ class FirstFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         if (InitSession.getCurrentUser() != null) {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-            //FirebaseAuth.getInstance().signOut()
+            if (SharedPref.isLock()) {
+                findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            } else {
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+                requireActivity().finish()
+            }
         }
     }
 

@@ -31,4 +31,6 @@ object Constants {
 
     const val PREFERENCES = "preferences"
     const val PREFERENCES_DAYS_EXPIRED = "days_expired"
+    const val PREFERENCES_LOCK = "lock"
+    const val PREFERENCES_PIN_LOCK = "pinLock"
 }

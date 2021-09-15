@@ -29,4 +29,9 @@
         <item>7</item>
     </string-array>
 
+    <string-array name="days_expired_entries">
+        <item>Con 3 días</item>
+        <item>Con 5 días</item>
+        <item>Con 7 días</item>
+    </string-array>
 </resources>
