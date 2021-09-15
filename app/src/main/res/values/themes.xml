@@ -2,16 +2,18 @@
     <!-- Base application theme. -->
     <style name="Theme.RosquetesLucy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/brown_normal</item>
-        <item name="colorPrimaryVariant">@color/brown_dark</item>
+        <item name="colorPrimary">@color/green_base_normal</item>
+        <item name="colorPrimaryVariant">@color/green_base_dark</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/blue_gray_normal</item>
+        <item name="colorSecondary">@color/green_second_base_normal</item>
         <item name="colorSecondaryVariant">@color/blue_gray_dark</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="materialButtonStyle">@style/ButtonColor</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
     <style name="Theme.RosquetesLucy.NoActionBar">
@@ -22,6 +24,12 @@
     <style name="Theme.RosquetesLucy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.RosquetesLucy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/DialogButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/DialogButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/DialogButtonStyle</item>
+    </style>
 
     <!--<style name="Theme.App.Starting" parent="Theme.SplashScreen">
         // Set the splash screen background, animated icon, and animation duration.

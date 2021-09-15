@@ -57,9 +57,10 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.1.1'
 
     //librerias Firebase
-    implementation platform('com.google.firebase:firebase-bom:26.6.0')
+    implementation platform('com.google.firebase:firebase-bom:28.4.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //librerias externas
@@ -67,6 +68,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.airbnb.android:lottie:4.1.0'
     implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'androidx.annotation:annotation:1.2.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

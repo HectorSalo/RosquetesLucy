@@ -72,6 +72,7 @@
         android:clickable="true"
         android:contentDescription="@string/title_costumers"
         android:focusable="true"
+        android:tintMode="@color/white"
         android:src="@drawable/ic_add_costumer_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

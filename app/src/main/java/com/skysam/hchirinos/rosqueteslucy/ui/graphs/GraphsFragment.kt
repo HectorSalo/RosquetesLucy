@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentGraphsBinding
 import java.text.DateFormat
@@ -35,6 +36,7 @@ class GraphsFragment : Fragment() {
     private val salesNotPaid = mutableListOf<Sale>()
     private val salesPaid = mutableListOf<Sale>()
     private val expenses = mutableListOf<Expense>()
+    private val notesSale = mutableListOf<NoteSale>()
     private var isByRange = true
     private var monthByDefault = 0
     private lateinit var dateStart: Date
@@ -112,6 +114,13 @@ class GraphsFragment : Fragment() {
                 loadChart(true, -1)
             }
         })
+        viewModel.notesSale.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                notesSale.clear()
+                notesSale.addAll(it)
+                loadChart(true, -1)
+            }
+        })
     }
 
     private fun selecDate() {
@@ -154,10 +163,8 @@ class GraphsFragment : Fragment() {
         var totalSalesPaid = 0.0
         var totalWaste = 0.0
         for (sale in salesPaid) {
-            val calendar = Calendar.getInstance()
-            calendar.time = Date(sale.datePaid)
-            val dateSale = Date(sale.datePaid)
             if (isByRange) {
+                val dateSale = Date(sale.datePaid)
                 if (dateSale.after(calendarStartRange.time) && dateSale.before(calendarFinalRange.time)) {
                     val total = sale.quantity * sale.price
                     totalSalesPaid += if (sale.isDolar) {
@@ -169,6 +176,8 @@ class GraphsFragment : Fragment() {
                     if (!sale.isDolar) totalWaste += if (rest > 0) rest else 0.0
                 }
             } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(sale.datePaid)
                 if (calendar[Calendar.MONTH] == selection) {
                     val total = sale.quantity * sale.price
                     totalSalesPaid += if (sale.isDolar) {
@@ -183,10 +192,8 @@ class GraphsFragment : Fragment() {
         }
         var totalSalesNotPaid = 0.0
         for (sale in salesNotPaid) {
-            val calendar = Calendar.getInstance()
-            calendar.time = Date(sale.datePaid)
-            val dateSale = Date(sale.datePaid)
             if (isByRange) {
+                val dateSale = Date(sale.datePaid)
                 if (dateSale.after(calendarStartRange.time) && dateSale.before(calendarFinalRange.time)) {
                     totalSalesNotPaid += if (sale.isDolar) {
                         (sale.quantity * sale.price)
@@ -195,6 +202,8 @@ class GraphsFragment : Fragment() {
                     }
                 }
             } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(sale.datePaid)
                 if (calendar[Calendar.MONTH] == selection) {
                     totalSalesNotPaid += if (sale.isDolar) {
                         (sale.quantity * sale.price)
@@ -206,10 +215,8 @@ class GraphsFragment : Fragment() {
         }
         var totalExpenses = 0.0
         for (expense in expenses) {
-            val calendar = Calendar.getInstance()
-            calendar.time = Date(expense.date)
-            val dateExpense = Date(expense.date)
             if (isByRange) {
+                val dateExpense = Date(expense.date)
                 if (dateExpense.after(calendarStartRange.time) && dateExpense.before(calendarFinalRange.time)) {
                     totalExpenses += if (expense.isDolar) {
                         (expense.quantity * expense.price)
@@ -218,6 +225,8 @@ class GraphsFragment : Fragment() {
                     }
                 }
             } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(expense.date)
                 if (calendar[Calendar.MONTH] == selection) {
                     totalExpenses += if (expense.isDolar) {
                         (expense.quantity * expense.price)
@@ -227,9 +236,33 @@ class GraphsFragment : Fragment() {
                 }
             }
         }
+        var totalNotesSale = 0.0
+        for (noteSale in notesSale) {
+            if (isByRange) {
+                val dateNoteSale = Date(noteSale.date)
+                if (dateNoteSale.after(calendarStartRange.time) && dateNoteSale.before(calendarFinalRange.time)) {
+                    totalNotesSale += if (noteSale.isDolar) {
+                        noteSale.quantity * noteSale.price
+                    } else {
+                        (noteSale.quantity * noteSale.price) / noteSale.rate
+                    }
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(noteSale.date)
+                if (calendar[Calendar.MONTH] == selection) {
+                    totalNotesSale += if (noteSale.isDolar) {
+                        noteSale.quantity * noteSale.price
+                    } else {
+                        (noteSale.quantity * noteSale.price) / noteSale.rate
+                    }
+                }
+            }
+        }
 
         val pieEntries = mutableListOf<PieEntry>()
         pieEntries.add(PieEntry(totalSalesPaid.toFloat(), getString(R.string.text_sales_paid)))
+        pieEntries.add(PieEntry(totalNotesSale.toFloat(), getString(R.string.text_note_sale_graph)))
         pieEntries.add(PieEntry(totalSalesNotPaid.toFloat(), getString(R.string.text_sales_not_paid)))
         pieEntries.add(PieEntry(totalWaste.toFloat(), getString(R.string.text_waste)))
         pieEntries.add(PieEntry(totalExpenses.toFloat(), getString(R.string.title_expenses)))
@@ -238,6 +271,7 @@ class GraphsFragment : Fragment() {
         pieDataSet.valueTextSize = 18f
         pieDataSet.setColors(
             ContextCompat.getColor(requireContext(), R.color.green_light),
+            ContextCompat.getColor(requireContext(), R.color.purple),
             ContextCompat.getColor(requireContext(), R.color.red_light),
             ContextCompat.getColor(requireContext(), R.color.yellow),
             ContextCompat.getColor(requireContext(), R.color.blue)
@@ -255,6 +289,7 @@ class GraphsFragment : Fragment() {
         pieBalance.data = pieData
         pieBalance.legend.textColor = requireContext().resolveColorAttr(android.R.attr.textColorSecondary)
         pieBalance.legend.textSize = 14f
+        pieBalance.legend.isWordWrapEnabled = true
         pieBalance.invalidate()
 
         pieBalance.visibility = View.VISIBLE

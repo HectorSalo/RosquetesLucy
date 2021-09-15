@@ -102,6 +102,7 @@
 
     <!-- Graphs -->
     <string name="text_sales_paid">Cobradas</string>
+    <string name="text_note_sale_graph">Notas</string>
     <string name="text_sales_not_paid">Por cobrar</string>
     <string name="text_waste">Pérdidas</string>
     <string name="title_chart">Balance\n($)</string>
@@ -126,4 +127,13 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <!-- LoginActivity -->
+    <string name="text_email_user">Correo electrónico</string>
+    <string name="text_password">Contraseña</string>
+    <string name="btn_init_session">Iniciar Sesión</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
