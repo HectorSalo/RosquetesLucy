@@ -8,20 +8,34 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/background_splash.xml" value="0.21354166666666666" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_backspace_24.xml" value="0.29635416666666664" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_fingerprint_24.xml" value="0.37083333333333335" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/activity_add_sale.xml" value="0.2033514492753623" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/content_add_sale.xml" value="0.2033514492753623" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/dialog_pin_settings.xml" value="0.2033514492753623" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_container_pages_sales.xml" value="0.20606884057971014" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_costumers.xml" value="0.2033514492753623" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_first_add_sale.xml" value="0.2033514492753623" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_notes_sale.xml" value="0.2033514492753623" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_sales.xml" value="0.2033514492753623" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_second_login.xml" value="0.2033514492753623" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/menu/activity_main_drawer.xml" value="0.3546875" />
-        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/xml/root_preferences.xml" value="0.33" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/background_image_init_session.xml" value="0.3296296296296296" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_add_costumer_24.xml" value="0.23125" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_add_location_24.xml" value="0.37083333333333335" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_add_sale_24.xml" value="0.37083333333333335" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_add_shopping_cart_24.xml" value="0.37083333333333335" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_cash_remove_56dp.xml" value="0.23125" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/side_nav_bar.xml" value="0.23125" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/activity_login.xml" value="0.17" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/activity_main.xml" value="0.18795289855072464" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/content_login.xml" value="0.3546875" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/dialog_add_costumer.xml" value="0.17249240121580547" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/dialog_add_expense.xml" value="0.3546875" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_about.xml" value="0.3546875" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_costumers.xml" value="0.17249240121580547" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_expenses.xml" value="0.3546875" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_first_add_sale.xml" value="0.25" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_first_login.xml" value="0.3546875" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_graphs.xml" value="0.17249240121580547" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_sales.xml" value="0.17249240121580547" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_second_add_sale.xml" value="0.18795289855072464" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_second_login.xml" value="0.3546875" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_settings.xml" value="0.340625" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/settings_activity.xml" value="0.3546875" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/menu/activity_main_drawer.xml" value="0.34923076923076923" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/menu/menu_costumers.xml" value="0.21510416666666668" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/menu/menu_expenses.xml" value="0.19739583333333333" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/menu/menu_top_bar_main.xml" value="0.3546875" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/xml/root_preferences.xml" value="0.3546875" />
       </map>
     </option>
   </component>

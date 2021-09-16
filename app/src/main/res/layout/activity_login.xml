@@ -5,6 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.initSession.LoginActivity">
 
-    <include layout="@layout/content_login" />
+    <include layout="@layout/content_login"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

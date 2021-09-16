@@ -115,6 +115,8 @@
     <string name="sync_header">Sync</string>
     <string name="text_about">Información de la App</string>
     <string name="about_title">Desarrollado por&#8230;</string>
+    <string name="title_sign_out">Cerrar sesión</string>
+    <string name="message_sign_out">¿Desea cerrar la sesión actual?</string>
     <string name="version_name">Versión %1$s</string>
     <string name="days_expired_title">Alerta de días vencidos</string>
 
@@ -122,10 +124,14 @@
     <string name="lock_title">Bloquear acceso a la aplicación</string>
     <string name="lock_summary_on">Acceso bloqueado</string>
     <string name="lock_summary_off">Sin bloqueo</string>
-    <string name="title_change_pin_lock">Cambiar PIN de bloqueo</string>
+    <string name="title_change_pin_lock">Cambiar PIN de desbloqueo</string>
     <string name="text_type_pin">Ingrese Pin</string>
     <string name="text_type_pin_again">Repetir Pin</string>
     <string name="error_pin_match">Códigos no coinciden</string>
+    <string name="error_pin_length">Código debe tener 4 dígitos</string>
+    <string name="error_biometric">Error al leer datos biométricos</string>
+    <string name="error_biometric_hw">Dispositivo sin lector biométrico</string>
+    <string name="error_biometric_register">Dispositivo no tiene huella registrada</string>
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>

@@ -8,20 +8,22 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
+import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogPinSettingsBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 /**
  * Created by Hector Chirinos on 15/09/2021.
  */
-class PinDialog: DialogFragment() {
+class PinDialog(private val isPinChange: Boolean): DialogFragment() {
     private var _binding: DialogPinSettingsBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: SettingsViewModel by activityViewModels()
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
 
@@ -49,6 +51,7 @@ class PinDialog: DialogFragment() {
         }
 
         buttonNegative.setOnClickListener {
+            if (!isPinChange) viewModel.changeLockState(false)
             dismiss()
         }
 
@@ -69,6 +72,11 @@ class PinDialog: DialogFragment() {
             binding.etPin.requestFocus()
             return
         }
+        if (pin.length < 4) {
+            binding.tfPin.error = getString(R.string.error_pin_length)
+            binding.etPin.requestFocus()
+            return
+        }
         val pinRepeat = binding.etPinRepetir.text.toString()
         if (pinRepeat.isEmpty()) {
             binding.tfRepetirPin.error = getString(R.string.error_field_empty)
@@ -81,8 +89,9 @@ class PinDialog: DialogFragment() {
             return
         }
         Keyboard.close(binding.root)
-        //SharedPref.changeLock(true)
-        //SharedPref.changePinLock(pin)
+        SharedPref.changeLock(true)
+        SharedPref.changePinLock(pin)
+        viewModel.changeLockState(true)
 
         buttonPositive.visibility = View.GONE
         buttonNegative.visibility = View.GONE
