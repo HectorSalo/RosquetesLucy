@@ -17,6 +17,7 @@ import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.classView.ExitDialog
 import com.skysam.hchirinos.rosqueteslucy.common.classView.OnClickExit
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentFirstAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.costumers.AddLocationDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
@@ -31,6 +32,8 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
     private var dateSelected: Long = 0
     private lateinit var costumer: Costumer
     private var isSale = true
+    private val sales = mutableListOf<Sale>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,7 +97,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
             if (_binding != null) {
                 costumer = it
                 binding.tvNameCostumer.text = it.name
-                val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, it.locations)
+                val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, it.locations.sorted())
                 binding.spinner.adapter = adapterLocations
             }
         })
@@ -130,6 +133,19 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
                         if (noteSale.noteNumber > number) {
                             number = noteSale.noteNumber
                         }
+                    }
+                    binding.etInvoice.setText((number + 1).toString())
+                }
+            }
+        })
+        viewModel.sales.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                if (isSale) {
+                    sales.clear()
+                    sales.addAll(it)
+                    var number = 0
+                    for (sale in it) {
+                        if (sale.invoice > number) number = sale.invoice
                     }
                     binding.etInvoice.setText((number + 1).toString())
                 }
@@ -173,6 +189,13 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
             binding.tfInvoice.error = getString(R.string.error_field_empty)
             binding.etInvoice.requestFocus()
             return
+        }
+        for (sale in sales) {
+            if (invoice.toInt() == sale.invoice) {
+                binding.tfInvoice.error = getString(R.string.error_invoice_exists)
+                binding.etInvoice.requestFocus()
+                return
+            }
         }
         var rate: String
         if (binding.rbDolar.isChecked) {

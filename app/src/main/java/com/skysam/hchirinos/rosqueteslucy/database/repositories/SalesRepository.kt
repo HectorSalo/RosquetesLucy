@@ -27,25 +27,22 @@ object SalesRepository {
     fun getValueWeb(): Flow<String> {
         return callbackFlow {
             var valor: String? = null
-            val url = "https://monitordolarvenezuela.com/"
+            val url = "http://www.bcv.org.ve/"
 
             withContext(Dispatchers.IO) {
                try {
-                    val doc = Jsoup.connect(url).get()
-                    val data = doc.select("div.back-white-tabla")
-                    valor = data.select("h6.text-center").text()
+                   val doc = Jsoup.connect(url).get()
+                   val data = doc.select("div#dolar")
+                   valor = data.select("strong").last()?.text()
                 } catch (e: Exception) {
                     Log.e("Error", e.toString())
                 }
             }
-
             if (valor != null) {
-                val valor1: String = valor!!.replace("Bs.S ", "")
-                val valor2 = valor1.replace(".", "")
-                val values: List<String> = valor2.split(" ")
-                val valor3 = values[0]
-                val valorNeto = valor3.replace(",", ".")
-                offer(valorNeto)
+                val valorNeto = valor?.replace(",", ".")
+                val valorCotizacion = valorNeto!!.toFloat()
+                val valorRounded = String.format(Locale.US, "%.2f", valorCotizacion)
+                offer(valorRounded)
             } else {
                 offer("1,00")
             }

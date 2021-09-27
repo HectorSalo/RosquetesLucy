@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddExpenseBinding
 import java.text.DateFormat
@@ -44,7 +45,7 @@ class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWat
         binding.etPrice.addTextChangedListener(this)
         binding.etRate.addTextChangedListener(this)
         binding.etName.setText(expense.name)
-        binding.etPrice.setText(expense.price.toString())
+        binding.etPrice.setText(ClassesCommon.convertDoubleToString(expense.price))
         if (expense.isDolar) {
             binding.rbDolar.isChecked = true
             binding.tfRate.visibility = View.GONE
@@ -173,7 +174,7 @@ class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWat
         var cadena = s.toString()
         cadena = cadena.replace(",", "").replace(".", "")
         val cantidad: Double = cadena.toDouble() / 100
-        cadena = String.format(Locale.GERMANY, "%,.2f", cantidad)
+        cadena = ClassesCommon.convertDoubleToString(cantidad)
 
         if (s.toString() == binding.etPrice.text.toString()) {
             binding.etPrice.removeTextChangedListener(this)
