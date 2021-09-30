@@ -39,6 +39,7 @@ class CostumersAdapter(private var costumers: MutableList<Costumer>, private val
                     R.id.menu_delete_location-> onClick.deleteLocation(item)
                     R.id.menu_edit-> onClick.edit(item)
                     R.id.menu_delete-> onClick.delete(item)
+                    R.id.menu_add_refund -> onClick.addRefund(item)
                 }
                false
             }

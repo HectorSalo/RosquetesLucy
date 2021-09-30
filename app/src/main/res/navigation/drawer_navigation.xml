@@ -29,7 +29,12 @@
         tools:layout="@layout/fragment_expenses"/>
     <fragment
         android:id="@+id/navigation_notes_sales"
-        android:name="com.skysam.hchirinos.rosqueteslucy.ui.notesSale.NotesSaleFragment"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.notesSale.ContainerPagesNoteSalesFragment"
         android:label="@string/title_notes_sales"
-        tools:layout="@layout/fragment_notes_sale" />
+        tools:layout="@layout/fragment_container_pages_note_sales"/>
+    <fragment
+        android:id="@+id/navigation_refunds"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsFragment"
+        android:label="@string/title_refunds"
+        tools:layout="@layout/fragment_refunds" />
 </navigation>

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentCostumersBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.refunds.AddRefundDialog
 import java.util.*
 
 class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
@@ -162,6 +163,11 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
 
         val dialog = builder.create()
         dialog.show()
+    }
+
+    override fun addRefund(costumer: Costumer) {
+        val addRefundDialog = AddRefundDialog(costumer)
+        addRefundDialog.show(requireActivity().supportFragmentManager, tag)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {

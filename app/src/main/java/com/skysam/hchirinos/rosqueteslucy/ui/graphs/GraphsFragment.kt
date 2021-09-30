@@ -21,6 +21,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentGraphsBinding
 import java.text.DateFormat
@@ -37,6 +38,9 @@ class GraphsFragment : Fragment() {
     private val salesPaid = mutableListOf<Sale>()
     private val expenses = mutableListOf<Expense>()
     private val notesSale = mutableListOf<NoteSale>()
+    private val notesSalePaid = mutableListOf<NoteSale>()
+    private val notesSaleNotPaid = mutableListOf<NoteSale>()
+    private val refunds = mutableListOf<Refund>()
     private var isByRange = true
     private var monthByDefault = 0
     private lateinit var dateStart: Date
@@ -54,7 +58,15 @@ class GraphsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val calendar = Calendar.getInstance()
+        val timeZone = TimeZone.getDefault()
+        val offset = timeZone.getOffset(Date().time) * -1
+        calendar.timeInMillis = calendar.timeInMillis + offset
+        calendar[Calendar.HOUR_OF_DAY] = 0
+        calendar[Calendar.MINUTE] = 0
         dateStart = calendar.time
+        calendar.timeInMillis = calendar.timeInMillis + offset
+        calendar[Calendar.HOUR_OF_DAY] = 23
+        calendar[Calendar.MINUTE] = 59
         dateFinal = calendar.time
         monthByDefault = calendar[Calendar.MONTH]
         loadViewModel()
@@ -116,8 +128,20 @@ class GraphsFragment : Fragment() {
         })
         viewModel.notesSale.observe(viewLifecycleOwner, {
             if (_binding != null) {
+                notesSalePaid.clear()
+                notesSaleNotPaid.clear()
                 notesSale.clear()
                 notesSale.addAll(it)
+                for (noteSale in notesSale) {
+                    if (noteSale.isPaid) notesSalePaid.add(noteSale) else notesSaleNotPaid.add(noteSale)
+                }
+                loadChart(true, -1)
+            }
+        })
+        viewModel.refunds.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                refunds.clear()
+                refunds.addAll(it)
                 loadChart(true, -1)
             }
         })
@@ -133,11 +157,13 @@ class GraphsFragment : Fragment() {
             val offset = timeZone.getOffset(Date().time) * -1
             calendar.timeInMillis = selection.first
             calendar.timeInMillis = calendar.timeInMillis + offset
+            calendar[Calendar.HOUR_OF_DAY] = 0
+            calendar[Calendar.MINUTE] = 0
             dateStart = calendar.time
             calendar.timeInMillis = selection.second
+            calendar.timeInMillis = calendar.timeInMillis + offset
             calendar[Calendar.HOUR_OF_DAY] = 23
             calendar[Calendar.MINUTE] = 59
-            calendar.timeInMillis = calendar.timeInMillis + offset
             dateFinal = calendar.time
             binding.etDate.setText(getString(R.string.text_date_range,
                     formatDate(dateStart), formatDate(dateFinal)))
@@ -151,8 +177,7 @@ class GraphsFragment : Fragment() {
         val calendarFinalRange = Calendar.getInstance()
         calendarStartRange.time = dateStart
         calendarFinalRange.time = dateFinal
-        calendarStartRange.add(Calendar.DAY_OF_YEAR, -1)
-        calendarFinalRange.add(Calendar.DAY_OF_YEAR, 1)
+
         val pieBalance = binding.pieBalance
         pieBalance.description = null
         pieBalance.centerText = getString(R.string.title_chart)
@@ -236,25 +261,73 @@ class GraphsFragment : Fragment() {
                 }
             }
         }
-        var totalNotesSale = 0.0
-        for (noteSale in notesSale) {
+        var totalNotesSalePaid = 0.0
+        for (noteSale in notesSalePaid) {
             if (isByRange) {
-                val dateNoteSale = Date(noteSale.date)
+                val dateNoteSale = Date(noteSale.datePaid)
                 if (dateNoteSale.after(calendarStartRange.time) && dateNoteSale.before(calendarFinalRange.time)) {
-                    totalNotesSale += if (noteSale.isDolar) {
+                    totalNotesSalePaid += if (noteSale.isDolar) {
                         noteSale.quantity * noteSale.price
                     } else {
-                        (noteSale.quantity * noteSale.price) / noteSale.rate
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
                     }
                 }
             } else {
                 val calendar = Calendar.getInstance()
-                calendar.time = Date(noteSale.date)
+                calendar.time = Date(noteSale.datePaid)
                 if (calendar[Calendar.MONTH] == selection) {
-                    totalNotesSale += if (noteSale.isDolar) {
+                    totalNotesSalePaid += if (noteSale.isDolar) {
                         noteSale.quantity * noteSale.price
                     } else {
-                        (noteSale.quantity * noteSale.price) / noteSale.rate
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
+                    }
+                }
+            }
+        }
+
+        var totalNotesSaleNotPaid = 0.0
+        for (noteSale in notesSaleNotPaid) {
+            if (isByRange) {
+                val dateNoteSale = Date(noteSale.datePaid)
+                if (dateNoteSale.after(calendarStartRange.time) && dateNoteSale.before(calendarFinalRange.time)) {
+                    totalNotesSaleNotPaid += if (noteSale.isDolar) {
+                        noteSale.quantity * noteSale.price
+                    } else {
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
+                    }
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(noteSale.datePaid)
+                if (calendar[Calendar.MONTH] == selection) {
+                    totalNotesSaleNotPaid += if (noteSale.isDolar) {
+                        noteSale.quantity * noteSale.price
+                    } else {
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
+                    }
+                }
+            }
+        }
+
+        var totalRefunds = 0.0
+        for (refund in refunds) {
+            if (isByRange) {
+                val dateRefund = Date(refund.date)
+                if (dateRefund.after(calendarStartRange.time) && dateRefund.before(calendarFinalRange.time)) {
+                    totalRefunds += if (refund.isDolar) {
+                        (refund.quantity * refund.price)
+                    } else {
+                        (refund.quantity * refund.price) / refund.rate
+                    }
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(refund.date)
+                if (calendar[Calendar.MONTH] == selection) {
+                    totalRefunds += if (refund.isDolar) {
+                        (refund.quantity * refund.price)
+                    } else {
+                        (refund.quantity * refund.price) / refund.rate
                     }
                 }
             }
@@ -262,10 +335,12 @@ class GraphsFragment : Fragment() {
 
         val pieEntries = mutableListOf<PieEntry>()
         pieEntries.add(PieEntry(totalSalesPaid.toFloat(), getString(R.string.text_sales_paid)))
-        pieEntries.add(PieEntry(totalNotesSale.toFloat(), getString(R.string.text_note_sale_graph)))
+        pieEntries.add(PieEntry(totalNotesSalePaid.toFloat(), getString(R.string.text_note_sale_paid_graph)))
         pieEntries.add(PieEntry(totalSalesNotPaid.toFloat(), getString(R.string.text_sales_not_paid)))
-        pieEntries.add(PieEntry(totalWaste.toFloat(), getString(R.string.text_waste)))
+        pieEntries.add(PieEntry(totalNotesSaleNotPaid.toFloat(), getString(R.string.text_note_sale_not_paid_graph)))
+        //pieEntries.add(PieEntry(totalWaste.toFloat(), getString(R.string.text_waste)))
         pieEntries.add(PieEntry(totalExpenses.toFloat(), getString(R.string.title_expenses)))
+        pieEntries.add(PieEntry(totalRefunds.toFloat(), getString(R.string.title_refunds)))
 
         val pieDataSet = PieDataSet(pieEntries, "")
         pieDataSet.valueTextSize = 18f
@@ -274,7 +349,8 @@ class GraphsFragment : Fragment() {
             ContextCompat.getColor(requireContext(), R.color.purple),
             ContextCompat.getColor(requireContext(), R.color.red_light),
             ContextCompat.getColor(requireContext(), R.color.yellow),
-            ContextCompat.getColor(requireContext(), R.color.blue)
+            ContextCompat.getColor(requireContext(), R.color.blue),
+            ContextCompat.getColor(requireContext(), R.color.mostaza)
         )
         pieDataSet.formSize = 16f
         val pieData = PieData(pieDataSet)

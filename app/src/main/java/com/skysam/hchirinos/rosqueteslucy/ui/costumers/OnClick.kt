@@ -10,4 +10,5 @@ interface OnClick {
     fun deleteLocation(costumer: Costumer)
     fun edit(costumer: Costumer)
     fun delete(costumer: Costumer)
+    fun addRefund(costumer: Costumer)
 }

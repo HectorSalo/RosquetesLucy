@@ -9,7 +9,7 @@ import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.CloseDialog
-import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.PaidDialog
+import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.PaidSaleDialog
 import java.text.DateFormat
 import java.util.*
 
@@ -97,8 +97,8 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment(), CloseDial
     }
 
     private fun paidSale() {
-        val paidDialog = PaidDialog(sale, this)
-        paidDialog.show(requireActivity().supportFragmentManager, tag)
+        val paidSaleDialog = PaidSaleDialog(sale, this)
+        paidSaleDialog.show(requireActivity().supportFragmentManager, tag)
     }
 
     private fun convertFormatNumber(amount: Double): String {

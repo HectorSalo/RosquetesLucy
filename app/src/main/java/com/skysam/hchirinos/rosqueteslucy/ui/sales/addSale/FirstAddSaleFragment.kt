@@ -118,9 +118,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
             if (_binding != null) {
                 if (!it) {
                     binding.tfInvoice.hint = getString(R.string.text_note_sale_number)
-                    binding.rgInvoicePaid.visibility = View.GONE
-                    binding.tvInvoicePaid.visibility = View.GONE
-                    binding.rbPaidYes.isChecked = true
+                    binding.tvInvoicePaid.text = getString(R.string.text_rg_note_sale_paid)
                     isSale = false
                 }
             }

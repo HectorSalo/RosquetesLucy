@@ -9,9 +9,12 @@ data class NoteSale(
     var nameCostumer: String,
     var location: String,
     var price: Double,
-    var rate: Double,
+    var rateDelivery: Double,
+    var ratePaid: Double,
     var quantity: Int,
     var isDolar: Boolean,
     var noteNumber: Int,
-    var date: Long
+    var datePaid: Long,
+    var dateDelivery: Long,
+    var isPaid:Boolean
 )

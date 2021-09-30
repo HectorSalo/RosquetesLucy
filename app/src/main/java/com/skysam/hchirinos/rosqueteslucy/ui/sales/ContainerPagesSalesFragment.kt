@@ -16,6 +16,7 @@ class ContainerPagesSalesFragment : Fragment(), SearchView.OnQueryTextListener {
     private var _binding: FragmentContainerPagesSalesBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
+    private lateinit var search: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +63,7 @@ class ContainerPagesSalesFragment : Fragment(), SearchView.OnQueryTextListener {
         menu.clear()
         inflater.inflate(R.menu.menu_top_bar_main, menu)
         val item = menu.findItem(R.id.action_search)
-        val search = item.actionView as SearchView
+        search = item.actionView as SearchView
         search.setOnQueryTextListener(this)
     }
 
@@ -70,6 +71,7 @@ class ContainerPagesSalesFragment : Fragment(), SearchView.OnQueryTextListener {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
             viewModel.changePage(position)
+            search.isIconified = true
         }
     }
 

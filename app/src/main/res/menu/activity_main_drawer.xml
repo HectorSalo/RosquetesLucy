@@ -23,6 +23,11 @@
                     android:icon="@drawable/ic_notes_sale_24"
                     android:title="@string/title_notes_sales"/>
 
+                <item
+                    android:id="@+id/navigation_refunds"
+                    android:icon="@drawable/ic_refund_24"
+                    android:title="@string/title_refunds"/>
+
             </menu>
 
         </item>
@@ -38,7 +43,8 @@
                 <item
                     android:id="@+id/navigation_supplier"
                     android:icon="@drawable/ic_supplier_24"
-                    android:title="@string/title_suppliers" />
+                    android:title="@string/title_suppliers"
+                    android:visible="false"/>
 
                 <item
                     android:id="@+id/navigation_expenses"
@@ -48,7 +54,14 @@
                 <item
                     android:id="@+id/navigation_products_expenses"
                     android:icon="@drawable/ic_factory_24"
-                    android:title="@string/title_products_expenses"/>
+                    android:title="@string/title_products_expenses"
+                    android:visible="false"/>
+
+                <item
+                    android:id="@+id/navigation_storage"
+                    android:icon="@drawable/ic_graphs_24"
+                    android:title="@string/title_storage"
+                    android:visible="false"/>
 
             </menu>
 
@@ -61,12 +74,6 @@
 
         <item android:title="@string/text_empty">
             <menu>
-                <item
-                    android:id="@+id/navigation_storage"
-                    android:icon="@drawable/ic_graphs_24"
-                    android:title="@string/title_storage"
-                    android:visible="false"/>
-
                 <item
                     android:id="@+id/navigation_graphs"
                     android:icon="@drawable/ic_graphs_24"

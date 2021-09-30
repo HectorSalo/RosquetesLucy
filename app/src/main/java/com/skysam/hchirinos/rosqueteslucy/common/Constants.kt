@@ -29,6 +29,8 @@ object Constants {
 
     const val EXPENSES = "expenses"
 
+    const val REFUNDS = "refunds"
+
     const val PREFERENCES = "preferences"
     const val PREFERENCES_DAYS_EXPIRED = "days_expired"
     const val PREFERENCES_LOCK = "lock"
