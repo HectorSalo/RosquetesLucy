@@ -28,11 +28,20 @@ object Constants {
     const val NUMBER_NOTE_SALE = "numberNoteSale"
 
     const val EXPENSES = "expenses"
+    const val LIST_EXPENSES = "listExpenses"
+    const val PRIMARY_PRODUCTS = "primaryProducts"
+    const val ID_SUPPLIER = "idSupplier"
+    const val PRODUCT_UNIT_INITIAL = "Unidad(es)"
+    const val UNIT = "unit"
 
     const val REFUNDS = "refunds"
+
+    const val SUPPLIERS = "suppliers"
 
     const val PREFERENCES = "preferences"
     const val PREFERENCES_DAYS_EXPIRED = "days_expired"
     const val PREFERENCES_LOCK = "lock"
     const val PREFERENCES_PIN_LOCK = "pinLock"
+
+    const val TOPIC_NOTIFICATION_UPDATE_APP = "updateApp"
 }

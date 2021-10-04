@@ -34,4 +34,17 @@
         <item>Con 5 días</item>
         <item>Con 7 días</item>
     </string-array>
+
+    <string-array name="units">
+        <item>Seleccione unidad</item>
+        <item>Caja(s)</item>
+        <item>Envase(s)</item>
+        <item>Gramo(s)</item>
+        <item>Kilogramo(s)</item>
+        <item>Litro(s)</item>
+        <item>Libra(s)</item>
+        <item>Mililitro(s)</item>
+        <item>Paquete(s)</item>
+        <item>Unidad(es)</item>
+    </string-array>
 </resources>

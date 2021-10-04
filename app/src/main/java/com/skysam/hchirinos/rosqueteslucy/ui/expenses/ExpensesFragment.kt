@@ -36,10 +36,6 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
             setHasFixedSize(true)
             adapter = adapterExpense
         }
-        binding.floatingActionButton.setOnClickListener {
-            val addExpenseDialog = AddExpenseDialog()
-            addExpenseDialog.show(requireActivity().supportFragmentManager, tag)
-        }
         loadViewModel()
     }
 
@@ -69,24 +65,19 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.floatingActionButton.show()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.floatingActionButton.hide()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    override fun viewExpense(expense: Expense) {
+        val viewExpenseDialog = ViewExpenseDialog(expense)
+        viewExpenseDialog.show(requireActivity().supportFragmentManager, tag)
+    }
+
     override fun edit(expense: Expense) {
-        val editExpenseDialog = EditExpenseDialog(expense)
-        editExpenseDialog.show(requireActivity().supportFragmentManager, tag)
+        /*val editExpenseDialog = EditExpenseDialog(expense)
+        editExpenseDialog.show(requireActivity().supportFragmentManager, tag)*/
     }
 
     override fun delete(expense: Expense) {
@@ -116,7 +107,7 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
             listSearch.clear()
 
             for (expense in expenses) {
-                if (expense.name.lowercase().contains(userInput)) {
+                if (expense.nameSupplier.lowercase().contains(userInput)) {
                     listSearch.add(expense)
                 }
             }

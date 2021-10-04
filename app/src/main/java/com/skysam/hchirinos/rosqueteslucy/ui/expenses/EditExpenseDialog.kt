@@ -6,13 +6,15 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.PrimaryProducts
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddExpenseBinding
 import java.text.DateFormat
 import java.util.*
@@ -20,11 +22,14 @@ import java.util.*
 /**
  * Created by Hector Chirinos on 27/08/2021.
  */
-class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWatcher {
+class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWatcher, OnClickList {
     private var _binding: DialogAddExpenseBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ExpensesViewModel by activityViewModels()
+    private lateinit var adapterItem: ItemListAdapter
+    private val productsInList = mutableListOf<PrimaryProducts>()
     private var dateSelected: Long = 0
+    private lateinit var valueWeb: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,33 +47,25 @@ class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWat
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.etPrice.addTextChangedListener(this)
-        binding.etRate.addTextChangedListener(this)
-        binding.etName.setText(expense.name)
-        binding.etPrice.setText(ClassesCommon.convertDoubleToString(expense.price))
-        if (expense.isDolar) {
-            binding.rbDolar.isChecked = true
-            binding.tfRate.visibility = View.GONE
-        } else {
-            binding.rbBolivar.isChecked = true
+        adapterItem = ItemListAdapter(productsInList, this)
+        binding.rvList.apply {
+            //setHasFixedSize(true)
+            adapter = adapterItem
+            addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
         }
-        val quantity = expense.quantity.toString().replace(".", ",")
-        binding.etQuantity.setText(quantity)
-        dateSelected = expense.date
-        binding.etDate.setText(DateFormat.getDateInstance().format(expense.date))
+        productsInList.addAll(expense.listProducts)
+        adapterItem.updateList(productsInList)
+        binding.etRate.addTextChangedListener(this)
+        binding.tvNameSupplier.text = expense.nameSupplier
+        binding.tvTotal.text = getString(R.string.text_total_dolar_expense,
+            ClassesCommon.convertDoubleToString(expense.total!!))
+        dateSelected = expense.dateCreated!!
+        binding.etDate.setText(DateFormat.getDateInstance().format(dateSelected))
 
         binding.etDate.setOnClickListener { selecDate() }
-        binding.btnExpense.text = getString(R.string.btn_save)
-        binding.btnExpense.setOnClickListener { validateData() }
-        binding.btnExit.setOnClickListener { dialog?.dismiss() }
-        binding.rgMoneda.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.rb_dolar) {
-                binding.tfRate.visibility = View.GONE
-            } else {
-                binding.tfRate.visibility = View.VISIBLE
-            }
-        }
-        binding.etRate.setText(expense.rate.toString())
+        binding.fabSave.setOnClickListener { validateData() }
+        binding.fabCancel.setOnClickListener { dialog?.dismiss() }
+        binding.etRate.setText(ClassesCommon.convertDoubleToString(expense.rate))
     }
 
     override fun onDestroyView() {
@@ -77,7 +74,7 @@ class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWat
     }
 
     private fun validateData() {
-        binding.tfName.error = null
+        /*binding.tfName.error = null
         binding.tfPrice.error = null
         binding.tfQuantity.error = null
         binding.tfDate.error = null
@@ -143,7 +140,7 @@ class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWat
         )
         viewModel.editExpense(expenseUpdate)
         Toast.makeText(requireContext(), getString(R.string.text_editing), Toast.LENGTH_SHORT).show()
-        dialog?.dismiss()
+        dialog?.dismiss()*/
     }
 
     private fun selecDate() {
@@ -176,17 +173,20 @@ class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWat
         val cantidad: Double = cadena.toDouble() / 100
         cadena = ClassesCommon.convertDoubleToString(cantidad)
 
-        if (s.toString() == binding.etPrice.text.toString()) {
-            binding.etPrice.removeTextChangedListener(this)
-            binding.etPrice.setText(cadena)
-            binding.etPrice.setSelection(cadena.length)
-            binding.etPrice.addTextChangedListener(this)
-        }
         if (s.toString() == binding.etRate.text.toString()) {
             binding.etRate.removeTextChangedListener(this)
             binding.etRate.setText(cadena)
             binding.etRate.setSelection(cadena.length)
             binding.etRate.addTextChangedListener(this)
+            valueWeb = cadena
         }
+    }
+
+    override fun deleteItem(primaryProducts: PrimaryProducts) {
+
+    }
+
+    override fun editItem(primaryProducts: PrimaryProducts) {
+
     }
 }

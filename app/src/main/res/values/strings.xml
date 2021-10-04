@@ -27,6 +27,7 @@
     <string name="list_notes_sales_paid_empty">No tiene Notas de Ventas pagadas</string>
     <string name="list_graph_empty">Debe realizar su primera Venta para cargar las gráficas</string>
     <string name="list_refunds_empty">Sin devoluciones</string>
+    <string name="list_supplier_empty">No ha creado su primer Proveedor</string>
     <string name="error_field_empty">Campo vacío</string>
     <string name="text_saving">Guardando&#8230;</string>
     <string name="text_editing">Actualizando&#8230;</string>
@@ -59,7 +60,7 @@
     <string name="text_address_costumer">Dirección Fiscal</string>
     <string name="text_location_costumer">Sucursal</string>
     <string name="text_locations_costumer">Sucursales</string>
-    <string name="error_costumer.exists">Este cliente ya existe</string>
+    <string name="error_costumer_exists">Este cliente ya existe</string>
     <string name="error_identifier_exists">Este RIF está almacenado con otro cliente</string>
     <string name="error_location_exists">Sucursal ya existe para este cliente</string>
     <string name="text_add_location">Nueva sucursal</string>
@@ -108,10 +109,20 @@
 
     <!-- Expenses-->
     <string name="btn_expense">Comprar</string>
-    <string name="text_name_expense">Producto</string>
+    <string name="text_product">Producto</string>
+    <string name="text_add_expense">Crear compra</string>
+    <string name="text_unit">Unidad</string>
+    <string name="title_add_producto_dialog">Agregar producto</string>
+    <string name="error_name_product_exists">Producto ya existe</string>
+    <string name="product_added">Producto ya está en la lista</string>
+    <string name="text_total_dolar_expense">Total ($) %1$s</string>
+    <string name="title_edit_producto_dialog">Editar %1$s</string>
 
     <!-- Refund-->
     <string name="btn_add_refund">Agregar devolución</string>
+
+    <!-- Supplier-->
+    <string name="text_delete_supplier">Eliminar proveedor</string>
 
     <!--Dialogs Common-->
     <string name="title_confirmation_dialog">Confirmar</string>

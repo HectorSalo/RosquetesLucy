@@ -19,10 +19,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.*
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentGraphsBinding
 import java.text.DateFormat
 import java.util.*
@@ -58,13 +55,9 @@ class GraphsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val calendar = Calendar.getInstance()
-        val timeZone = TimeZone.getDefault()
-        val offset = timeZone.getOffset(Date().time) * -1
-        calendar.timeInMillis = calendar.timeInMillis + offset
         calendar[Calendar.HOUR_OF_DAY] = 0
         calendar[Calendar.MINUTE] = 0
         dateStart = calendar.time
-        calendar.timeInMillis = calendar.timeInMillis + offset
         calendar[Calendar.HOUR_OF_DAY] = 23
         calendar[Calendar.MINUTE] = 59
         dateFinal = calendar.time
@@ -166,7 +159,7 @@ class GraphsFragment : Fragment() {
             calendar[Calendar.MINUTE] = 59
             dateFinal = calendar.time
             binding.etDate.setText(getString(R.string.text_date_range,
-                    formatDate(dateStart), formatDate(dateFinal)))
+                formatDate(dateStart), formatDate(dateFinal)))
             loadChart(true, -1)
         }
         picker.show(requireActivity().supportFragmentManager, picker.toString())
@@ -241,23 +234,15 @@ class GraphsFragment : Fragment() {
         var totalExpenses = 0.0
         for (expense in expenses) {
             if (isByRange) {
-                val dateExpense = Date(expense.date)
+                val dateExpense = Date(expense.dateCreated)
                 if (dateExpense.after(calendarStartRange.time) && dateExpense.before(calendarFinalRange.time)) {
-                    totalExpenses += if (expense.isDolar) {
-                        (expense.quantity * expense.price)
-                    } else {
-                        (expense.quantity * expense.price) / expense.rate
-                    }
+                    totalExpenses += expense.total
                 }
             } else {
                 val calendar = Calendar.getInstance()
-                calendar.time = Date(expense.date)
+                calendar.time = Date(expense.dateCreated)
                 if (calendar[Calendar.MONTH] == selection) {
-                    totalExpenses += if (expense.isDolar) {
-                        (expense.quantity * expense.price)
-                    } else {
-                        (expense.quantity * expense.price) / expense.rate
-                    }
+                    totalExpenses += expense.total
                 }
             }
         }

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.skysam.hchirinos.rosqueteslucy.MainActivity
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.CloudMessaging
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
 import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.InitSession
@@ -51,6 +52,7 @@ class FirstFragment : Fragment() {
                     binding.tfUser.isEnabled = true
                     binding.tfPassword.isEnabled = true
                 } else {
+                    CloudMessaging.subscribeToMyTopic()
                     startActivity(Intent(requireContext(), MainActivity::class.java))
                     requireActivity().finish()
                 }
@@ -72,6 +74,7 @@ class FirstFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         if (InitSession.getCurrentUser() != null) {
+            CloudMessaging.subscribeToMyTopic()
             if (SharedPref.isLock()) {
                 findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
             } else {

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -14,8 +13,8 @@ import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreferenceCompat
 import com.skysam.hchirinos.rosqueteslucy.BuildConfig
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.CloudMessaging
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.InitSession
 import com.skysam.hchirinos.rosqueteslucy.ui.initSession.LoginActivity
@@ -104,6 +103,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         builder.setTitle(getString(R.string.title_sign_out))
             .setMessage(getString(R.string.message_sign_out))
             .setPositiveButton(R.string.title_sign_out) { _, _ ->
+                CloudMessaging.unsubscribeToMyTopic()
                 InitSession.signOut()
                 startActivity(Intent(requireContext(), LoginActivity::class.java))
                 requireActivity().finish()

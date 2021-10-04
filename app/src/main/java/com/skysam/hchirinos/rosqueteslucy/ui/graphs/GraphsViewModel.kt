@@ -3,10 +3,7 @@ package com.skysam.hchirinos.rosqueteslucy.ui.graphs
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.*
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.ExpensesRepository
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.NoteSaleRepository
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.RefundsRepository

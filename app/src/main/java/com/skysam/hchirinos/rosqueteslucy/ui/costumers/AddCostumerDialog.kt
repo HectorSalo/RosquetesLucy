@@ -109,7 +109,8 @@ class AddCostumerDialog: DialogFragment() {
             }
         }
         if (costumerExists) return
-        var identifierExists = false
+        // metodo para verificar si el rif está repetido
+        /*var identifierExists = false
         for (cos in costumers) {
             if (cos.identifier == identifier) {
                 if (cos.name != name) {
@@ -120,7 +121,7 @@ class AddCostumerDialog: DialogFragment() {
                 }
             }
         }
-        if (identifierExists) return
+        if (identifierExists) return*/
         val locations = mutableListOf<String>()
         locations.add(location)
 

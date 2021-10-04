@@ -43,8 +43,7 @@
                 <item
                     android:id="@+id/navigation_supplier"
                     android:icon="@drawable/ic_supplier_24"
-                    android:title="@string/title_suppliers"
-                    android:visible="false"/>
+                    android:title="@string/title_suppliers"/>
 
                 <item
                     android:id="@+id/navigation_expenses"

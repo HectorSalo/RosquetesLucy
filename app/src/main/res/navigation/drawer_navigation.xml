@@ -37,4 +37,9 @@
         android:name="com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsFragment"
         android:label="@string/title_refunds"
         tools:layout="@layout/fragment_refunds" />
+    <fragment
+        android:id="@+id/navigation_supplier"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.suppliers.SuppliersFragment"
+        android:label="@string/title_suppliers"
+        tools:layout="@layout/fragment_suppliers"/>
 </navigation>

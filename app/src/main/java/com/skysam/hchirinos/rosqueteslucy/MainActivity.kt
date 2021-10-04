@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.navigation_costumers, R.id.navigation_sales,
                 R.id.navigation_notes_sales, R.id.navigation_refunds,
-                R.id.navigation_expenses,
+                R.id.navigation_supplier, R.id.navigation_expenses,
                 R.id.navigation_graphs
             ), drawerLayout
         )
