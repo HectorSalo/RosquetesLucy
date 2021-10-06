@@ -33,6 +33,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
     private lateinit var costumer: Costumer
     private var isSale = true
     private val sales = mutableListOf<Sale>()
+    private val listSorted = mutableListOf<String>()
 
 
     override fun onCreateView(
@@ -96,8 +97,10 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         viewModel.costumer.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 costumer = it
+                listSorted.clear()
+                listSorted.addAll(costumer.locations.sorted())
                 binding.tvNameCostumer.text = it.name
-                val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, it.locations.sorted())
+                val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
                 binding.spinner.adapter = adapterLocations
             }
         })
@@ -109,8 +112,8 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         })
         viewModel.addLocation.observe(viewLifecycleOwner, {
             if (_binding != null) {
-                if (it) {
-                    binding.spinner.setSelection(costumer.locations.size - 1)
+                if (it != null) {
+                    binding.spinner.setSelection(listSorted.indexOf(it))
                 }
             }
         })

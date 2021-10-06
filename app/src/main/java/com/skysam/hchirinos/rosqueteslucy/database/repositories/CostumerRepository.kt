@@ -76,8 +76,10 @@ object CostumerRepository {
     }
 
     fun deleteLocations(id: String, locations: MutableList<String>) {
-        getInstance().document(id)
-            .update(Constants.LOCATIONS, FieldValue.arrayRemove(locations))
+        for (loc in locations) {
+            getInstance().document(id)
+                .update(Constants.LOCATIONS, FieldValue.arrayRemove(loc))
+        }
     }
 
     fun deleteCostumer(costumer: Costumer) {

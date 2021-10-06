@@ -33,7 +33,7 @@ object NoteSaleRepository {
             Constants.IS_DOLAR to noteSale.isDolar,
             Constants.NUMBER_NOTE_SALE to noteSale.noteNumber,
             Constants.IS_PAID to noteSale.isPaid,
-            Constants.DATE_DELIVERY to noteSale.dateDelivery,
+            Constants.DATE_DELIVERY to Date(noteSale.dateDelivery),
             Constants.DATE_PAID to Date(noteSale.datePaid)
         )
        getInstance().add(data)
