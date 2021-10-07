@@ -8,30 +8,39 @@
 
     <TextView
         android:id="@+id/tv_pin"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:hint="@string/text_type_pin"
         android:gravity="center"
+        android:hint="@string/text_type_pin"
+        android:maxLength="4"
         android:textSize="48sp"
-        android:maxLength="4"/>
+        app:layout_constraintEnd_toStartOf="@+id/guide_line2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_line2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintGuide_percent="0.4"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TableLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_pin">
+        app:layout_constraintStart_toStartOf="@+id/guide_line2"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TableRow
             android:layout_width="match_parent"
@@ -40,120 +49,123 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button1"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                android:text="1"/>
+                android:text="1"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
 
             <Button
                 android:id="@+id/button2"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                android:text="2" />
+                android:text="2"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
 
             <Button
                 android:id="@+id/button3"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                android:text="3" />
+                android:text="3"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button4"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                android:text="4"/>
+                android:text="4"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
 
             <Button
                 android:id="@+id/button5"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                android:text="5" />
+                android:text="5"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
 
             <Button
                 android:id="@+id/button6"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                android:text="6" />
+                android:text="6"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button7"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                android:text="7"/>
+                android:text="7"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
 
             <Button
                 android:id="@+id/button8"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                android:text="8" />
+                android:text="8"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
 
             <Button
                 android:id="@+id/button9"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                android:text="9" />
+                android:text="9"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center">
+
             <Button
                 android:id="@+id/button_fingerprint"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
                 app:icon="@drawable/ic_fingerprint_40"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:iconTint="@color/green_second_base_normal"/>
+                app:iconTint="@color/green_second_base_normal"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
 
             <Button
                 android:id="@+id/button0"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
-                android:text="0" />
+                android:text="0"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
 
             <Button
                 android:id="@+id/button_delete"
+                style="@style/StyleButtonCircle"
                 android:layout_width="@dimen/dimen_button_pin"
                 android:layout_height="@dimen/dimen_button_pin"
-                style="@style/StyleButtonCircle"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
                 app:icon="@drawable/ic_backspace_32"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:iconTint="@color/green_second_base_normal"/>
+                app:iconTint="@color/green_second_base_normal"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
         </TableRow>
     </TableLayout>
 

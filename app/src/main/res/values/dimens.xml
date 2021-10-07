@@ -11,4 +11,5 @@
     <dimen name="dimen_button_pin">72dp</dimen>
 
     <dimen name="size_btn_item_list">48dp</dimen>
+    <dimen name="size_text_btn_init_session_tablet">32sp</dimen>
 </resources>
