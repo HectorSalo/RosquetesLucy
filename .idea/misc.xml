@@ -17,11 +17,19 @@
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_cash_remove_56dp.xml" value="0.23125" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_neg_1_24.xml" value="0.24054054054054055" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/side_nav_bar.xml" value="0.23125" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-land/dialog_add_costumer.xml" value="0.3002645502645503" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-land/fragment_first_login.xml" value="0.22" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-land/fragment_graphs.xml" value="0.3002645502645503" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-land/fragment_second_login.xml" value="0.3002645502645503" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-large-land/fragment_first_login.xml" value="0.2058645707376058" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-sw600dp-land/fragment_first_login.xml" value="0.2058645707376058" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-sw600dp/dialog_add_costumer.xml" value="0.266015625" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-sw600dp/fragment_expenses.xml" value="0.266015625" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-sw600dp/fragment_first_login.xml" value="0.266015625" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-sw600dp/fragment_graphs.xml" value="0.266015625" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-sw600dp/fragment_notes_sale.xml" value="0.266015625" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-sw600dp/fragment_refunds.xml" value="0.266015625" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-sw600dp/fragment_sales.xml" value="0.266015625" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-sw600dp/fragment_second_login.xml" value="0.266015625" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/activity_login.xml" value="0.17" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/activity_main.xml" value="0.18795289855072464" />
@@ -42,6 +50,7 @@
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_first_add_sale.xml" value="0.25" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_first_login.xml" value="0.17" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_graphs.xml" value="0.17249240121580547" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_notes_sale.xml" value="0.30675675675675673" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_refunds.xml" value="0.23006756756756758" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_sales.xml" value="0.17249240121580547" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_second_add_sale.xml" value="0.18795289855072464" />
@@ -50,6 +59,7 @@
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_suppliers.xml" value="0.23006756756756758" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/layout_expense_item.xml" value="0.11297279362972794" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/layout_product_list.xml" value="0.23006756756756758" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/layout_refund_item.xml" value="0.30675675675675673" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/settings_activity.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/menu/activity_main_drawer.xml" value="0.34923076923076923" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/menu/menu_costumers.xml" value="0.21510416666666668" />

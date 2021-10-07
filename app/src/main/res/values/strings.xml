@@ -120,6 +120,7 @@
 
     <!-- Refund-->
     <string name="btn_add_refund">Agregar devolución</string>
+    <string name="text_quantity_refund_item">%1$s unidades devueltas</string>
 
     <!-- Supplier-->
     <string name="text_delete_supplier">Eliminar proveedor</string>

@@ -22,7 +22,7 @@ class RefundsAdapter(private var refunds: MutableList<Refund>, private val onCli
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.layout_expense_item, parent, false)
+            .inflate(R.layout.layout_refund_item, parent, false)
         context = parent.context
         return ViewHolder(view)
     }
@@ -31,6 +31,7 @@ class RefundsAdapter(private var refunds: MutableList<Refund>, private val onCli
         val item = refunds[position]
         holder.name.text = context.getString(R.string.text_costumer_location,
             item.nameCostumer, item.location)
+        holder.quantity.text = context.getString(R.string.text_quantity_refund_item, item.quantity.toString())
         val total = item.price * item.quantity
         val symbol = if (item.isDolar) "$" else "Bs."
         holder.price.text = context.getString(R.string.text_price_item, symbol,
@@ -56,6 +57,7 @@ class RefundsAdapter(private var refunds: MutableList<Refund>, private val onCli
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tv_name)
         val price: TextView = view.findViewById(R.id.tv_price)
+        val quantity: TextView = view.findViewById(R.id.tv_quantity)
         val date: TextView = view.findViewById(R.id.tv_date)
         val card: MaterialCardView = view.findViewById(R.id.card)
     }
