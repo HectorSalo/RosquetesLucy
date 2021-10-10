@@ -1,4 +1,4 @@
-package com.skysam.hchirinos.rosqueteslucy.common.classView
+package com.skysam.hchirinos.rosqueteslucy.ui.common
 
 /**
  * Created by Hector Chirinos (Home) on 1/8/2021.

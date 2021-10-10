@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentContainerPagesSalesBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.common.filterList.FilterListDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.SectionsPagerAdapter
 
 class ContainerPagesSalesFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -61,9 +62,15 @@ class ContainerPagesSalesFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
-        inflater.inflate(R.menu.menu_top_bar_main, menu)
-        val item = menu.findItem(R.id.action_search)
-        search = item.actionView as SearchView
+        inflater.inflate(R.menu.menu_top_bar_sale, menu)
+        val itemFilter = menu.findItem(R.id.action_filter)
+        itemFilter.setOnMenuItemClickListener {
+            val filterDialog = FilterListDialog(true)
+            filterDialog.show(requireActivity().supportFragmentManager, tag)
+            true
+        }
+        val itemSearch = menu.findItem(R.id.action_search)
+        search = itemSearch.actionView as SearchView
         search?.setOnQueryTextListener(this)
     }
 

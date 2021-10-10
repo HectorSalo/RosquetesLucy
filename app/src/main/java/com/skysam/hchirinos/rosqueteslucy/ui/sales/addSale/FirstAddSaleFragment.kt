@@ -14,8 +14,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.classView.ExitDialog
-import com.skysam.hchirinos.rosqueteslucy.common.classView.OnClickExit
+import com.skysam.hchirinos.rosqueteslucy.ui.common.ExitDialog
+import com.skysam.hchirinos.rosqueteslucy.ui.common.OnClickExit
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentFirstAddSaleBinding

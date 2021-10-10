@@ -37,7 +37,7 @@ class ExpensesAdapter(private var expens: MutableList<Expense>, private val onCl
 
         holder.card.setOnClickListener {
             val popMenu = PopupMenu(context, holder.card)
-            popMenu.inflate(R.menu.menu_expenses)
+            popMenu.inflate(R.menu.menu_expenses_item)
             popMenu.setOnMenuItemClickListener {
                 when(it.itemId) {
                     R.id.menu_view -> onClick.viewExpense(item)

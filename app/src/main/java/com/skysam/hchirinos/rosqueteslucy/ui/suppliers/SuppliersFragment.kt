@@ -96,8 +96,8 @@ class SuppliersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
         inflater.inflate(R.menu.menu_top_bar_main, menu)
-        val item = menu.findItem(R.id.action_search)
-        search = item.actionView as SearchView
+        val itemSearch = menu.findItem(R.id.action_search)
+        search = itemSearch.actionView as SearchView
         search.setOnQueryTextListener(this)
     }
 

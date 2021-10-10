@@ -19,8 +19,8 @@ import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
-import com.skysam.hchirinos.rosqueteslucy.common.classView.ExitDialog
-import com.skysam.hchirinos.rosqueteslucy.common.classView.OnClickExit
+import com.skysam.hchirinos.rosqueteslucy.ui.common.ExitDialog
+import com.skysam.hchirinos.rosqueteslucy.ui.common.OnClickExit
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.PrimaryProducts
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Supplier

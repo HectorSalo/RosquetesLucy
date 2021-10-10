@@ -41,6 +41,7 @@ class ViewDetailsNoteSaleDialog(private val noteSale: NoteSale):
         if (noteSale.isPaid) {
             binding.btnSale.visibility = View.GONE
         }
+        binding.btnSale.text = getString(R.string.btn_paid_note)
         binding.tvTextIvaDolar.visibility = View.GONE
         binding.tvTotalIvaDolar.visibility = View.GONE
         binding.tvTotalIvaBs.visibility = View.GONE

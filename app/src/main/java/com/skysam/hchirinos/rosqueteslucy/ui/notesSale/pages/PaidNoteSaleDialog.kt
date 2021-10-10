@@ -45,7 +45,7 @@ class PaidNoteSaleDialog(private val noteSale: NoteSale, private val closeDialog
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.title_dialog_paid))
             .setView(binding.root)
-            .setPositiveButton(R.string.btn_paid, null)
+            .setPositiveButton(R.string.btn_paid_sale, null)
             .setNegativeButton(R.string.btn_cancel, null)
 
         val dialog = builder.create()

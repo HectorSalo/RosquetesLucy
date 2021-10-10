@@ -40,7 +40,7 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment(), CloseDial
         if (sale.isPaid) {
             binding.btnSale.visibility = View.GONE
         }
-        binding.btnSale.text = getString(R.string.btn_paid)
+        binding.btnSale.text = getString(R.string.btn_paid_sale)
         binding.tvNameCostumer.text = sale.nameCostumer
         binding.tvRif.text = sale.idCostumer
         binding.tvLocationCostumer.text = sale.location

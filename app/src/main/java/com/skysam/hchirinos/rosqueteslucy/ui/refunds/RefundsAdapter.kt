@@ -40,7 +40,7 @@ class RefundsAdapter(private var refunds: MutableList<Refund>, private val onCli
 
         holder.card.setOnClickListener {
             val popMenu = PopupMenu(context, holder.card)
-            popMenu.inflate(R.menu.menu_refunds)
+            popMenu.inflate(R.menu.menu_refunds_item)
             popMenu.setOnMenuItemClickListener {
                 when(it.itemId) {
                     R.id.menu_view-> onClick.viewDetails(item)

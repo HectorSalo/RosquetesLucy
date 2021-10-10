@@ -28,6 +28,7 @@
     <string name="list_graph_empty">Debe realizar su primera Venta para cargar las gráficas</string>
     <string name="list_refunds_empty">Sin devoluciones</string>
     <string name="list_supplier_empty">No ha creado su primer Proveedor</string>
+    <string name="list_filter_empty">Realice una nueva búsqueda</string>
     <string name="error_field_empty">Campo vacío</string>
     <string name="text_saving">Guardando&#8230;</string>
     <string name="text_editing">Actualizando&#8230;</string>
@@ -45,6 +46,10 @@
     <string name="btn_close">Cerrar</string>
     <string name="symbol_bolivar">Bs.</string>
     <string name="symbol_dolar">$</string>
+    <string name="search_by_date">Por rango de fecha</string>
+    <string name="search_by_number">Por rango numérico</string>
+    <string name="text_from">Desde:</string>
+    <string name="text_until">Hasta:</string>
 
     <!--Menus-->
     <string name="menu_search">Buscar</string>
@@ -84,7 +89,8 @@
     <string name="text_loading_rate">Cargando tasa de cambio</string>
     <string name="btn_sale">Generar Factura</string>
     <string name="btn_note_sale">Generar Nota de Venta</string>
-    <string name="btn_paid">Cobrar Factura</string>
+    <string name="btn_paid_sale">Cobrar Factura</string>
+    <string name="btn_paid_note">Cobrar Nota de Venta</string>
     <string name="text_total_bs">Total (Bs.)</string>
     <string name="text_total_dolar">Total ($)</string>
     <string name="text_total_amount">%1$s</string>
@@ -129,6 +135,9 @@
     <string name="title_confirmation_dialog">Confirmar</string>
     <string name="msg_exit_dialog">Se perderá toda la información.\n¿Desea salir?</string>
     <string name="msg_delete_dialog">¿Desea eliminar esta información?</string>
+    <string name="list_filter_without_result">No hay documentos en el rango consultado.\nRealice una nueva búsqueda</string>
+    <string name="error_date_invalidate">Debe seleccionar fecha inicial y final</string>
+    <string name="error_number_final">Número final debe ser mayor o igual que el inicial</string>
 
     <!-- Graphs -->
     <string name="text_sales_paid">Facturas Cobradas</string>

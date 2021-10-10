@@ -41,7 +41,7 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
-        requireActivity().menuInflater.inflate(R.menu.menu_top_bar_main, menu)
+        requireActivity().menuInflater.inflate(R.menu.menu_top_bar_expense, menu)
         val item = menu.findItem(R.id.action_search)
         search = item.actionView as SearchView
         search.setOnQueryTextListener(this)

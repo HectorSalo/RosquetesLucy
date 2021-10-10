@@ -31,7 +31,7 @@ class SuppliersAdapter (private var suppliers: MutableList<Supplier>, private va
 
         holder.card.setOnClickListener {
             val popMenu = PopupMenu(context, holder.menu)
-            popMenu.inflate(R.menu.menu_suppliers)
+            popMenu.inflate(R.menu.menu_suppliers_item)
             popMenu.setOnMenuItemClickListener {
                 when(it.itemId) {
                     R.id.menu_add_expense-> onClick.addExpense(item)

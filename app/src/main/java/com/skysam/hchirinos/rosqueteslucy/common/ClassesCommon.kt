@@ -1,5 +1,6 @@
 package com.skysam.hchirinos.rosqueteslucy.common
 
+import java.text.DateFormat
 import java.util.*
 
 /**
@@ -12,5 +13,9 @@ object ClassesCommon {
 
     fun convertDoubleToString(value: Double): String {
         return String.format(Locale.GERMANY, "%,.2f", value)
+    }
+
+    fun convertDateToString(date: Date): String {
+        return DateFormat.getDateInstance().format(date)
     }
 }

@@ -1,4 +1,4 @@
-package com.skysam.hchirinos.rosqueteslucy.common.classView
+package com.skysam.hchirinos.rosqueteslucy.ui.common
 
 import android.app.Dialog
 import android.os.Bundle
