@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="@string/text_add_expense"
+        android:id="@+id/menu_add_expense"/>
+    <item
+        android:title="@string/text_delete_supplier"
+        android:id="@+id/menu_delete"/>
+
+</menu>

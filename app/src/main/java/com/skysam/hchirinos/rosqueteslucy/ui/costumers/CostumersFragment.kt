@@ -1,6 +1,7 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.costumers
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -12,8 +13,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentCostumersBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.refunds.AddRefundDialog
+import com.skysam.hchirinos.rosqueteslucy.ui.viewDocuments.ViewDocumentsActivity
 import java.util.*
 
 class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
@@ -83,8 +87,8 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
         inflater.inflate(R.menu.menu_top_bar_main, menu)
-        val item = menu.findItem(R.id.action_search)
-        search = item.actionView as SearchView
+        val itemSearch = menu.findItem(R.id.action_search)
+        search = itemSearch.actionView as SearchView
         search.setOnQueryTextListener(this)
     }
 
@@ -162,6 +166,17 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
 
         val dialog = builder.create()
         dialog.show()
+    }
+
+    override fun addRefund(costumer: Costumer) {
+        val addRefundDialog = AddRefundDialog(costumer)
+        addRefundDialog.show(requireActivity().supportFragmentManager, tag)
+    }
+
+    override fun viewDocuments(costumer: Costumer) {
+        val intent = Intent(requireContext(), ViewDocumentsActivity::class.java)
+        intent.putExtra(Constants.ID_COSTUMER, costumer)
+        startActivity(intent)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {

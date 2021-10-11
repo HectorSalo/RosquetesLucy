@@ -9,14 +9,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
 import java.text.DateFormat
-import java.util.*
 
 /**
  * Created by Hector Chirinos on 27/08/2021.
  */
-class ExpensesAdapter(private var expenses: MutableList<Expense>, private val onClick: OnClick):
+class ExpensesAdapter(private var expens: MutableList<Expense>, private val onClick: OnClick):
     RecyclerView.Adapter<ExpensesAdapter.ViewHolder>() {
 
     private lateinit var context: Context
@@ -29,19 +29,18 @@ class ExpensesAdapter(private var expenses: MutableList<Expense>, private val on
     }
 
     override fun onBindViewHolder(holder: ExpensesAdapter.ViewHolder, position: Int) {
-        val item = expenses[position]
-        holder.name.text = item.name
-        val total = item.price * item.quantity
-        val symbol = if (item.isDolar) "$" else "Bs."
-        holder.price.text = context.getString(R.string.text_price_item, symbol,
-            String.format(Locale.GERMANY, "%,.2f", total))
-        holder.date.text = DateFormat.getDateInstance().format(item.date)
+        val item = expens[position]
+        holder.name.text = item.nameSupplier
+        holder.price.text = context.getString(R.string.text_total_dolar_expense,
+            ClassesCommon.convertDoubleToString(item.total))
+        holder.date.text = DateFormat.getDateInstance().format(item.dateCreated)
 
         holder.card.setOnClickListener {
             val popMenu = PopupMenu(context, holder.card)
-            popMenu.inflate(R.menu.menu_expenses)
+            popMenu.inflate(R.menu.menu_expenses_item)
             popMenu.setOnMenuItemClickListener {
                 when(it.itemId) {
+                    R.id.menu_view -> onClick.viewExpense(item)
                     R.id.menu_edit-> onClick.edit(item)
                     R.id.menu_delete-> onClick.delete(item)
                 }
@@ -51,7 +50,7 @@ class ExpensesAdapter(private var expenses: MutableList<Expense>, private val on
         }
     }
 
-    override fun getItemCount(): Int = expenses.size
+    override fun getItemCount(): Int = expens.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tv_name)
@@ -61,7 +60,7 @@ class ExpensesAdapter(private var expenses: MutableList<Expense>, private val on
     }
 
     fun updateList(newList: MutableList<Expense>) {
-        expenses = newList
+        expens = newList
         notifyDataSetChanged()
     }
 }

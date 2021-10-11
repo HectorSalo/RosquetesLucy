@@ -165,9 +165,7 @@ class SalesFragment : Fragment(), OnClick {
 
     private fun searchFromText(text: String) {
         val listSearch = mutableListOf<Sale>()
-        if (sales.isEmpty()) {
-            Toast.makeText(context, getString(R.string.list_sales_empty), Toast.LENGTH_SHORT).show()
-        } else {
+        if (sales.isNotEmpty()) {
             val userInput: String = text.lowercase()
             listSearch.clear()
 

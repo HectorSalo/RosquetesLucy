@@ -26,7 +26,13 @@
 
         <PreferenceScreen
             app:key="pinLock"
-            app:title="@string/title_change_pin_lock"/>
+            app:title="@string/title_change_pin_lock"
+            app:isPreferenceVisible="false"/>
+
+        <PreferenceScreen
+            app:key="signOut"
+            app:title="@string/title_sign_out"
+            app:icon="@drawable/ic_exit_to_app_24"/>
 
     </PreferenceCategory>
 

@@ -27,11 +27,14 @@ object NoteSaleRepository {
             Constants.NAME to noteSale.nameCostumer,
             Constants.COSTUMER_LOCATION to noteSale.location,
             Constants.PRICE to noteSale.price,
-            Constants.RATE_PAID to noteSale.rate,
+            Constants.RATE_DELIVERY to noteSale.rateDelivery,
+            Constants.RATE_PAID to noteSale.ratePaid,
             Constants.QUANTITY to noteSale.quantity,
             Constants.IS_DOLAR to noteSale.isDolar,
             Constants.NUMBER_NOTE_SALE to noteSale.noteNumber,
-            Constants.DATE_PAID to Date(noteSale.date)
+            Constants.IS_PAID to noteSale.isPaid,
+            Constants.DATE_DELIVERY to Date(noteSale.dateDelivery),
+            Constants.DATE_PAID to Date(noteSale.datePaid)
         )
        getInstance().add(data)
     }
@@ -54,11 +57,14 @@ object NoteSaleRepository {
                             noteSale.getString(Constants.NAME)!!,
                             noteSale.getString(Constants.COSTUMER_LOCATION)!!,
                             noteSale.getDouble(Constants.PRICE)!!,
+                            noteSale.getDouble(Constants.RATE_DELIVERY)!!,
                             noteSale.getDouble(Constants.RATE_PAID)!!,
                             noteSale.getDouble(Constants.QUANTITY)!!.toInt(),
                             noteSale.getBoolean(Constants.IS_DOLAR)!!,
                             noteSale.getDouble(Constants.NUMBER_NOTE_SALE)!!.toInt(),
-                            noteSale.getDate(Constants.DATE_PAID)!!.time
+                            noteSale.getDate(Constants.DATE_PAID)!!.time,
+                            noteSale.getDate(Constants.DATE_DELIVERY)!!.time,
+                            noteSale.getBoolean(Constants.IS_PAID)!!
                         )
                         notesSale.add(noteSaleNew)
                     }
@@ -71,5 +77,15 @@ object NoteSaleRepository {
     fun deleteNoteSale(noteSale: NoteSale) {
         getInstance().document(noteSale.id)
             .delete()
+    }
+
+    fun paidNoteSale(noteSale: NoteSale) {
+        val data: Map<String, Any> = hashMapOf(
+            Constants.IS_PAID to true,
+            Constants.DATE_PAID to Date(noteSale.datePaid),
+            Constants.RATE_PAID to noteSale.ratePaid
+        )
+        getInstance().document(noteSale.id)
+            .update(data)
     }
 }

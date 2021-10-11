@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentContainerPagesSalesBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.common.filterList.FilterListDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.SectionsPagerAdapter
 
 class ContainerPagesSalesFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -16,6 +17,7 @@ class ContainerPagesSalesFragment : Fragment(), SearchView.OnQueryTextListener {
     private var _binding: FragmentContainerPagesSalesBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
+    private var search: SearchView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,16 +62,23 @@ class ContainerPagesSalesFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
-        inflater.inflate(R.menu.menu_top_bar_main, menu)
-        val item = menu.findItem(R.id.action_search)
-        val search = item.actionView as SearchView
-        search.setOnQueryTextListener(this)
+        inflater.inflate(R.menu.menu_top_bar_sale, menu)
+        val itemFilter = menu.findItem(R.id.action_filter)
+        itemFilter.setOnMenuItemClickListener {
+            val filterDialog = FilterListDialog(true)
+            filterDialog.show(requireActivity().supportFragmentManager, tag)
+            true
+        }
+        val itemSearch = menu.findItem(R.id.action_search)
+        search = itemSearch.actionView as SearchView
+        search?.setOnQueryTextListener(this)
     }
 
     private val callback: ViewPager2.OnPageChangeCallback = object: ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
             viewModel.changePage(position)
+            search?.isIconified = true
         }
     }
 

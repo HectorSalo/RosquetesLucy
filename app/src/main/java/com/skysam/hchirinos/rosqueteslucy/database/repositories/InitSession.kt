@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -25,6 +26,8 @@ object InitSession {
     }
 
     fun signOut() {
+        SharedPref.changeLock(false)
+        SharedPref.changePinLock("0000")
         getInstance().signOut()
     }
 }

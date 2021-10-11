@@ -54,6 +54,8 @@ class SecondFragment : Fragment(), View.OnClickListener {
         binding.buttonFingerprint.setOnClickListener(this)
 
         loadViewModel()
+
+        showPrint()
     }
 
     private fun loadViewModel() {
@@ -125,7 +127,7 @@ class SecondFragment : Fragment(), View.OnClickListener {
 
                         }
                         BiometricPrompt.ERROR_NO_BIOMETRICS -> {
-
+                            Snackbar.make(binding.root, R.string.error_biometric, Snackbar.LENGTH_LONG).show()
                         }
                         BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL -> {
 

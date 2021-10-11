@@ -1,8 +1,9 @@
 package com.skysam.hchirinos.rosqueteslucy
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -12,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.skysam.hchirinos.rosqueteslucy.databinding.ActivityMainBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,12 +40,20 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_costumers, R.id.navigation_sales,
-                R.id.navigation_notes_sales, R.id.navigation_expenses,
-                R.id.navigation_graphs, R.id.navigation_settings
+                R.id.navigation_notes_sales, R.id.navigation_refunds,
+                R.id.navigation_supplier, R.id.navigation_expenses,
+                R.id.navigation_graphs
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val settingsMenu = navView.menu.findItem(R.id.navigation_settings)
+        settingsMenu.setOnMenuItemClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

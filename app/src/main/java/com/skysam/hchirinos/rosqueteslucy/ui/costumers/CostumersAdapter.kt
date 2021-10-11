@@ -33,12 +33,14 @@ class CostumersAdapter(private var costumers: MutableList<Costumer>, private val
 
         holder.menu.setOnClickListener {
             val popMenu = PopupMenu(context, holder.menu)
-            popMenu.inflate(R.menu.menu_costumers)
+            popMenu.inflate(R.menu.menu_costumers_item)
             popMenu.setOnMenuItemClickListener {
                 when(it.itemId) {
                     R.id.menu_delete_location-> onClick.deleteLocation(item)
                     R.id.menu_edit-> onClick.edit(item)
                     R.id.menu_delete-> onClick.delete(item)
+                    R.id.menu_add_refund -> onClick.addRefund(item)
+                    R.id.menu_view_documents -> onClick.viewDocuments(item)
                 }
                false
             }

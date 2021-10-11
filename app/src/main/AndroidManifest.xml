@@ -10,7 +10,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RosquetesLucy">
+        android:theme="@style/Theme.RosquetesLucy"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.viewDocuments.ViewDocumentsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_view_documents"/>
         <activity
             android:name=".ui.initSession.LoginActivity"
             android:exported="true"
@@ -33,6 +38,13 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/rosquetes_lucy_logo" /> <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming notification message. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/green_base_normal" />
     </application>
 
 </manifest>

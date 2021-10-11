@@ -3,9 +3,7 @@ package com.skysam.hchirinos.rosqueteslucy.ui.graphs
 import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.AttrRes
@@ -19,9 +17,8 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.*
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentGraphsBinding
 import java.text.DateFormat
 import java.util.*
@@ -37,6 +34,9 @@ class GraphsFragment : Fragment() {
     private val salesPaid = mutableListOf<Sale>()
     private val expenses = mutableListOf<Expense>()
     private val notesSale = mutableListOf<NoteSale>()
+    private val notesSalePaid = mutableListOf<NoteSale>()
+    private val notesSaleNotPaid = mutableListOf<NoteSale>()
+    private val refunds = mutableListOf<Refund>()
     private var isByRange = true
     private var monthByDefault = 0
     private lateinit var dateStart: Date
@@ -48,13 +48,18 @@ class GraphsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGraphsBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val calendar = Calendar.getInstance()
+        calendar[Calendar.HOUR_OF_DAY] = 0
+        calendar[Calendar.MINUTE] = 0
         dateStart = calendar.time
+        calendar[Calendar.HOUR_OF_DAY] = 23
+        calendar[Calendar.MINUTE] = 59
         dateFinal = calendar.time
         monthByDefault = calendar[Calendar.MONTH]
         loadViewModel()
@@ -116,8 +121,20 @@ class GraphsFragment : Fragment() {
         })
         viewModel.notesSale.observe(viewLifecycleOwner, {
             if (_binding != null) {
+                notesSalePaid.clear()
+                notesSaleNotPaid.clear()
                 notesSale.clear()
                 notesSale.addAll(it)
+                for (noteSale in notesSale) {
+                    if (noteSale.isPaid) notesSalePaid.add(noteSale) else notesSaleNotPaid.add(noteSale)
+                }
+                loadChart(true, -1)
+            }
+        })
+        viewModel.refunds.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                refunds.clear()
+                refunds.addAll(it)
                 loadChart(true, -1)
             }
         })
@@ -133,14 +150,16 @@ class GraphsFragment : Fragment() {
             val offset = timeZone.getOffset(Date().time) * -1
             calendar.timeInMillis = selection.first
             calendar.timeInMillis = calendar.timeInMillis + offset
+            calendar[Calendar.HOUR_OF_DAY] = 0
+            calendar[Calendar.MINUTE] = 0
             dateStart = calendar.time
             calendar.timeInMillis = selection.second
+            calendar.timeInMillis = calendar.timeInMillis + offset
             calendar[Calendar.HOUR_OF_DAY] = 23
             calendar[Calendar.MINUTE] = 59
-            calendar.timeInMillis = calendar.timeInMillis + offset
             dateFinal = calendar.time
             binding.etDate.setText(getString(R.string.text_date_range,
-                    formatDate(dateStart), formatDate(dateFinal)))
+                formatDate(dateStart), formatDate(dateFinal)))
             loadChart(true, -1)
         }
         picker.show(requireActivity().supportFragmentManager, picker.toString())
@@ -151,8 +170,7 @@ class GraphsFragment : Fragment() {
         val calendarFinalRange = Calendar.getInstance()
         calendarStartRange.time = dateStart
         calendarFinalRange.time = dateFinal
-        calendarStartRange.add(Calendar.DAY_OF_YEAR, -1)
-        calendarFinalRange.add(Calendar.DAY_OF_YEAR, 1)
+
         val pieBalance = binding.pieBalance
         pieBalance.description = null
         pieBalance.centerText = getString(R.string.title_chart)
@@ -216,45 +234,85 @@ class GraphsFragment : Fragment() {
         var totalExpenses = 0.0
         for (expense in expenses) {
             if (isByRange) {
-                val dateExpense = Date(expense.date)
+                val dateExpense = Date(expense.dateCreated)
                 if (dateExpense.after(calendarStartRange.time) && dateExpense.before(calendarFinalRange.time)) {
-                    totalExpenses += if (expense.isDolar) {
-                        (expense.quantity * expense.price)
+                    totalExpenses += expense.total
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(expense.dateCreated)
+                if (calendar[Calendar.MONTH] == selection) {
+                    totalExpenses += expense.total
+                }
+            }
+        }
+        var totalNotesSalePaid = 0.0
+        for (noteSale in notesSalePaid) {
+            if (isByRange) {
+                val dateNoteSale = Date(noteSale.datePaid)
+                if (dateNoteSale.after(calendarStartRange.time) && dateNoteSale.before(calendarFinalRange.time)) {
+                    totalNotesSalePaid += if (noteSale.isDolar) {
+                        noteSale.quantity * noteSale.price
                     } else {
-                        (expense.quantity * expense.price) / expense.rate
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
                     }
                 }
             } else {
                 val calendar = Calendar.getInstance()
-                calendar.time = Date(expense.date)
+                calendar.time = Date(noteSale.datePaid)
                 if (calendar[Calendar.MONTH] == selection) {
-                    totalExpenses += if (expense.isDolar) {
-                        (expense.quantity * expense.price)
+                    totalNotesSalePaid += if (noteSale.isDolar) {
+                        noteSale.quantity * noteSale.price
                     } else {
-                        (expense.quantity * expense.price) / expense.rate
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
                     }
                 }
             }
         }
-        var totalNotesSale = 0.0
-        for (noteSale in notesSale) {
+
+        var totalNotesSaleNotPaid = 0.0
+        for (noteSale in notesSaleNotPaid) {
             if (isByRange) {
-                val dateNoteSale = Date(noteSale.date)
+                val dateNoteSale = Date(noteSale.datePaid)
                 if (dateNoteSale.after(calendarStartRange.time) && dateNoteSale.before(calendarFinalRange.time)) {
-                    totalNotesSale += if (noteSale.isDolar) {
+                    totalNotesSaleNotPaid += if (noteSale.isDolar) {
                         noteSale.quantity * noteSale.price
                     } else {
-                        (noteSale.quantity * noteSale.price) / noteSale.rate
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
                     }
                 }
             } else {
                 val calendar = Calendar.getInstance()
-                calendar.time = Date(noteSale.date)
+                calendar.time = Date(noteSale.datePaid)
                 if (calendar[Calendar.MONTH] == selection) {
-                    totalNotesSale += if (noteSale.isDolar) {
+                    totalNotesSaleNotPaid += if (noteSale.isDolar) {
                         noteSale.quantity * noteSale.price
                     } else {
-                        (noteSale.quantity * noteSale.price) / noteSale.rate
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
+                    }
+                }
+            }
+        }
+
+        var totalRefunds = 0.0
+        for (refund in refunds) {
+            if (isByRange) {
+                val dateRefund = Date(refund.date)
+                if (dateRefund.after(calendarStartRange.time) && dateRefund.before(calendarFinalRange.time)) {
+                    totalRefunds += if (refund.isDolar) {
+                        (refund.quantity * refund.price)
+                    } else {
+                        (refund.quantity * refund.price) / refund.rate
+                    }
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(refund.date)
+                if (calendar[Calendar.MONTH] == selection) {
+                    totalRefunds += if (refund.isDolar) {
+                        (refund.quantity * refund.price)
+                    } else {
+                        (refund.quantity * refund.price) / refund.rate
                     }
                 }
             }
@@ -262,10 +320,12 @@ class GraphsFragment : Fragment() {
 
         val pieEntries = mutableListOf<PieEntry>()
         pieEntries.add(PieEntry(totalSalesPaid.toFloat(), getString(R.string.text_sales_paid)))
-        pieEntries.add(PieEntry(totalNotesSale.toFloat(), getString(R.string.text_note_sale_graph)))
+        pieEntries.add(PieEntry(totalNotesSalePaid.toFloat(), getString(R.string.text_note_sale_paid_graph)))
         pieEntries.add(PieEntry(totalSalesNotPaid.toFloat(), getString(R.string.text_sales_not_paid)))
-        pieEntries.add(PieEntry(totalWaste.toFloat(), getString(R.string.text_waste)))
+        pieEntries.add(PieEntry(totalNotesSaleNotPaid.toFloat(), getString(R.string.text_note_sale_not_paid_graph)))
+        //pieEntries.add(PieEntry(totalWaste.toFloat(), getString(R.string.text_waste)))
         pieEntries.add(PieEntry(totalExpenses.toFloat(), getString(R.string.title_expenses)))
+        pieEntries.add(PieEntry(totalRefunds.toFloat(), getString(R.string.title_refunds)))
 
         val pieDataSet = PieDataSet(pieEntries, "")
         pieDataSet.valueTextSize = 18f
@@ -274,7 +334,8 @@ class GraphsFragment : Fragment() {
             ContextCompat.getColor(requireContext(), R.color.purple),
             ContextCompat.getColor(requireContext(), R.color.red_light),
             ContextCompat.getColor(requireContext(), R.color.yellow),
-            ContextCompat.getColor(requireContext(), R.color.blue)
+            ContextCompat.getColor(requireContext(), R.color.blue),
+            ContextCompat.getColor(requireContext(), R.color.mostaza)
         )
         pieDataSet.formSize = 16f
         val pieData = PieData(pieDataSet)
@@ -294,6 +355,22 @@ class GraphsFragment : Fragment() {
 
         pieBalance.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
+
+        val total = totalSalesPaid + totalSalesNotPaid + totalNotesSalePaid + totalNotesSaleNotPaid -
+                totalExpenses - totalRefunds
+        if (total > 0.0) {
+            binding.tvTotal.text = getString(R.string.text_total_graph_superavit,
+                ClassesCommon.convertDoubleToString(total))
+            binding.tvTotal.setTextColor(ContextCompat.getColor(requireContext(), R.color.green_second_base_dark))
+        }  else {
+            binding.tvTotal.text = getString(R.string.text_total_graph_deficit,
+            ClassesCommon.convertDoubleToString(total))
+            binding.tvTotal.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+        }
+        if (total == 0.0) {
+            binding.tvTotal.text = getString(R.string.text_total_graph_zero)
+            binding.tvTotal.setTextColor(requireContext().resolveColorAttr(android.R.attr.textColorSecondary))
+        }
     }
 
     @ColorInt
@@ -322,6 +399,18 @@ class GraphsFragment : Fragment() {
         binding.spinner.apply {
             adapter = adapterUnits
             setSelection(selectionSpinner)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+        inflater.inflate(R.menu.menu_top_bar_graphs, menu)
+        val itemReport = menu.findItem(R.id.action_report_day)
+        itemReport.setOnMenuItemClickListener {
+            val dialogReportDay = DialogReportDay()
+            dialogReportDay.show(requireActivity().supportFragmentManager, tag)
+            true
         }
     }
 

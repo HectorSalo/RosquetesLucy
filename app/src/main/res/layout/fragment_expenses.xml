@@ -64,16 +64,16 @@
         app:lottie_loop="false" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/fab_clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:contentDescription="@string/title_expenses"
+        android:contentDescription="@string/btn_save"
         android:tintMode="@color/white"
-        android:focusable="true"
-        android:src="@drawable/ic_add_shopping_cart_24"
+        app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_search_off_24"
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,8 +23,8 @@ class SalesViewModel : ViewModel() {
     private val _location = MutableLiveData<String>()
     val location: LiveData<String> get() = _location
 
-    private val _addLocation = MutableLiveData<Boolean>().apply { value = false }
-    val addLocation: LiveData<Boolean> get() = _addLocation
+    private val _addLocation = MutableLiveData<String?>().apply { value = null }
+    val addLocation: LiveData<String?> get() = _addLocation
 
     private val _price = MutableLiveData<Double>()
     val price: LiveData<Double> get() = _price
@@ -63,7 +63,8 @@ class SalesViewModel : ViewModel() {
     fun addLocation(id: String, location: String) {
         CostumerRepository.addLocation(id, location)
         _costumer.value!!.locations.add(_costumer.value!!.locations.size, location)
-        _addLocation.value = true
+        _costumer.value = _costumer.value
+        _addLocation.value = location
     }
 
     fun reviewInvoice(location: String, price: Double, rate: Double, quantity: Int,

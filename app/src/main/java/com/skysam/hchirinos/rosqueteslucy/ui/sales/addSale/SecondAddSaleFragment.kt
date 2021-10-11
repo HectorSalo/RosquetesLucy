@@ -105,12 +105,17 @@ class SecondAddSaleFragment : Fragment(){
             binding.tvDate.text = DateFormat.getDateInstance().format(it)
         })
         viewModel.isSale.observe(viewLifecycleOwner, {
-            isSale = it
-            binding.tvTextIvaBs.visibility = View.GONE
-            binding.tvTotalIvaBs.visibility = View.GONE
-            binding.tvTextIvaDolar.visibility = View.GONE
-            binding.tvTotalIvaDolar.visibility = View.GONE
-            showInvoice()
+            if (_binding != null) {
+                isSale = it
+                if (!it) {
+                    binding.tvTextIvaBs.visibility = View.GONE
+                    binding.tvTotalIvaBs.visibility = View.GONE
+                    binding.tvTextIvaDolar.visibility = View.GONE
+                    binding.tvTotalIvaDolar.visibility = View.GONE
+                    binding.btnSale.text = getString(R.string.btn_note_sale)
+                }
+                showInvoice()
+            }
         })
     }
 
@@ -182,10 +187,13 @@ class SecondAddSaleFragment : Fragment(){
             location,
             price,
             rate,
+            rate,
             quantity,
             isDolar,
             invoice,
-            date
+            date,
+            date,
+            isPaid
         )
         viewModel.addNoteSale(noteSale)
     }

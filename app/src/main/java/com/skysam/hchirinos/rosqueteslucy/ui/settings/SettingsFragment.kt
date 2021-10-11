@@ -1,11 +1,11 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
@@ -13,15 +13,26 @@ import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreferenceCompat
 import com.skysam.hchirinos.rosqueteslucy.BuildConfig
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.CloudMessaging
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
+import com.skysam.hchirinos.rosqueteslucy.database.repositories.InitSession
+import com.skysam.hchirinos.rosqueteslucy.ui.initSession.LoginActivity
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
+
+    private val viewModel: SettingsViewModel by activityViewModels()
+    private var switchLock: SwitchPreferenceCompat? = null
+    private var screenChangePin: PreferenceScreen? = null
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
         setHasOptionsMenu(true)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val listDaysExpired = findPreference<ListPreference>("days_expired")
         listDaysExpired?.value = SharedPref.getDaysExpired().toString()
 
@@ -31,27 +42,35 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
-        val switchLock = findPreference<SwitchPreferenceCompat>(Constants.PREFERENCES_LOCK)
-        val screenChangePin = findPreference<PreferenceScreen>(Constants.PREFERENCES_PIN_LOCK)
-        if (SharedPref.isLock()) {
-            switchLock?.isChecked = true
-            switchLock?.setIcon(R.drawable.ic_lock_24)
-            screenChangePin?.isVisible = true
-        } else {
-            switchLock?.isChecked = false
-            switchLock?.setIcon(R.drawable.ic_lock_open_24)
-            screenChangePin?.isVisible = false
-        }
+        switchLock = findPreference(Constants.PREFERENCES_LOCK)
+        screenChangePin = findPreference(Constants.PREFERENCES_PIN_LOCK)
+
+        viewModel.lockActived.observe(viewLifecycleOwner, {
+            if (it) {
+                switchLock?.isChecked = true
+                switchLock?.setIcon(R.drawable.ic_lock_24)
+                screenChangePin?.isVisible = true
+            } else {
+                switchLock?.isChecked = false
+                switchLock?.setIcon(R.drawable.ic_lock_open_24)
+                screenChangePin?.isVisible = false
+            }
+        })
 
         switchLock?.setOnPreferenceChangeListener { _, newValue ->
             val isOn = newValue as Boolean
             if (isOn) {
-                //switchLock.setIcon(R.drawable.ic_lock_24)
-                val pinDialog = PinDialog()
+                val pinDialog = PinDialog(false)
                 pinDialog.show(requireActivity().supportFragmentManager, tag)
             } else {
-                switchLock.setIcon(R.drawable.ic_lock_open_24)
+                viewModel.changeLockState(false)
             }
+            true
+        }
+
+        screenChangePin?.setOnPreferenceClickListener {
+            val pinDialog = PinDialog(true)
+            pinDialog.show(requireActivity().supportFragmentManager, tag)
             true
         }
 
@@ -59,6 +78,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
         aboutPreference.setOnPreferenceClickListener {
             NavHostFragment.findNavController(this)
                 .navigate(R.id.action_nav_home_settings_to_nav_about)
+            true
+        }
+
+        val signOutPreference: PreferenceScreen = findPreference("signOut")!!
+        signOutPreference.setOnPreferenceClickListener {
+            signOut()
             true
         }
 
@@ -71,5 +96,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
             requireActivity().finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun signOut() {
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setTitle(getString(R.string.title_sign_out))
+            .setMessage(getString(R.string.message_sign_out))
+            .setPositiveButton(R.string.title_sign_out) { _, _ ->
+                CloudMessaging.unsubscribeToMyTopic()
+                InitSession.signOut()
+                startActivity(Intent(requireContext(), LoginActivity::class.java))
+                requireActivity().finish()
+            }
+            .setNegativeButton(R.string.btn_cancel, null)
+
+        val dialog = builder.create()
+        dialog.show()
     }
 }
