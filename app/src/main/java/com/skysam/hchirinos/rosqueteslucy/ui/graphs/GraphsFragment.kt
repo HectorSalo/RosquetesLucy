@@ -3,9 +3,7 @@ package com.skysam.hchirinos.rosqueteslucy.ui.graphs
 import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.AttrRes
@@ -19,6 +17,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.*
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentGraphsBinding
 import java.text.DateFormat
@@ -49,6 +48,7 @@ class GraphsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGraphsBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -355,6 +355,22 @@ class GraphsFragment : Fragment() {
 
         pieBalance.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
+
+        val total = totalSalesPaid + totalSalesNotPaid + totalNotesSalePaid + totalNotesSaleNotPaid -
+                totalExpenses - totalRefunds
+        if (total > 0.0) {
+            binding.tvTotal.text = getString(R.string.text_total_graph_superavit,
+                ClassesCommon.convertDoubleToString(total))
+            binding.tvTotal.setTextColor(ContextCompat.getColor(requireContext(), R.color.green_second_base_dark))
+        }  else {
+            binding.tvTotal.text = getString(R.string.text_total_graph_deficit,
+            ClassesCommon.convertDoubleToString(total))
+            binding.tvTotal.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+        }
+        if (total == 0.0) {
+            binding.tvTotal.text = getString(R.string.text_total_graph_zero)
+            binding.tvTotal.setTextColor(requireContext().resolveColorAttr(android.R.attr.textColorSecondary))
+        }
     }
 
     @ColorInt
@@ -383,6 +399,18 @@ class GraphsFragment : Fragment() {
         binding.spinner.apply {
             adapter = adapterUnits
             setSelection(selectionSpinner)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+        inflater.inflate(R.menu.menu_top_bar_graphs, menu)
+        val itemReport = menu.findItem(R.id.action_report_day)
+        itemReport.setOnMenuItemClickListener {
+            val dialogReportDay = DialogReportDay()
+            dialogReportDay.show(requireActivity().supportFragmentManager, tag)
+            true
         }
     }
 

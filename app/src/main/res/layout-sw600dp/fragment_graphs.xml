@@ -65,6 +65,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tf_date" />
 
+    <TextView
+        android:id="@+id/tv_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/text_total_graph_zero"
+        app:layout_constraintBottom_toTopOf="@+id/chipGroup"
+        android:textSize="@dimen/size_text_btn_init_session_tablet"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pie_balance" />
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroup"
         style="@style/Widget.MaterialComponents.ChipGroup"

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_view_sale">
+
+    <fragment
+        android:id="@+id/navigation_view_sale"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.viewDocuments.ViewDocSalesFragment"
+        tools:layout="@layout/fragment_view_document_sale" />
+
+    <fragment
+        android:id="@+id/navigation_view_note_sale"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.viewDocuments.ViewDocNotesSaleFragment"
+        tools:layout="@layout/fragment_view_document_note_sale" />
+
+    <fragment
+        android:id="@+id/navigation_view_refund"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.viewDocuments.ViewDocRefundsFragment"
+        tools:layout="@layout/fragment_view_document_refund" />
+</navigation>

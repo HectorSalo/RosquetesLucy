@@ -11,4 +11,5 @@ interface OnClick {
     fun edit(costumer: Costumer)
     fun delete(costumer: Costumer)
     fun addRefund(costumer: Costumer)
+    fun viewDocuments(costumer: Costumer)
 }

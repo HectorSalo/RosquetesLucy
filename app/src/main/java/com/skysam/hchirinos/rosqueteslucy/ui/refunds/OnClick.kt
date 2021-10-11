@@ -7,6 +7,5 @@ import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
  */
 interface OnClick {
     fun viewDetails(refund: Refund)
-    fun edit(refund: Refund)
     fun delete(refund: Refund)
 }

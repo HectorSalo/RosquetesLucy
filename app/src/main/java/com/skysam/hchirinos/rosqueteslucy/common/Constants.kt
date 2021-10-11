@@ -44,4 +44,6 @@ object Constants {
     const val PREFERENCES_PIN_LOCK = "pinLock"
 
     const val TOPIC_NOTIFICATION_UPDATE_APP = "updateApp"
+
+    const val ALL_LOCATIONS = "Todas las Sucursales"
 }

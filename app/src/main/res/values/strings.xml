@@ -9,6 +9,7 @@
     <string name="title_graphs">Estadísticas</string>
     <string name="title_activity_add_sale">Generar Venta</string>
     <string name="title_activity_settings">Configuración</string>
+    <string name="title_activity_view_documents">Documentos</string>
     <string name="title_suppliers">Proveedores</string>
     <string name="title_history_expenses">Historial de Compras</string>
     <string name="title_products_expenses">Productos de Materia Prima</string>
@@ -29,6 +30,9 @@
     <string name="list_refunds_empty">Sin devoluciones</string>
     <string name="list_supplier_empty">No ha creado su primer Proveedor</string>
     <string name="list_filter_empty">Realice una nueva búsqueda</string>
+    <string name="list_doc_sales_empty">Cliente sin Facturas</string>
+    <string name="list_doc_note_sale_empty">Cliente sin Notas de Ventas</string>
+    <string name="list_doc_refund_empty">Cliente sin Devoluciones</string>
     <string name="error_field_empty">Campo vacío</string>
     <string name="text_saving">Guardando&#8230;</string>
     <string name="text_editing">Actualizando&#8230;</string>
@@ -73,6 +77,7 @@
     <string name="text_edit_costumer">Editar cliente</string>
     <string name="text_delete_costumer">Eliminar cliente</string>
     <string name="text_add_refund">Agregar devolución</string>
+    <string name="text_view_documents">Ver documentos</string>
     <string name="title_delete_locations">Seleccione las sucursales a eliminar</string>
     <string name="error_delete_all_locations">No puede eliminar todas las sucursales</string>
 
@@ -149,6 +154,12 @@
     <string name="chip_week">Rango de Fecha</string>
     <string name="chip_month">Mensual</string>
     <string name="text_date_range">%1$s - %2$s</string>
+    <string name="text_total_graph_zero">Balance en cero en este período</string>
+    <string name="text_total_graph_superavit">Tiene un superávit en este período de:\n$ %1$s</string>
+    <string name="text_total_graph_deficit">Tiene un déficit en este período de:\n$ %1$s</string>
+    <string name="title_report_day">Reporte Diario</string>
+    <string name="text_amount_add_graph">+ %1$s</string>
+    <string name="text_amount_rest_graph">- %1$s</string>
 
     <!-- Preference Titles -->
     <string name="personalizacion_header">Personalización</string>
