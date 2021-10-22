@@ -16,5 +16,6 @@ data class Sale(
     var invoice: Int,
     var isPaid: Boolean,
     var dateDelivery: Long,
-    var datePaid: Long
+    var datePaid: Long,
+    var isAnnuled: Boolean = false
 )

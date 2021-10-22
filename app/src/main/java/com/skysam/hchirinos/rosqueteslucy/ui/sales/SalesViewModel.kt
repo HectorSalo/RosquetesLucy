@@ -87,6 +87,10 @@ class SalesViewModel : ViewModel() {
         SalesRepository.paidSale(sale)
     }
 
+    fun annulSale(sale: Sale) {
+        SalesRepository.annulSale(sale)
+    }
+
     fun deleteSale(sale: Sale) {
         SalesRepository.deleteSale(sale)
     }

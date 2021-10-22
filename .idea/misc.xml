@@ -90,6 +90,11 @@
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/menu/menu_top_bar_sale.xml" value="0.30675675675675673" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.24054054054054055" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/xml/root_preferences.xml" value="0.3546875" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_cash_remove_56dp.xml" value="0.37083333333333335" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/drawable/ic_sale_not_paid_56.xml" value="0.37083333333333335" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout-land/fragment_second_add_sale.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/fragment_second_add_sale.xml" value="0.3374094202898551" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/RosquetesLucy/app/src/main/res/layout/layout_sale_item.xml" value="0.3374094202898551" />
       </map>
     </option>
   </component>

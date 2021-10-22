@@ -64,7 +64,8 @@ object SalesRepository {
             Constants.NUMBER_INVOICE to sale.invoice,
             Constants.IS_PAID to sale.isPaid,
             Constants.DATE_DELIVERY to Date(sale.dateDelivery),
-            Constants.DATE_PAID to Date(sale.datePaid)
+            Constants.DATE_PAID to Date(sale.datePaid),
+            Constants.IS_ANULLED to sale.isAnnuled
         )
         getInstance().add(data)
     }
@@ -81,6 +82,10 @@ object SalesRepository {
 
                     val sales = mutableListOf<Sale>()
                     for (sale in value!!) {
+                        var isAnulled = false
+                        if (sale.getBoolean(Constants.IS_ANULLED) != null) {
+                            isAnulled = sale.getBoolean(Constants.IS_ANULLED)!!
+                        }
                         val saleNew = Sale(
                             sale.id,
                             sale.getString(Constants.ID_COSTUMER)!!,
@@ -94,7 +99,8 @@ object SalesRepository {
                             sale.getDouble(Constants.NUMBER_INVOICE)!!.toInt(),
                             sale.getBoolean(Constants.IS_PAID)!!,
                             sale.getDate(Constants.DATE_DELIVERY)!!.time,
-                            sale.getDate(Constants.DATE_PAID)!!.time
+                            sale.getDate(Constants.DATE_PAID)!!.time,
+                            isAnulled
                         )
                         sales.add(saleNew)
                     }
@@ -102,6 +108,16 @@ object SalesRepository {
                 }
             awaitClose { request.remove() }
         }
+    }
+
+    fun annulSale(sale: Sale) {
+        val data: Map<String, Any> = hashMapOf(
+            Constants.IS_PAID to true,
+            Constants.DATE_PAID to Date(),
+            Constants.IS_ANULLED to true
+        )
+        getInstance().document(sale.id)
+            .update(data)
     }
 
     fun paidSale(sale: Sale) {
