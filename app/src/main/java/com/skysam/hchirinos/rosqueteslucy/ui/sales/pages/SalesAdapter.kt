@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
 import java.text.DateFormat
@@ -39,8 +40,11 @@ class SalesAdapter(private var sales: MutableList<Sale>, private val onClick: On
             item.nameCostumer, item.location)
         val total = item.quantity * item.price
         val symbol = if (item.isDolar) "$" else "Bs."
-        holder.price.text = context.getString(R.string.text_price_item, symbol,
+        val convert = ClassesCommon.convertDoubleToString(total / item.ratePaid)
+        holder.price.text = if (item.isDolar) context.getString(R.string.text_price_item, symbol,
             String.format(Locale.GERMANY, "%,.2f", total))
+        else context.getString(R.string.text_price_convert_item, symbol,
+            String.format(Locale.GERMANY, "%,.2f", total), convert)
         val daysBetween = getTimeDistance(Date(item.dateDelivery), Date())
         holder.date.text = if (item.isPaid) {
             context.getString(R.string.text_date_paid,
@@ -52,12 +56,22 @@ class SalesAdapter(private var sales: MutableList<Sale>, private val onClick: On
                     .format(item.dateDelivery), daysBetween.toString())
         }
 
-        val image = if (item.isPaid) R.drawable.ic_cash_check_56dp else R.drawable.ic_cash_remove_56dp
+        var image = if (item.isPaid) R.drawable.ic_sale_paid_56dp else R.drawable.ic_sale_not_paid_56
+        if (item.isAnnuled) {
+            image = R.drawable.ic_sale_annulled_56dp
+            holder.date.text = context.getString(R.string.text_date_annul,
+                DateFormat.getDateInstance()
+                    .format(item.datePaid))
+        }
         holder.ivPaid.setImageResource(image)
         holder.invoice.text = context.getString(R.string.text_invoice_item, item.invoice.toString())
 
-        if (!item.isPaid && daysBetween >= SharedPref.getDaysExpired()) {
-            holder.date.setTextColor(ContextCompat.getColor(context, R.color.red))
+        if (!item.isAnnuled) {
+            if (!item.isPaid && daysBetween >= SharedPref.getDaysExpired()) {
+                holder.date.setTextColor(ContextCompat.getColor(context, R.color.red))
+            } else {
+                holder.date.setTextColor(context.resolveColorAttr(android.R.attr.textColorSecondary))
+            }
         } else {
             holder.date.setTextColor(context.resolveColorAttr(android.R.attr.textColorSecondary))
         }

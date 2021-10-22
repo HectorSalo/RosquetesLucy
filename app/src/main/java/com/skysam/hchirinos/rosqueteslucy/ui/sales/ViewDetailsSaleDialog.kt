@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.CloseDialog
@@ -16,9 +19,12 @@ import java.util.*
 /**
  * Created by Hector Chirinos (Home) on 15/8/2021.
  */
-class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment(), CloseDialog {
+class ViewDetailsSaleDialog(private var sale: Sale): DialogFragment(), CloseDialog {
     private var _binding: FragmentSecondAddSaleBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: SalesViewModel by activityViewModels()
+    private val allSales = mutableListOf<Sale>()
+    private val costumers = mutableListOf<Costumer>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +43,52 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment(), CloseDial
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (sale.isPaid) {
-            binding.btnSale.visibility = View.GONE
+        viewModel.sales.observe(viewLifecycleOwner, {
+            allSales.clear()
+            allSales.addAll(it)
+        })
+        viewModel.costumers.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                costumers.clear()
+                costumers.addAll(it)
+                for (cos in costumers) {
+                    if (cos.id == sale.idCostumer) {
+                        sale.idCostumer = cos.identifier
+                    }
+                }
+                binding.tvRif.text = sale.idCostumer
+            }
+        })
+        binding.ibBack.visibility = View.VISIBLE
+        binding.ibFoward.visibility = View.VISIBLE
+
+        binding.btnSale.setOnClickListener { paidSale() }
+        binding.ibBack.setOnClickListener {
+            val position = allSales.indexOf(sale)
+            sale = allSales[position + 1]
+            loadData()
+            if (allSales.indexOf(sale) == allSales.lastIndex) binding.ibBack.visibility = View.INVISIBLE
+        }
+        loadData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun loadData() {
+        for (cos in costumers) {
+            if (cos.id == sale.idCostumer) {
+                sale.idCostumer = cos.identifier
+            }
+        }
+        if (sale.isPaid) binding.btnSale.visibility = View.GONE else binding.btnSale.visibility = View.VISIBLE
+        if (sale.isAnnuled) {
+            binding.tvSubtitle.text = getString(R.string.text_date_annul,
+                DateFormat.getDateInstance()
+                    .format(sale.datePaid))
+            binding.tvSubtitle.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
         binding.btnSale.text = getString(R.string.btn_paid_sale)
         binding.tvNameCostumer.text = sale.nameCostumer
@@ -62,12 +112,6 @@ class ViewDetailsSaleDialog(private val sale: Sale): DialogFragment(), CloseDial
             binding.tvTotalIvaDolar.visibility = View.GONE
         }
         showTotal()
-        binding.btnSale.setOnClickListener { paidSale() }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun showTotal() {

@@ -59,7 +59,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_gravity="end|bottom"
-        android:src="@drawable/ic_cash_check_56dp"
+        android:src="@drawable/ic_sale_paid_56dp"
         android:contentDescription="@string/title_sales" />
 
 </com.google.android.material.card.MaterialCardView>

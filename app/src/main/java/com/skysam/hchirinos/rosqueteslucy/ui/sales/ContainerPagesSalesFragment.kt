@@ -38,6 +38,7 @@ class ContainerPagesSalesFragment : Fragment(), SearchView.OnQueryTextListener {
                 0 -> "Por Cobrar"
                 1 -> "Cobradas"
                 2 -> "Todas"
+                3 -> "Anuladas"
                 else -> "Facturas"
             }
         }.attach()

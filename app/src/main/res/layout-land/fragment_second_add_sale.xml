@@ -19,6 +19,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageButton
+                android:id="@+id/ib_back"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#00FFFFFF"
+                android:contentDescription="@string/text_view_details"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_name_costumer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_back_24"
+                app:tint="@color/green_second_base_dark"
+                android:visibility="gone"/>
+
             <TextView
                 android:id="@+id/tv_name_costumer"
                 android:layout_width="0dp"
@@ -28,10 +43,24 @@
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
                 android:textSize="22sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ib_foward"
+                app:layout_constraintStart_toEndOf="@+id/ib_back"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/text_name_costumer" />
+
+            <ImageButton
+                android:id="@+id/ib_foward"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/text_view_details"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_name_costumer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_foward_24"
+                android:backgroundTint="#00FFFFFF"
+                app:tint="@color/green_second_base_dark"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_rif"

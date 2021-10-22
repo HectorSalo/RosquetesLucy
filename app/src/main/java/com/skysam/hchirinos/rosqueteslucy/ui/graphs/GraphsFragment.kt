@@ -105,7 +105,9 @@ class GraphsFragment : Fragment() {
                 salesNotPaid.clear()
                 salesPaid.clear()
                 sales.clear()
-                sales.addAll(it)
+                for (saleA in it) {
+                    if (!saleA.isAnnuled) sales.add(saleA)
+                }
                 for (sale in sales) {
                     if (sale.isPaid) salesPaid.add(sale) else salesNotPaid.add(sale)
                 }

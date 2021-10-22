@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import java.text.DateFormat
 import java.util.*
@@ -34,8 +35,11 @@ class NoteSaleAdapter(private var notesSale: MutableList<NoteSale>, private val 
             item.nameCostumer, item.location)
         val total = item.quantity * item.price
         val symbol = if (item.isDolar) "$" else "Bs."
-        holder.price.text = context.getString(R.string.text_price_item, symbol,
+        val convert = ClassesCommon.convertDoubleToString(total / item.ratePaid)
+        holder.price.text = if (item.isDolar) context.getString(R.string.text_price_item, symbol,
             String.format(Locale.GERMANY, "%,.2f", total))
+        else context.getString(R.string.text_price_convert_item, symbol,
+            String.format(Locale.GERMANY, "%,.2f", total), convert)
         holder.date.text = if (item.isPaid) {
             context.getString(R.string.text_date_note_sale_paid,
                 DateFormat.getDateInstance()
@@ -45,7 +49,7 @@ class NoteSaleAdapter(private var notesSale: MutableList<NoteSale>, private val 
                 DateFormat.getDateInstance().format(item.datePaid))
         }
         holder.invoice.text = context.getString(R.string.text_note_sale_item, item.noteNumber.toString())
-        val image = if (item.isPaid) R.drawable.ic_cash_check_56dp else R.drawable.ic_cash_remove_56dp
+        val image = if (item.isPaid) R.drawable.ic_sale_paid_56dp else R.drawable.ic_sale_annulled_56dp
         holder.ivPaid.setImageResource(image)
 
         holder.card.setOnClickListener { onClick.viewNoteSale(item) }

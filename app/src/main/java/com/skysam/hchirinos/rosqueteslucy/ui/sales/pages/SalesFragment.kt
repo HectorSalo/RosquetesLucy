@@ -7,7 +7,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSalesBinding
@@ -24,7 +23,7 @@ class SalesFragment : Fragment(), OnClick {
     private val sales = mutableListOf<Sale>()
     private val salesPaid = mutableListOf<Sale>()
     private val salesNotPaid = mutableListOf<Sale>()
-    private val costumers = mutableListOf<Costumer>()
+    private val salesAnnulled = mutableListOf<Sale>()
     private val listExpiredSevenDays = mutableListOf<Sale>()
     private var index = 0
 
@@ -66,22 +65,23 @@ class SalesFragment : Fragment(), OnClick {
     }
 
     private fun loadViewModel() {
-        viewModel.costumers.observe(viewLifecycleOwner, {
-            costumers.clear()
-            costumers.addAll(it)
-        })
         viewModel.sales.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 listExpiredSevenDays.clear()
                 salesNotPaid.clear()
                 salesPaid.clear()
+                salesAnnulled.clear()
                 sales.clear()
                 if (it.isNotEmpty()) {
                     sales.addAll(it)
                     for (sale in sales) {
-                        val daysBetween = adapaterSales.getTimeDistance(Date(sale.dateDelivery), Date())
-                        if (sale.isPaid) salesPaid.add(sale) else salesNotPaid.add(sale)
-                        if (!sale.isPaid && daysBetween >= SharedPref.getDaysExpired()) listExpiredSevenDays.add(sale)
+                        if (!sale.isAnnuled) {
+                            val daysBetween = adapaterSales.getTimeDistance(Date(sale.dateDelivery), Date())
+                            if (sale.isPaid) salesPaid.add(sale) else salesNotPaid.add(sale)
+                            if (!sale.isPaid && daysBetween >= SharedPref.getDaysExpired()) listExpiredSevenDays.add(sale)
+                        } else {
+                            salesAnnulled.add(sale)
+                        }
                     }
                     loadList(index)
                 } else {
@@ -136,28 +136,36 @@ class SalesFragment : Fragment(), OnClick {
                     binding.textListEmpty.text = getString(R.string.list_sales_empty)
                 }
             }
+            3 -> {
+                if (salesAnnulled.isNotEmpty()) {
+                    adapaterSales.updateList(salesAnnulled)
+                    binding.rvSales.visibility = View.VISIBLE
+                    binding.textListEmpty.visibility = View.GONE
+                } else {
+                    binding.rvSales.visibility = View.GONE
+                    binding.textListEmpty.visibility = View.VISIBLE
+                    binding.textListEmpty.text = getString(R.string.list_sales_annulled_empty)
+                }
+            }
         }
     }
 
     override fun viewSale(sale: Sale) {
-        for (cos in costumers) {
-            if (cos.id == sale.idCostumer) {
-                sale.idCostumer = cos.identifier
-            }
-        }
         val viewDetailsSale = ViewDetailsSaleDialog(sale)
         viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
     }
 
     override fun deleteSale(sale: Sale) {
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle(getString(R.string.title_confirmation_dialog))
-            .setMessage(getString(R.string.msg_delete_dialog))
-            .setPositiveButton(R.string.text_delete) { _, _ ->
+        builder.setTitle(getString(R.string.title_dialog_delete_sale))
+            .setMessage(getString(R.string.message_dialog_delete_sale))
+            .setPositiveButton(R.string.text_delete_sale) { _, _ ->
                 Toast.makeText(requireContext(), R.string.text_deleting, Toast.LENGTH_SHORT).show()
                 viewModel.deleteSale(sale)
             }
-            .setNegativeButton(R.string.btn_cancel, null)
+            .setNeutralButton(R.string.text_annul_sale) {_, _ ->
+                if (!sale.isAnnuled) viewModel.annulSale(sale)
+            }
 
         val dialog = builder.create()
         dialog.show()
@@ -186,6 +194,13 @@ class SalesFragment : Fragment(), OnClick {
                 }
                 2-> {
                     for (sale in sales) {
+                        if (sale.nameCostumer.lowercase().contains(userInput) || sale.location.lowercase().contains(userInput)) {
+                            listSearch.add(sale)
+                        }
+                    }
+                }
+                3-> {
+                    for (sale in salesAnnulled) {
                         if (sale.nameCostumer.lowercase().contains(userInput) || sale.location.lowercase().contains(userInput)) {
                             listSearch.add(sale)
                         }

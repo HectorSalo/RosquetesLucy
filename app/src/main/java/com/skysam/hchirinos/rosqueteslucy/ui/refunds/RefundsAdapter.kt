@@ -9,6 +9,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import java.text.DateFormat
 import java.util.*
@@ -34,8 +35,11 @@ class RefundsAdapter(private var refunds: MutableList<Refund>, private val onCli
         holder.quantity.text = context.getString(R.string.text_quantity_refund_item, item.quantity.toString())
         val total = item.price * item.quantity
         val symbol = if (item.isDolar) "$" else "Bs."
-        holder.price.text = context.getString(R.string.text_price_item, symbol,
+        val convert = ClassesCommon.convertDoubleToString(total / item.rate)
+        holder.price.text = if (item.isDolar) context.getString(R.string.text_price_item, symbol,
             String.format(Locale.GERMANY, "%,.2f", total))
+        else context.getString(R.string.text_price_convert_item, symbol,
+            String.format(Locale.GERMANY, "%,.2f", total), convert)
         holder.date.text = DateFormat.getDateInstance().format(item.date)
 
         holder.card.setOnClickListener {
