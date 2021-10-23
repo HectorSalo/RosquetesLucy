@@ -14,7 +14,6 @@ import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentViewDocumentSaleBinding
-import com.skysam.hchirinos.rosqueteslucy.ui.sales.ViewDetailsSaleDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.OnClick
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.SalesAdapter
 
@@ -108,20 +107,21 @@ class ViewDocSalesFragment: Fragment(), OnClick {
     }
 
   override fun viewSale(sale: Sale) {
-    sale.idCostumer = costumer.identifier
-    val viewDetailsSale = ViewDetailsSaleDialog(sale)
+    val viewDetailsSale = ViewDetailsSaleCostumerDialog(sale, costumer)
     viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
   }
 
   override fun deleteSale(sale: Sale) {
     val builder = AlertDialog.Builder(requireActivity())
-    builder.setTitle(getString(R.string.title_confirmation_dialog))
-      .setMessage(getString(R.string.msg_delete_dialog))
-      .setPositiveButton(R.string.text_delete) { _, _ ->
+    builder.setTitle(getString(R.string.title_dialog_delete_sale))
+      .setMessage(getString(R.string.message_dialog_delete_sale))
+      .setPositiveButton(R.string.text_delete_sale) { _, _ ->
         Toast.makeText(requireContext(), R.string.text_deleting, Toast.LENGTH_SHORT).show()
         viewModel.deleteSale(sale)
       }
-      .setNegativeButton(R.string.btn_cancel, null)
+      .setNeutralButton(R.string.text_annul_sale) {_, _ ->
+        if (!sale.isAnnuled) viewModel.annulSale(sale)
+      }
 
     val dialog = builder.create()
     dialog.show()

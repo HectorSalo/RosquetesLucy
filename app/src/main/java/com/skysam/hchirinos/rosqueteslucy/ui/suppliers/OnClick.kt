@@ -7,5 +7,6 @@ import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Supplier
  */
 interface OnClick {
     fun addExpense(supplier: Supplier)
-    fun deleteExpense(supplier: Supplier)
+    fun editSupplier(supplier: Supplier)
+    fun deleteSupplier(supplier: Supplier)
 }

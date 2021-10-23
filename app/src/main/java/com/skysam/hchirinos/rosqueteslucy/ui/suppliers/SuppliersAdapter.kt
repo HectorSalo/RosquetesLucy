@@ -35,7 +35,8 @@ class SuppliersAdapter (private var suppliers: MutableList<Supplier>, private va
             popMenu.setOnMenuItemClickListener {
                 when(it.itemId) {
                     R.id.menu_add_expense-> onClick.addExpense(item)
-                    R.id.menu_delete-> onClick.deleteExpense(item)
+                    R.id.menu_edit -> onClick.editSupplier(item)
+                    R.id.menu_delete-> onClick.deleteSupplier(item)
                 }
                 false
             }

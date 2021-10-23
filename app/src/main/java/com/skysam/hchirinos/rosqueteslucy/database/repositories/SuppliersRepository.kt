@@ -58,6 +58,15 @@ object SuppliersRepository {
         }
     }
 
+    fun updateSupplier(supplier: Supplier) {
+        val data = hashMapOf(
+            Constants.NAME to supplier.name,
+            Constants.LOCATIONS to supplier.locations
+        )
+        getInstance().document(supplier.id)
+            .update(data)
+    }
+
     fun deleteSupplier(supplier: Supplier) {
         getInstance().document(supplier.id)
             .delete()

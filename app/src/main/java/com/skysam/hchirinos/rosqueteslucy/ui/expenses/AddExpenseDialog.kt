@@ -193,6 +193,7 @@ class AddExpenseDialog(private val supplier: Supplier): DialogFragment(),
             rate.toDouble()
         )
         viewModel.addExpense(expense)
+        viewModel.clearFields()
         Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
         dialog?.dismiss()
     }
@@ -225,6 +226,7 @@ class AddExpenseDialog(private val supplier: Supplier): DialogFragment(),
     }
 
     override fun onClickExit() {
+        viewModel.clearFields()
         dialog?.dismiss()
     }
 

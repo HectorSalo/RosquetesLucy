@@ -5,6 +5,9 @@
         android:title="@string/text_add_expense"
         android:id="@+id/menu_add_expense"/>
     <item
+        android:title="@string/text_edit_supplier"
+        android:id="@+id/menu_edit"/>
+    <item
         android:title="@string/text_delete_supplier"
         android:id="@+id/menu_delete"/>
 

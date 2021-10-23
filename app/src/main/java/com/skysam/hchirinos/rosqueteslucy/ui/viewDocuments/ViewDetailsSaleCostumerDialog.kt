@@ -1,4 +1,4 @@
-package com.skysam.hchirinos.rosqueteslucy.ui.sales
+package com.skysam.hchirinos.rosqueteslucy.ui.viewDocuments
 
 import android.content.Context
 import android.os.Bundle
@@ -15,20 +15,21 @@ import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.CloseDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.PaidSaleDialog
 import java.text.DateFormat
 import java.util.*
 
 /**
- * Created by Hector Chirinos (Home) on 15/8/2021.
+ * Created by Hector Chirinos (Home) on 22/10/2021.
  */
-class ViewDetailsSaleDialog(private var sale: Sale): DialogFragment(), CloseDialog {
+class ViewDetailsSaleCostumerDialog(private var sale: Sale, private val costumer: Costumer): DialogFragment(),
+    CloseDialog {
     private var _binding: FragmentSecondAddSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
-    private val allSales = mutableListOf<Sale>()
-    private val costumers = mutableListOf<Costumer>()
+    private val allSalesFromCostumer = mutableListOf<Sale>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,38 +50,29 @@ class ViewDetailsSaleDialog(private var sale: Sale): DialogFragment(), CloseDial
 
         viewModel.sales.observe(viewLifecycleOwner, {
             if (_binding != null) {
-                allSales.clear()
-                allSales.addAll(it)
-                if (allSales.indexOf(sale) != allSales.lastIndex) binding.ibBack.visibility = View.VISIBLE
-                if (allSales.indexOf(sale) != 0) binding.ibFoward.visibility = View.VISIBLE
-            }
-        })
-        viewModel.costumers.observe(viewLifecycleOwner, {
-            if (_binding != null) {
-                costumers.clear()
-                costumers.addAll(it)
-                for (cos in costumers) {
-                    if (cos.id == sale.idCostumer) {
-                        binding.tvRif.text = cos.identifier
-                    }
+                allSalesFromCostumer.clear()
+                for (sale in it) {
+                    if (sale.idCostumer == costumer.id) allSalesFromCostumer.add(sale)
                 }
+                if (allSalesFromCostumer.indexOf(sale) != allSalesFromCostumer.lastIndex) binding.ibBack.visibility = View.VISIBLE
+                if (allSalesFromCostumer.indexOf(sale) != 0) binding.ibFoward.visibility = View.VISIBLE
             }
         })
 
         binding.btnSale.setOnClickListener { paidSale() }
         binding.ibBack.setOnClickListener {
-            val position = allSales.indexOf(sale)
-            sale = allSales[position + 1]
+            val position = allSalesFromCostumer.indexOf(sale)
+            sale = allSalesFromCostumer[position + 1]
             loadData()
-            if (allSales.indexOf(sale) == allSales.lastIndex) binding.ibBack.visibility = View.INVISIBLE
-            if (allSales.indexOf(sale) == 1) binding.ibFoward.visibility = View.VISIBLE
+            if (allSalesFromCostumer.indexOf(sale) == allSalesFromCostumer.lastIndex) binding.ibBack.visibility = View.INVISIBLE
+            if (allSalesFromCostumer.indexOf(sale) == 1) binding.ibFoward.visibility = View.VISIBLE
         }
         binding.ibFoward.setOnClickListener {
-            val position = allSales.indexOf(sale)
-            sale = allSales[position - 1]
+            val position = allSalesFromCostumer.indexOf(sale)
+            sale = allSalesFromCostumer[position - 1]
             loadData()
-            if (allSales.indexOf(sale) == 0) binding.ibFoward.visibility = View.INVISIBLE
-            if (allSales.indexOf(sale) == allSales.lastIndex - 1) binding.ibBack.visibility = View.VISIBLE
+            if (allSalesFromCostumer.indexOf(sale) == 0) binding.ibFoward.visibility = View.INVISIBLE
+            if (allSalesFromCostumer.indexOf(sale) == allSalesFromCostumer.lastIndex - 1) binding.ibBack.visibility = View.VISIBLE
         }
         loadData()
     }
@@ -91,14 +83,10 @@ class ViewDetailsSaleDialog(private var sale: Sale): DialogFragment(), CloseDial
     }
 
     private fun loadData() {
-        for (cos in costumers) {
-            if (cos.id == sale.idCostumer) {
-                binding.tvRif.text = cos.identifier
-            }
-        }
         if (sale.isPaid) binding.btnSale.visibility = View.GONE else binding.btnSale.visibility = View.VISIBLE
         if (sale.isAnnuled) {
-            binding.tvSubtitle.text = getString(R.string.text_date_annul,
+            binding.tvSubtitle.text = getString(
+                R.string.text_date_annul,
                 DateFormat.getDateInstance()
                     .format(sale.datePaid))
             binding.tvSubtitle.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
@@ -109,6 +97,7 @@ class ViewDetailsSaleDialog(private var sale: Sale): DialogFragment(), CloseDial
         binding.btnSale.text = getString(R.string.btn_paid_sale)
         binding.tvNameCostumer.text = sale.nameCostumer
         binding.tvLocationCostumer.text = sale.location
+        binding.tvRif.text = costumer.identifier
         binding.tvDate.text = DateFormat.getDateInstance().format(sale.dateDelivery)
         binding.tvInvoice.text = getString(R.string.text_invoice_item, sale.invoice.toString())
         binding.tvRate.text = getString(R.string.text_rate_view, convertFormatNumber(sale.ratePaid))
@@ -144,7 +133,8 @@ class ViewDetailsSaleDialog(private var sale: Sale): DialogFragment(), CloseDial
                 binding.tvTotalIvaDolar.visibility = View.VISIBLE
                 binding.tvTextIvaDolar.text = getString(R.string.title_waste)
                 val totalWaste = (total / sale.rateDelivery) - totalAmountDolar
-                binding.tvTotalIvaDolar.text = getString(R.string.text_total_amount,
+                binding.tvTotalIvaDolar.text = getString(
+                    R.string.text_total_amount,
                     convertFormatNumber(totalWaste))
             }
         } else {

@@ -49,7 +49,7 @@ class NoteSaleAdapter(private var notesSale: MutableList<NoteSale>, private val 
                 DateFormat.getDateInstance().format(item.datePaid))
         }
         holder.invoice.text = context.getString(R.string.text_note_sale_item, item.noteNumber.toString())
-        val image = if (item.isPaid) R.drawable.ic_sale_paid_56dp else R.drawable.ic_sale_annulled_56dp
+        val image = if (item.isPaid) R.drawable.ic_sale_paid_56dp else R.drawable.ic_sale_not_paid_56
         holder.ivPaid.setImageResource(image)
 
         holder.card.setOnClickListener { onClick.viewNoteSale(item) }

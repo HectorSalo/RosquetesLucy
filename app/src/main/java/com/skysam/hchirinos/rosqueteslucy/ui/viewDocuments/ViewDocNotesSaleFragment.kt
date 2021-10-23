@@ -14,7 +14,6 @@ import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentViewDocumentNoteSaleBinding
-import com.skysam.hchirinos.rosqueteslucy.ui.notesSale.ViewDetailsNoteSaleDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.notesSale.pages.NoteSaleAdapter
 import com.skysam.hchirinos.rosqueteslucy.ui.notesSale.pages.OnClick
 
@@ -107,8 +106,7 @@ class ViewDocNotesSaleFragment : Fragment(), OnClick {
     }
 
   override fun viewNoteSale(noteSale: NoteSale) {
-    noteSale.idCostumer = costumer.identifier
-    val viewDetailsNoteSaleDialog = ViewDetailsNoteSaleDialog(noteSale)
+    val viewDetailsNoteSaleDialog = ViewDetailsNotesSaleCostumerDialog(noteSale, costumer)
     viewDetailsNoteSaleDialog.show(requireActivity().supportFragmentManager, tag)
   }
 

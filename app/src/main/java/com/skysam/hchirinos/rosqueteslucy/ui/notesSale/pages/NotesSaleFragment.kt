@@ -132,11 +132,6 @@ class NotesSaleFragment : Fragment(), OnClick {
     }
 
     override fun viewNoteSale(noteSale: NoteSale) {
-        for (cos in costumers) {
-            if (cos.id == noteSale.idCostumer) {
-                noteSale.idCostumer = cos.identifier
-            }
-        }
         val viewDetailsNoteSaleDialog = ViewDetailsNoteSaleDialog(noteSale)
         viewDetailsNoteSaleDialog.show(requireActivity().supportFragmentManager, tag)
     }

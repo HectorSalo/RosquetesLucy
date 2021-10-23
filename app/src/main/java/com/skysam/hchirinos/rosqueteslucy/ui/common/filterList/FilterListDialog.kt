@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.util.Pair
@@ -13,7 +15,6 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogFilterListSaleBinding
@@ -32,7 +33,6 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
     private var _binding: DialogFilterListSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: FilterListViewModel by activityViewModels()
-    private val costumers = mutableListOf<Costumer>()
     private val sales = mutableListOf<Sale>()
     private val salesResult = mutableListOf<Sale>()
     private val noteSale = mutableListOf<NoteSale>()
@@ -42,6 +42,7 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
     private var dateStart: Date? = null
     private var dateFinal: Date? = null
     private var isEditing = false
+    private var isFirstTime = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +66,12 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
             setHasFixedSize(true)
             adapter = if (isSale) adapterSale else adapterNoteSale
         }
+        val list = if (isSale) listOf(*resources.getStringArray(R.array.doc_sale))
+        else listOf(*resources.getStringArray(R.array.doc_note_sale))
+        val adapterDocs = ArrayAdapter(requireContext(), R.layout.layout_spinner, list)
+        binding.spinner.adapter = adapterDocs
+        binding.tvTitle.text = if (isSale) getString(R.string.title_filter_list, getString(R.string.title_sales))
+        else getString(R.string.title_filter_list, getString(R.string.title_notes_sales))
         binding.etDate.setOnClickListener { selecDate() }
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId == R.id.rb_date) {
@@ -79,10 +86,18 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
             }
         }
         binding.btnSearch.setOnClickListener {
-            if (binding.rbDate.isChecked) {
-                validateDate()
-            } else {
-                validateNumber()
+            if (binding.spinner.selectedItemPosition != 0) binding.spinner.setSelection(0) else search(0)
+        }
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                search(position)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
         loadViewModel()
@@ -94,21 +109,13 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
     }
 
     private fun loadViewModel() {
-        viewModel.costumers.observe(viewLifecycleOwner, {
-            costumers.clear()
-            costumers.addAll(it)
-        })
         viewModel.sales.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 sales.clear()
                 sales.addAll(it)
                 if (isEditing) {
                     isEditing = false
-                    if (binding.rbDate.isChecked) {
-                        validateDate()
-                    } else {
-                        validateNumber()
-                    }
+                    if (binding.spinner.selectedItemPosition != 0) binding.spinner.setSelection(0) else search(0)
                 }
             }
         })
@@ -118,11 +125,7 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
                 noteSale.addAll(it)
                 if (isEditing) {
                     isEditing = false
-                    if (binding.rbDate.isChecked) {
-                        validateDate()
-                    } else {
-                        validateNumber()
-                    }
+                    if (binding.spinner.selectedItemPosition != 0) binding.spinner.setSelection(0) else search(0)
                 }
             }
         })
@@ -146,6 +149,7 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
             calendar[Calendar.HOUR_OF_DAY] = 23
             calendar[Calendar.MINUTE] = 59
             dateFinal = calendar.time
+            binding.tfDate.error = null
             binding.etDate.setText(getString(R.string.text_date_range,
                 ClassesCommon.convertDateToString(dateStart!!),
                 ClassesCommon.convertDateToString(dateFinal!!)))
@@ -153,7 +157,18 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
         picker.show(requireActivity().supportFragmentManager, picker.toString())
     }
 
-    private fun validateDate() {
+    private fun search(position: Int) {
+        if (!isFirstTime) {
+            if (binding.rbDate.isChecked) {
+                validateDate(position)
+            } else {
+                validateNumber(position)
+            }
+        }
+        isFirstTime = false
+    }
+
+    private fun validateDate(position: Int) {
         binding.progressBar.visibility = View.VISIBLE
         binding.btnSearch.isEnabled = false
         binding.tfDate.error = null
@@ -174,7 +189,12 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
             for (sale in sales) {
                 val dateSale = Date(sale.datePaid)
                 if (dateSale.after(calendarStartRange.time) && dateSale.before(calendarFinalRange.time)) {
-                    salesResult.add(sale)
+                    when (position) {
+                        0 -> salesResult.add(sale)
+                        1 -> if (!sale.isPaid) salesResult.add(sale)
+                        2 -> if (sale.isPaid && !sale.isAnnuled) salesResult.add(sale)
+                        3 -> if (sale.isAnnuled) salesResult.add(sale)
+                    }
                 }
             }
             adapterSale.updateList(salesResult)
@@ -184,7 +204,11 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
             for (note in noteSale) {
                 val dateNoteSale = Date(note.datePaid)
                 if (dateNoteSale.after(calendarStartRange.time) && dateNoteSale.before(calendarFinalRange.time)) {
-                    noteSaleResult.add(note)
+                    when (position) {
+                        0 -> noteSaleResult.add(note)
+                        1 -> if (!note.isPaid) noteSaleResult.add(note)
+                        2 -> if (note.isPaid) noteSaleResult.add(note)
+                    }
                 }
             }
             adapterNoteSale.updateList(noteSaleResult)
@@ -193,7 +217,7 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
         validateListEmpty(listIsEmpty)
     }
 
-    private fun validateNumber() {
+    private fun validateNumber(position: Int) {
         binding.progressBar.visibility = View.VISIBLE
         binding.btnSearch.isEnabled = false
         binding.tfFromNumber.error = null
@@ -231,7 +255,14 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
             salesResult.clear()
             for (sale in sales) {
                 val numberSale = sale.invoice
-                if (numberSale in numberInitInt..numberFinalInt) salesResult.add(sale)
+                if (numberSale in numberInitInt..numberFinalInt) {
+                    when (position) {
+                        0 -> salesResult.add(sale)
+                        1 -> if (!sale.isPaid) salesResult.add(sale)
+                        2 -> if (sale.isPaid && !sale.isAnnuled) salesResult.add(sale)
+                        3 -> if (sale.isAnnuled) salesResult.add(sale)
+                    }
+                }
             }
             adapterSale.updateList(salesResult)
             if (salesResult.isEmpty()) listIsEmpty = true
@@ -239,7 +270,13 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
             noteSaleResult.clear()
             for (note in noteSale) {
                 val numberNoteSale = note.noteNumber
-                if (numberNoteSale in numberInitInt..numberFinalInt) noteSaleResult.add(note)
+                if (numberNoteSale in numberInitInt..numberFinalInt) {
+                    when (position) {
+                        0 -> noteSaleResult.add(note)
+                        1 -> if (!note.isPaid) noteSaleResult.add(note)
+                        2 -> if (note.isPaid) noteSaleResult.add(note)
+                    }
+                }
             }
             adapterNoteSale.updateList(noteSaleResult)
             if (noteSaleResult.isEmpty()) listIsEmpty = true
@@ -261,11 +298,6 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
     }
 
     override fun viewNoteSale(noteSale: NoteSale) {
-        for (cos in costumers) {
-            if (cos.id == noteSale.idCostumer) {
-                noteSale.idCostumer = cos.identifier
-            }
-        }
         if (!noteSale.isPaid) isEditing = true
         val viewDetailsNoteSaleDialog = ViewDetailsNoteSaleDialog(noteSale)
         viewDetailsNoteSaleDialog.show(requireActivity().supportFragmentManager, tag)
@@ -287,11 +319,6 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
     }
 
     override fun viewSale(sale: Sale) {
-        for (cos in costumers) {
-            if (cos.id == sale.idCostumer) {
-                sale.idCostumer = cos.identifier
-            }
-        }
         if (!sale.isPaid) isEditing = true
         val viewDetailsSale = ViewDetailsSaleDialog(sale)
         viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
@@ -299,14 +326,19 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
 
     override fun deleteSale(sale: Sale) {
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle(getString(R.string.title_confirmation_dialog))
-            .setMessage(getString(R.string.msg_delete_dialog))
-            .setPositiveButton(R.string.text_delete) { _, _ ->
+        builder.setTitle(getString(R.string.title_dialog_delete_sale))
+            .setMessage(getString(R.string.message_dialog_delete_sale))
+            .setPositiveButton(R.string.text_delete_sale) { _, _ ->
                 isEditing = true
                 Toast.makeText(requireContext(), R.string.text_deleting, Toast.LENGTH_SHORT).show()
                 viewModel.deleteSale(sale)
             }
-            .setNegativeButton(R.string.btn_cancel, null)
+            .setNeutralButton(R.string.text_annul_sale) {_, _ ->
+                if (!sale.isAnnuled) {
+                    isEditing = true
+                    viewModel.annulSale(sale)
+                }
+            }
 
         val dialog = builder.create()
         dialog.show()

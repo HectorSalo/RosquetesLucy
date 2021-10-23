@@ -106,7 +106,12 @@ class SuppliersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
         addExpenseDialog.show(requireActivity().supportFragmentManager, tag)
     }
 
-    override fun deleteExpense(supplier: Supplier) {
+    override fun editSupplier(supplier: Supplier) {
+        val editSupplierDialog = EditSupplierDialog(supplier)
+        editSupplierDialog.show(requireActivity().supportFragmentManager, tag)
+    }
+
+    override fun deleteSupplier(supplier: Supplier) {
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.title_confirmation_dialog))
             .setMessage(getString(R.string.msg_delete_dialog))

@@ -1,4 +1,4 @@
-package com.skysam.hchirinos.rosqueteslucy.ui.notesSale
+package com.skysam.hchirinos.rosqueteslucy.ui.viewDocuments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,15 +17,13 @@ import java.text.DateFormat
 import java.util.*
 
 /**
- * Created by Hector Chirinos on 14/09/2021.
+ * Created by Hector Chirinos (Home) on 22/10/2021.
  */
-class ViewDetailsNoteSaleDialog(private var noteSale: NoteSale):
-    DialogFragment(), CloseDialog {
+class ViewDetailsNotesSaleCostumerDialog(private var noteSale: NoteSale, private val costumer: Costumer): DialogFragment(), CloseDialog {
     private var _binding: FragmentSecondAddSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
-    private val allNotesSale = mutableListOf<NoteSale>()
-    private val costumers = mutableListOf<Costumer>()
+    private val allNotesSaleFromCostumer = mutableListOf<NoteSale>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,38 +43,29 @@ class ViewDetailsNoteSaleDialog(private var noteSale: NoteSale):
         super.onViewCreated(view, savedInstanceState)
         viewModel.notesSales.observe(viewLifecycleOwner, {
             if (_binding != null) {
-                allNotesSale.clear()
-                allNotesSale.addAll(it)
-                if (allNotesSale.indexOf(noteSale) != allNotesSale.lastIndex) binding.ibBack.visibility = View.VISIBLE
-                if (allNotesSale.indexOf(noteSale) != 0) binding.ibFoward.visibility = View.VISIBLE
-            }
-        })
-        viewModel.costumers.observe(viewLifecycleOwner, {
-            if (_binding != null) {
-                costumers.clear()
-                costumers.addAll(it)
-                for (cos in costumers) {
-                    if (cos.id == noteSale.idCostumer) {
-                        binding.tvRif.text = cos.identifier
-                    }
+                allNotesSaleFromCostumer.clear()
+                for (noteS in it) {
+                    if (noteS.idCostumer == costumer.id) allNotesSaleFromCostumer.add(noteS)
                 }
+                if (allNotesSaleFromCostumer.indexOf(noteSale) != allNotesSaleFromCostumer.lastIndex) binding.ibBack.visibility = View.VISIBLE
+                if (allNotesSaleFromCostumer.indexOf(noteSale) != 0) binding.ibFoward.visibility = View.VISIBLE
             }
         })
 
         binding.btnSale.setOnClickListener { paidSale() }
         binding.ibBack.setOnClickListener {
-            val position = allNotesSale.indexOf(noteSale)
-            noteSale = allNotesSale[position + 1]
+            val position = allNotesSaleFromCostumer.indexOf(noteSale)
+            noteSale = allNotesSaleFromCostumer[position + 1]
             loadData()
-            if (allNotesSale.indexOf(noteSale) == allNotesSale.lastIndex) binding.ibBack.visibility = View.INVISIBLE
-            if (allNotesSale.indexOf(noteSale) == 1) binding.ibFoward.visibility = View.VISIBLE
+            if (allNotesSaleFromCostumer.indexOf(noteSale) == allNotesSaleFromCostumer.lastIndex) binding.ibBack.visibility = View.INVISIBLE
+            if (allNotesSaleFromCostumer.indexOf(noteSale) == 1) binding.ibFoward.visibility = View.VISIBLE
         }
         binding.ibFoward.setOnClickListener {
-            val position = allNotesSale.indexOf(noteSale)
-            noteSale = allNotesSale[position - 1]
+            val position = allNotesSaleFromCostumer.indexOf(noteSale)
+            noteSale = allNotesSaleFromCostumer[position - 1]
             loadData()
-            if (allNotesSale.indexOf(noteSale) == 0) binding.ibFoward.visibility = View.INVISIBLE
-            if (allNotesSale.indexOf(noteSale) == allNotesSale.lastIndex - 1) binding.ibBack.visibility = View.VISIBLE
+            if (allNotesSaleFromCostumer.indexOf(noteSale) == 0) binding.ibFoward.visibility = View.INVISIBLE
+            if (allNotesSaleFromCostumer.indexOf(noteSale) == allNotesSaleFromCostumer.lastIndex - 1) binding.ibBack.visibility = View.VISIBLE
         }
         loadData()
     }
@@ -87,12 +76,6 @@ class ViewDetailsNoteSaleDialog(private var noteSale: NoteSale):
     }
 
     private fun loadData() {
-        for (cos in costumers) {
-            if (cos.id == noteSale.idCostumer) {
-                binding.tvRif.text = cos.identifier
-            }
-        }
-
         if (noteSale.isPaid) binding.btnSale.visibility = View.GONE else binding.btnSale.visibility = View.VISIBLE
         binding.btnSale.text = getString(R.string.btn_paid_note)
         binding.tvTextIvaDolar.visibility = View.GONE
@@ -101,6 +84,7 @@ class ViewDetailsNoteSaleDialog(private var noteSale: NoteSale):
         binding.tvTextIvaBs.visibility = View.GONE
         binding.tvNameCostumer.text = noteSale.nameCostumer
         binding.tvLocationCostumer.text = noteSale.location
+        binding.tvRif.text = costumer.identifier
         binding.tvDate.text = DateFormat.getDateInstance().format(noteSale.dateDelivery)
         binding.tvInvoice.text = getString(R.string.text_note_sale_item, noteSale.noteNumber.toString())
         binding.tvRate.text = getString(R.string.text_rate_view, convertFormatNumber(noteSale.ratePaid))

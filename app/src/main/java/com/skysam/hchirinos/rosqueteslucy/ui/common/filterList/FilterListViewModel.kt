@@ -14,9 +14,12 @@ import com.skysam.hchirinos.rosqueteslucy.database.repositories.SalesRepository
  * Created by Hector Chirinos (Home) on 9/10/2021.
  */
 class FilterListViewModel: ViewModel() {
-    val costumers: LiveData<MutableList<Costumer>> = CostumerRepository.getCostumers().asLiveData()
     val sales: LiveData<MutableList<Sale>> = SalesRepository.getSales().asLiveData()
     val notesSales: LiveData<MutableList<NoteSale>> = NoteSaleRepository.getNotesSale().asLiveData()
+
+    fun annulSale(sale: Sale) {
+        SalesRepository.annulSale(sale)
+    }
 
     fun deleteSale(sale: Sale) {
         SalesRepository.deleteSale(sale)

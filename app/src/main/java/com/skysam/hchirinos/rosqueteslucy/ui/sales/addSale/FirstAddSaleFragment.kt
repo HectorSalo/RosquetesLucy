@@ -72,7 +72,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         }
 
         binding.extendedFab.setOnClickListener {
-            val addLocationDialog = AddLocationDialog(costumer)
+            val addLocationDialog = AddLocationDialog(costumer, true)
             addLocationDialog.show(requireActivity().supportFragmentManager, tag)
         }
 

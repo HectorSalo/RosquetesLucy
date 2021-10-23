@@ -33,6 +33,7 @@ class ItemListAdapter(
         holder.price.text = ClassesCommon.convertDoubleToString(item.price)
         holder.unit.text = context.getString(R.string.text_price_item,
             ClassesCommon.convertDoubleToString(item.quantity), item.unit)
+        holder.priceQuantity.text = ClassesCommon.convertDoubleToString(item.price * item.quantity)
         holder.buttonDelete.setOnClickListener { listener.deleteItem(item) }
         holder.buttonEdit.setOnClickListener { listener.editItem(item) }
     }
@@ -43,6 +44,7 @@ class ItemListAdapter(
         val name: TextView = view.findViewById(R.id.tv_name_item)
         val unit: TextView = view.findViewById(R.id.tv_unit)
         val price: TextView = view.findViewById(R.id.tv_price)
+        val priceQuantity: TextView = view.findViewById(R.id.tv_price_quantity)
         val buttonDelete: ImageButton = view.findViewById(R.id.ib_delete_item)
         val buttonEdit: ConstraintLayout = view.findViewById(R.id.constraint)
     }

@@ -50,11 +50,24 @@
         android:id="@+id/tv_unit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="?attr/textAppearanceSubtitle1"
-        app:layout_constraintEnd_toEndOf="@+id/tv_name_item"
+        app:layout_constraintEnd_toStartOf="@+id/tv_price_quantity"
         app:layout_constraintStart_toEndOf="@+id/ib_delete_item"
         app:layout_constraintTop_toBottomOf="@+id/tv_name_item"
         tools:text="@string/text_unit" />
+
+    <TextView
+        android:id="@+id/tv_price_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_price"
+        tools:text="@string/text_price" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,33 +19,32 @@ import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddRefundBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.costumers.AddLocationDialog
 import java.text.DateFormat
 import java.util.*
 
 /**
  * Created by Hector Chirinos (Home) on 29/9/2021.
  */
-class AddRefundDialog(private val costumer: Costumer): DialogFragment(), TextWatcher {
+class AddRefundDialog: DialogFragment(), TextWatcher {
     private var _binding: DialogAddRefundBinding? = null
     private val binding get() = _binding!!
     private val viewModel: RefundsViewModel by activityViewModels()
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
+    private lateinit var costumer: Costumer
     private var dateSelected: Long = 0
+    private val listSorted = mutableListOf<String>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogAddRefundBinding.inflate(layoutInflater)
 
         dateSelected = Date().time
         binding.etDate.setText(DateFormat.getDateInstance().format(Date()))
-        binding.tvNameCostumer.text = costumer.name
         binding.etDate.setOnClickListener { selecDate() }
         binding.etPrice.addTextChangedListener(this)
         binding.etRate.addTextChangedListener(this)
         binding.etQuantity.doAfterTextChanged { binding.tfQuantity.error = null }
-
-        val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, costumer.locations.sorted())
-        binding.spinner.adapter = adapterLocations
 
         binding.rgMoneda.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId == R.id.rb_dolar) {
@@ -53,6 +52,11 @@ class AddRefundDialog(private val costumer: Costumer): DialogFragment(), TextWat
             } else {
                 binding.tfRate.visibility = View.VISIBLE
             }
+        }
+
+        binding.extendedFab.setOnClickListener {
+            val addLocationDialog = AddLocationDialog(costumer, false)
+            addLocationDialog.show(requireActivity().supportFragmentManager, tag)
         }
 
         val builder = AlertDialog.Builder(requireActivity())
@@ -74,10 +78,27 @@ class AddRefundDialog(private val costumer: Costumer): DialogFragment(), TextWat
     }
 
     private fun loadViewModel() {
+        viewModel.costumer.observe(this.requireActivity(), {
+            if (_binding != null) {
+                costumer = it
+                listSorted.clear()
+                listSorted.addAll(costumer.locations.sorted())
+                binding.tvNameCostumer.text = it.name
+                val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
+                binding.spinner.adapter = adapterLocations
+            }
+        })
         viewModel.valueWeb.observe(this.requireActivity(), {
             if (_binding != null) {
                 binding.tfRate.hint = getString(R.string.text_rate)
                 binding.etRate.setText(it)
+            }
+        })
+        viewModel.addLocation.observe(this.requireActivity(), {
+            if (_binding != null) {
+                if (it != null) {
+                    binding.spinner.setSelection(listSorted.indexOf(it))
+                }
             }
         })
     }

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentCostumersBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.AddRefundDialog
+import com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.viewDocuments.ViewDocumentsActivity
 import java.util.*
 
@@ -26,6 +28,7 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
     private var _binding: FragmentCostumersBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapterCostumer: CostumersAdapter
+    private val viewModelRefunds: RefundsViewModel by activityViewModels()
     private val costumers = mutableListOf<Costumer>()
     private val listSearch = mutableListOf<Costumer>()
     private lateinit var search: SearchView
@@ -169,7 +172,8 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
     }
 
     override fun addRefund(costumer: Costumer) {
-        val addRefundDialog = AddRefundDialog(costumer)
+        viewModelRefunds.addCostumer(costumer)
+        val addRefundDialog = AddRefundDialog()
         addRefundDialog.show(requireActivity().supportFragmentManager, tag)
     }
 

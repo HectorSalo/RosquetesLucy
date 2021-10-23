@@ -72,4 +72,9 @@ class ExpensesViewModel : ViewModel() {
         _productsInList.value = _productsInList.value
         _priceTotal.value = _priceTotal.value!! + priceAfter - priceBefore
     }
+
+    fun clearFields() {
+        _productsInList.value?.clear()
+        _priceTotal.value = 0.0
+    }
 }

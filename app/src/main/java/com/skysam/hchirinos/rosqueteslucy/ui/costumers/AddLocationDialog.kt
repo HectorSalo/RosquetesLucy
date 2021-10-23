@@ -12,15 +12,17 @@ import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddLocationBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 
 /**
  * Created by Hector Chirinos (Home) on 11/8/2021.
  */
-class AddLocationDialog(private val costumer: Costumer): DialogFragment() {
+class AddLocationDialog(private val costumer: Costumer, private val isSale: Boolean): DialogFragment() {
     private var _binding: DialogAddLocationBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
+    private val viewModel2: RefundsViewModel by activityViewModels()
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
 
@@ -65,7 +67,7 @@ class AddLocationDialog(private val costumer: Costumer): DialogFragment() {
         if (locationExists) return
 
         Keyboard.close(binding.root)
-        viewModel.addLocation(costumer.id, location)
+        if (isSale) viewModel.addLocation(costumer.id, location) else viewModel2.addLocation(costumer.id, location)
         Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
         dialog?.dismiss()
     }

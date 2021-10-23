@@ -13,6 +13,10 @@ class SuppliersViewModel : ViewModel() {
        SuppliersRepository.addSupplier(supplier)
    }
 
+    fun updateSupplier(supplier: Supplier) {
+        SuppliersRepository.updateSupplier(supplier)
+    }
+
     fun deleteSupplier(supplier: Supplier) {
         SuppliersRepository.deleteSupplier(supplier)
     }

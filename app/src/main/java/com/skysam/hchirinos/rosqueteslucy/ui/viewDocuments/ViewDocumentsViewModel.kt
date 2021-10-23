@@ -34,6 +34,10 @@ class ViewDocumentsViewModel: ViewModel() {
         _location.value = newLocation
     }
 
+    fun annulSale(sale: Sale) {
+        SalesRepository.annulSale(sale)
+    }
+
     fun deleteSale(sale: Sale) {
         SalesRepository.deleteSale(sale)
     }

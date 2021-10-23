@@ -125,6 +125,8 @@
     <string name="text_delete_sale">Eliminar Factura</string>
     <string name="text_annul_sale">Anular Factura</string>
 
+    <!-- FilterList-->
+    <string name="title_filter_list">Buscar en %1$s</string>
 
     <!-- Expenses-->
     <string name="btn_expense">Comprar</string>
@@ -143,6 +145,7 @@
 
     <!-- Supplier-->
     <string name="text_delete_supplier">Eliminar proveedor</string>
+    <string name="text_edit_supplier">Editar proveedor</string>
 
     <!--Dialogs Common-->
     <string name="title_confirmation_dialog">Confirmar</string>
