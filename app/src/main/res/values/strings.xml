@@ -127,6 +127,12 @@
 
     <!-- FilterList-->
     <string name="title_filter_list">Buscar en %1$s</string>
+    <string name="text_last_visit_all">Última sucursal visitada: %1$s, el día %2$s y se generó una %3$s</string>
+    <string name="text_last_visit_location">Última visita: %1$s\nSe generó una %2$s</string>
+    <string name="text_not_last_visit">No ha realizado visitas</string>
+    <string name="text_sale_single">Factura</string>
+    <string name="text_note_sale_single">Nota de Venta</string>
+    <string name="text_refund_single">Devolución</string>
 
     <!-- Expenses-->
     <string name="btn_expense">Comprar</string>
