@@ -78,7 +78,7 @@ class SalesAdapter(private var sales: MutableList<Sale>, private val onClick: On
 
         holder.card.setOnClickListener { onClick.viewSale(item) }
         holder.card.setOnLongClickListener {
-            onClick.deleteSale(item)
+            onClick.optionsSale(item)
             false
         }
     }

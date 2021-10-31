@@ -10,7 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.databinding.ActivityAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 
@@ -36,7 +36,7 @@ class AddSaleActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         if (bundle != null) {
-            val costumer = bundle.get(Constants.ID_COSTUMER) as Costumer
+            val costumer = bundle.get(Constants.ID_COSTUMER) as Customer
             viewModel.addCostumer(costumer)
             viewModel.changeIsSale(bundle.getBoolean(Constants.IS_SALE))
         }

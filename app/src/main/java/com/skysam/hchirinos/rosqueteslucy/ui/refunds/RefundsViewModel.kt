@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.CostumerRepository
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.RefundsRepository
@@ -14,14 +14,14 @@ class RefundsViewModel : ViewModel() {
     val valueWeb: LiveData<String> = SalesRepository.getValueWeb().asLiveData()
     val refunds: LiveData<MutableList<Refund>> = RefundsRepository.getRefunds().asLiveData()
 
-    private val _costumer = MutableLiveData<Costumer>()
-    val costumer: LiveData<Costumer> get() = _costumer
+    private val _costumer = MutableLiveData<Customer>()
+    val customer: LiveData<Customer> get() = _costumer
 
     private val _addLocation = MutableLiveData<String?>().apply { value = null }
     val addLocation: LiveData<String?> get() = _addLocation
 
-    fun addCostumer(costumer: Costumer) {
-        _costumer.value = costumer
+    fun addCostumer(customer: Customer) {
+        _costumer.value = customer
     }
 
     fun addLocation(id: String, location: String) {

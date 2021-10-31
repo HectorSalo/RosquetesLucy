@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -130,6 +131,10 @@ class AddExpenseDialog(private val supplier: Supplier): DialogFragment(),
                 valueWeb = it
                 binding.tfRate.hint = getString(R.string.text_rate)
                 binding.etRate.setText(it)
+                if (it == "1,00") {
+                    binding.tfRate.error = getString(R.string.error_rate)
+                    binding.etRate.doAfterTextChanged { binding.tfRate.error = null }
+                }
             }
         })
         viewModel.allProducts.observe(viewLifecycleOwner, {

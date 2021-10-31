@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
@@ -30,7 +30,7 @@ class SecondAddSaleFragment : Fragment(){
     private var isSale = true
     private var invoice = 0
     private var date: Long = 0
-    private lateinit var costumer: Costumer
+    private lateinit var customer: Customer
     private lateinit var location: String
 
     override fun onCreateView(
@@ -53,8 +53,8 @@ class SecondAddSaleFragment : Fragment(){
     }
 
     private fun loadViewModel() {
-        viewModel.costumer.observe(viewLifecycleOwner, {
-            costumer = it
+        viewModel.customer.observe(viewLifecycleOwner, {
+            customer = it
             binding.tvNameCostumer.text = it.name
             binding.tvRif.text = it.identifier
         })
@@ -163,8 +163,8 @@ class SecondAddSaleFragment : Fragment(){
     private fun addSale() {
         val sale = Sale(
             Constants.SALES,
-            costumer.id,
-            costumer.name,
+            customer.id,
+            customer.name,
             location,
             price,
             rate,
@@ -182,8 +182,8 @@ class SecondAddSaleFragment : Fragment(){
     private fun addNoteSale() {
         val noteSale = NoteSale(
             Constants.NOTE_SALES,
-            costumer.id,
-            costumer.name,
+            customer.id,
+            customer.name,
             location,
             price,
             rate,

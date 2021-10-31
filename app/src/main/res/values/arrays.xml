@@ -61,4 +61,10 @@
         <item>Por Cobrar</item>
         <item>Cobradas</item>
     </string-array>
+
+    <string-array name="options_sale">
+        <item>Editar Factura</item>
+        <item>Anular Factura</item>
+        <item>Eliminar Factura</item>
+    </string-array>
 </resources>

@@ -12,17 +12,17 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddCostumerBinding
 
 /**
  * Created by Hector Chirinos (Home) on 3/8/2021.
  */
-class EditCostumerDialog(private val costumer: Costumer): DialogFragment() {
+class EditCostumerDialog(private val customer: Customer): DialogFragment() {
     private var _binding: DialogAddCostumerBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CostumersViewModel by activityViewModels()
-    private val costumers = mutableListOf<Costumer>()
+    private val costumers = mutableListOf<Customer>()
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
 
@@ -32,8 +32,8 @@ class EditCostumerDialog(private val costumer: Costumer): DialogFragment() {
         val listUnits = listOf(*resources.getStringArray(R.array.identificador))
         val adapterUnits = ArrayAdapter(requireContext(), R.layout.layout_spinner, listUnits)
         binding.spinner.adapter = adapterUnits
-        binding.etNameCostumer.setText(costumer.name)
-        val values: List<String> = costumer.identifier.split("-")
+        binding.etNameCostumer.setText(customer.name)
+        val values: List<String> = customer.identifier.split("-")
         val symbolIdentifier = "${values[0]}-"
         val numberIdentifier = values[1]
         when(symbolIdentifier) {
@@ -42,7 +42,7 @@ class EditCostumerDialog(private val costumer: Costumer): DialogFragment() {
             "E-" -> binding.spinner.setSelection(2)
             "G-" -> binding.spinner.setSelection(3)
         }
-        binding.etAddressCostumer.setText(costumer.address)
+        binding.etAddressCostumer.setText(customer.address)
         binding.etIdCostumer.setText(numberIdentifier)
         binding.tfLocationCostumer.visibility = View.GONE
         binding.btnCancel.visibility = View.GONE
@@ -104,7 +104,7 @@ class EditCostumerDialog(private val costumer: Costumer): DialogFragment() {
             return
         }
         val identifier = "${binding.spinner.selectedItem}$rif"
-        if (name != costumer.name) {
+        if (name != customer.name) {
             var costumerExists = false
             for (cos in costumers) {
                 if (cos.name == name) {
@@ -116,7 +116,7 @@ class EditCostumerDialog(private val costumer: Costumer): DialogFragment() {
             }
             if (costumerExists) return
         }
-        if (identifier != costumer.identifier) {
+        if (identifier != customer.identifier) {
             var identifierExists = false
             for (cos in costumers) {
                 if (cos.identifier == identifier) {
@@ -132,7 +132,7 @@ class EditCostumerDialog(private val costumer: Costumer): DialogFragment() {
         }
 
         Keyboard.close(binding.root)
-        val costumerUpdate = Costumer(costumer.id, name, identifier, address, costumer.locations)
+        val costumerUpdate = Customer(customer.id, name, identifier, address, customer.locations)
         viewModel.editCostumer(costumerUpdate)
         Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
         dialog?.dismiss()

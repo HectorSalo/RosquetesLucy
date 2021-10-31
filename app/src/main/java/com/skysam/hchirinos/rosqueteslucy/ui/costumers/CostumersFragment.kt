@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentCostumersBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.AddRefundDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsViewModel
@@ -29,8 +29,8 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
     private val binding get() = _binding!!
     private lateinit var adapterCostumer: CostumersAdapter
     private val viewModelRefunds: RefundsViewModel by activityViewModels()
-    private val costumers = mutableListOf<Costumer>()
-    private val listSearch = mutableListOf<Costumer>()
+    private val costumers = mutableListOf<Customer>()
+    private val listSearch = mutableListOf<Customer>()
     private lateinit var search: SearchView
 
     override fun onCreateView(
@@ -113,15 +113,15 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
         })
     }
 
-    override fun viewCostumer(costumer: Costumer) {
-        val viewDetailsCostumerFragment = ViewDetailsCostumerFragment(costumer)
+    override fun viewCostumer(customer: Customer) {
+        val viewDetailsCostumerFragment = ViewDetailsCostumerFragment(customer)
         viewDetailsCostumerFragment.show(requireActivity().supportFragmentManager, tag)
     }
 
-    override fun deleteLocation(costumer: Costumer) {
+    override fun deleteLocation(customer: Customer) {
         val locationsToDelete = mutableListOf<String>()
-        val arrayLocations = costumer.locations.toTypedArray()
-        val arrayChecked = BooleanArray(costumer.locations.size)
+        val arrayLocations = customer.locations.toTypedArray()
+        val arrayChecked = BooleanArray(customer.locations.size)
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.title_delete_locations))
             .setMultiChoiceItems(arrayLocations, arrayChecked) { _, which, isChecked ->
@@ -138,7 +138,7 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
         dialog.show()
         val buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
         buttonPositive.setOnClickListener {
-            if (locationsToDelete.size == costumer.locations.size) {
+            if (locationsToDelete.size == customer.locations.size) {
                 Toast.makeText(requireContext(), getString(R.string.error_delete_all_locations), Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -146,24 +146,24 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
                 dialog.dismiss()
                 return@setOnClickListener
             }
-            viewModel.deleteLocations(costumer.id, locationsToDelete)
+            viewModel.deleteLocations(customer.id, locationsToDelete)
             Toast.makeText(requireContext(), getString(R.string.text_deleting), Toast.LENGTH_LONG).show()
             dialog.dismiss()
         }
     }
 
-    override fun edit(costumer: Costumer) {
-        val editCostumerDialog = EditCostumerDialog(costumer)
+    override fun edit(customer: Customer) {
+        val editCostumerDialog = EditCostumerDialog(customer)
         editCostumerDialog.show(requireActivity().supportFragmentManager, tag)
     }
 
-    override fun delete(costumer: Costumer) {
+    override fun delete(customer: Customer) {
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.title_confirmation_dialog))
             .setMessage(getString(R.string.msg_delete_dialog))
             .setPositiveButton(R.string.text_delete) { _, _ ->
                 Toast.makeText(requireContext(), R.string.text_deleting, Toast.LENGTH_SHORT).show()
-                viewModel.deleteCostumer(costumer)
+                viewModel.deleteCostumer(customer)
             }
             .setNegativeButton(R.string.btn_cancel, null)
 
@@ -171,15 +171,15 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
         dialog.show()
     }
 
-    override fun addRefund(costumer: Costumer) {
-        viewModelRefunds.addCostumer(costumer)
+    override fun addRefund(customer: Customer) {
+        viewModelRefunds.addCostumer(customer)
         val addRefundDialog = AddRefundDialog()
         addRefundDialog.show(requireActivity().supportFragmentManager, tag)
     }
 
-    override fun viewDocuments(costumer: Costumer) {
+    override fun viewDocuments(customer: Customer) {
         val intent = Intent(requireContext(), ViewDocumentsActivity::class.java)
-        intent.putExtra(Constants.ID_COSTUMER, costumer)
+        intent.putExtra(Constants.ID_COSTUMER, customer)
         startActivity(intent)
     }
 

@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddCostumerBinding
 
 
@@ -22,7 +22,7 @@ class AddCostumerDialog: DialogFragment() {
     private var _binding: DialogAddCostumerBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CostumersViewModel by activityViewModels()
-    private val costumers = mutableListOf<Costumer>()
+    private val costumers = mutableListOf<Customer>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,7 +125,7 @@ class AddCostumerDialog: DialogFragment() {
         locations.add(location)
 
         Keyboard.close(binding.root)
-        val costumer = Costumer("", name, identifier, address, locations)
+        val costumer = Customer("", name, identifier, address, locations)
         viewModel.addCostumer(costumer)
         Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
         dialog?.dismiss()

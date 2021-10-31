@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentViewDocumentRefundBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.OnClick
@@ -25,7 +25,7 @@ class ViewDocRefundsFragment : Fragment(), OnClick {
   private lateinit var refundsAdapter: RefundsAdapter
   private val allRefunds = mutableListOf<Refund>()
   private val refunds = mutableListOf<Refund>()
-  private lateinit var costumer: Costumer
+  private lateinit var customer: Customer
   private var location = Constants.ALL_LOCATIONS
 
   override fun onCreateView(
@@ -54,9 +54,9 @@ class ViewDocRefundsFragment : Fragment(), OnClick {
   }
 
   private fun loadViewModel() {
-    viewModel.costumer.observe(viewLifecycleOwner, {
+    viewModel.customer.observe(viewLifecycleOwner, {
       if (_binding != null) {
-        costumer = it
+        customer = it
       }
     })
     viewModel.allRefunds.observe(viewLifecycleOwner, {
@@ -79,12 +79,12 @@ class ViewDocRefundsFragment : Fragment(), OnClick {
     when(location) {
       Constants.ALL_LOCATIONS -> {
         for (refund in allRefunds) {
-          if (refund.idCostumer == costumer.id) refunds.add(refund)
+          if (refund.idCostumer == customer.id) refunds.add(refund)
         }
       }
       else -> {
         for (refund in allRefunds) {
-          if (refund.idCostumer == costumer.id && refund.location == location) refunds.add(refund)
+          if (refund.idCostumer == customer.id && refund.location == location) refunds.add(refund)
         }
       }
     }

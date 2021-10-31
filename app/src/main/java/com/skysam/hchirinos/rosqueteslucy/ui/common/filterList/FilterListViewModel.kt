@@ -3,10 +3,8 @@ package com.skysam.hchirinos.rosqueteslucy.ui.common.filterList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
-import com.skysam.hchirinos.rosqueteslucy.database.repositories.CostumerRepository
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.NoteSaleRepository
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.SalesRepository
 

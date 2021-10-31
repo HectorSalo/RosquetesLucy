@@ -187,7 +187,7 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
         if (isSale) {
             salesResult.clear()
             for (sale in sales) {
-                val dateSale = Date(sale.datePaid)
+                val dateSale = if (position != 0) Date(sale.datePaid) else Date(sale.dateDelivery)
                 if (dateSale.after(calendarStartRange.time) && dateSale.before(calendarFinalRange.time)) {
                     when (position) {
                         0 -> salesResult.add(sale)
@@ -324,9 +324,9 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
         viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
     }
 
-    override fun deleteSale(sale: Sale) {
+    override fun optionsSale(sale: Sale) {
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle(getString(R.string.title_dialog_delete_sale))
+        builder.setTitle(getString(R.string.title_dialog_options_sale))
             .setMessage(getString(R.string.message_dialog_delete_sale))
             .setPositiveButton(R.string.text_delete_sale) { _, _ ->
                 isEditing = true

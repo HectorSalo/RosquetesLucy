@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -66,6 +67,10 @@ class PaidNoteSaleDialog(private val noteSale: NoteSale, private val closeDialog
             if (_binding != null) {
                 binding.tfRate.hint = getString(R.string.text_rate)
                 binding.etRate.setText(it)
+                if (it == "1,00") {
+                    binding.tfRate.error = getString(R.string.error_rate)
+                    binding.etRate.doAfterTextChanged { binding.tfRate.error = null }
+                }
             }
         })
     }

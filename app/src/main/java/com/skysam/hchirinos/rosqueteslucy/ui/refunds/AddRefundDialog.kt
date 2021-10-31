@@ -16,7 +16,7 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddRefundBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.costumers.AddLocationDialog
@@ -32,7 +32,7 @@ class AddRefundDialog: DialogFragment(), TextWatcher {
     private val viewModel: RefundsViewModel by activityViewModels()
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
-    private lateinit var costumer: Costumer
+    private lateinit var customer: Customer
     private var dateSelected: Long = 0
     private val listSorted = mutableListOf<String>()
 
@@ -55,7 +55,7 @@ class AddRefundDialog: DialogFragment(), TextWatcher {
         }
 
         binding.extendedFab.setOnClickListener {
-            val addLocationDialog = AddLocationDialog(costumer, false)
+            val addLocationDialog = AddLocationDialog(customer, false)
             addLocationDialog.show(requireActivity().supportFragmentManager, tag)
         }
 
@@ -78,11 +78,11 @@ class AddRefundDialog: DialogFragment(), TextWatcher {
     }
 
     private fun loadViewModel() {
-        viewModel.costumer.observe(this.requireActivity(), {
+        viewModel.customer.observe(this.requireActivity(), {
             if (_binding != null) {
-                costumer = it
+                customer = it
                 listSorted.clear()
-                listSorted.addAll(costumer.locations.sorted())
+                listSorted.addAll(customer.locations.sorted())
                 binding.tvNameCostumer.text = it.name
                 val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
                 binding.spinner.adapter = adapterLocations
@@ -92,6 +92,10 @@ class AddRefundDialog: DialogFragment(), TextWatcher {
             if (_binding != null) {
                 binding.tfRate.hint = getString(R.string.text_rate)
                 binding.etRate.setText(it)
+                if (it == "1,00") {
+                    binding.tfRate.error = getString(R.string.error_rate)
+                    binding.etRate.doAfterTextChanged { binding.tfRate.error = null }
+                }
             }
         })
         viewModel.addLocation.observe(this.requireActivity(), {
@@ -169,9 +173,9 @@ class AddRefundDialog: DialogFragment(), TextWatcher {
 
         Keyboard.close(binding.root)
         val refund = Refund(
-            costumer.id,
-            costumer.id,
-            costumer.name,
+            customer.id,
+            customer.id,
+            customer.name,
             binding.spinner.selectedItem.toString(),
             price.toDouble(),
             binding.rbDolar.isChecked,

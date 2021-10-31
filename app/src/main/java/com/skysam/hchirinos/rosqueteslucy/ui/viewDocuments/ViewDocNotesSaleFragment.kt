@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentViewDocumentNoteSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.notesSale.pages.NoteSaleAdapter
@@ -26,7 +26,7 @@ class ViewDocNotesSaleFragment : Fragment(), OnClick {
   private lateinit var adapaterNoteSale: NoteSaleAdapter
   private val allNotesSale = mutableListOf<NoteSale>()
   private val notesSale = mutableListOf<NoteSale>()
-  private lateinit var costumer: Costumer
+  private lateinit var customer: Customer
   private var location = Constants.ALL_LOCATIONS
 
   override fun onCreateView(
@@ -55,9 +55,9 @@ class ViewDocNotesSaleFragment : Fragment(), OnClick {
   }
 
   private fun loadViewModel() {
-    viewModel.costumer.observe(viewLifecycleOwner, {
+    viewModel.customer.observe(viewLifecycleOwner, {
       if (_binding != null) {
-        costumer = it
+        customer = it
       }
     })
     viewModel.allNotesSales.observe(viewLifecycleOwner, {
@@ -80,12 +80,12 @@ class ViewDocNotesSaleFragment : Fragment(), OnClick {
     when(location) {
       Constants.ALL_LOCATIONS -> {
         for (noteSale in allNotesSale) {
-          if (noteSale.idCostumer == costumer.id) notesSale.add(noteSale)
+          if (noteSale.idCostumer == customer.id) notesSale.add(noteSale)
         }
       }
       else -> {
         for (noteSale in allNotesSale) {
-          if (noteSale.idCostumer == costumer.id && noteSale.location == location) notesSale.add(noteSale)
+          if (noteSale.idCostumer == customer.id && noteSale.location == location) notesSale.add(noteSale)
         }
       }
     }
@@ -106,7 +106,7 @@ class ViewDocNotesSaleFragment : Fragment(), OnClick {
     }
 
   override fun viewNoteSale(noteSale: NoteSale) {
-    val viewDetailsNoteSaleDialog = ViewDetailsNotesSaleCostumerDialog(noteSale, costumer)
+    val viewDetailsNoteSaleDialog = ViewDetailsNotesSaleCostumerDialog(noteSale, customer)
     viewDetailsNoteSaleDialog.show(requireActivity().supportFragmentManager, tag)
   }
 

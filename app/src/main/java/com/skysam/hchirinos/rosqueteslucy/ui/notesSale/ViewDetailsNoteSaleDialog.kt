@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.notesSale.pages.PaidNoteSaleDialog
@@ -25,7 +25,7 @@ class ViewDetailsNoteSaleDialog(private var noteSale: NoteSale):
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
     private val allNotesSale = mutableListOf<NoteSale>()
-    private val costumers = mutableListOf<Costumer>()
+    private val costumers = mutableListOf<Customer>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
@@ -24,7 +24,7 @@ import java.util.*
 /**
  * Created by Hector Chirinos (Home) on 22/10/2021.
  */
-class ViewDetailsSaleCostumerDialog(private var sale: Sale, private val costumer: Costumer): DialogFragment(),
+class ViewDetailsSaleCostumerDialog(private var sale: Sale, private val customer: Customer): DialogFragment(),
     CloseDialog {
     private var _binding: FragmentSecondAddSaleBinding? = null
     private val binding get() = _binding!!
@@ -52,7 +52,7 @@ class ViewDetailsSaleCostumerDialog(private var sale: Sale, private val costumer
             if (_binding != null) {
                 allSalesFromCostumer.clear()
                 for (sale in it) {
-                    if (sale.idCostumer == costumer.id) allSalesFromCostumer.add(sale)
+                    if (sale.idCostumer == customer.id) allSalesFromCostumer.add(sale)
                 }
                 if (allSalesFromCostumer.indexOf(sale) != allSalesFromCostumer.lastIndex) binding.ibBack.visibility = View.VISIBLE
                 if (allSalesFromCostumer.indexOf(sale) != 0) binding.ibFoward.visibility = View.VISIBLE
@@ -97,7 +97,7 @@ class ViewDetailsSaleCostumerDialog(private var sale: Sale, private val costumer
         binding.btnSale.text = getString(R.string.btn_paid_sale)
         binding.tvNameCostumer.text = sale.nameCostumer
         binding.tvLocationCostumer.text = sale.location
-        binding.tvRif.text = costumer.identifier
+        binding.tvRif.text = customer.identifier
         binding.tvDate.text = DateFormat.getDateInstance().format(sale.dateDelivery)
         binding.tvInvoice.text = getString(R.string.text_invoice_item, sale.invoice.toString())
         binding.tvRate.text = getString(R.string.text_rate_view, convertFormatNumber(sale.ratePaid))

@@ -13,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
@@ -26,7 +26,7 @@ class ViewDocumentsActivity : AppCompatActivity() {
     private val allSales = mutableListOf<Sale>()
     private val allNotesSale = mutableListOf<NoteSale>()
     private val allRefunds = mutableListOf<Refund>()
-    private lateinit var costumer: Costumer
+    private lateinit var customer: Customer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +47,10 @@ class ViewDocumentsActivity : AppCompatActivity() {
         val listSorted = mutableListOf<String>()
         val bundle = intent.extras
         if (bundle != null) {
-            costumer = bundle.get(Constants.ID_COSTUMER) as Costumer
-            viewModel.addCostumer(costumer)
-            supportActionBar?.title = costumer.name
-            listSorted.addAll(costumer.locations.sorted())
+            customer = bundle.get(Constants.ID_COSTUMER) as Customer
+            viewModel.addCostumer(customer)
+            supportActionBar?.title = customer.name
+            listSorted.addAll(customer.locations.sorted())
             listSorted.add(0, Constants.ALL_LOCATIONS)
             val adapterLocations = ArrayAdapter(this, R.layout.layout_spinner, listSorted)
             binding.spinner.adapter = adapterLocations
@@ -79,7 +79,7 @@ class ViewDocumentsActivity : AppCompatActivity() {
         viewModel.allSales.observe(this, {
             allSales.clear()
             for (sale in it) {
-                if (sale.idCostumer == costumer.id) allSales.add(sale)
+                if (sale.idCostumer == customer.id) allSales.add(sale)
             }
             if (it.isNotEmpty()) {
                 findLastDocument()
@@ -88,7 +88,7 @@ class ViewDocumentsActivity : AppCompatActivity() {
         viewModel.allNotesSales.observe(this, {
             allNotesSale.clear()
             for (noteSale in it) {
-                if (noteSale.idCostumer == costumer.id) allNotesSale.add(noteSale)
+                if (noteSale.idCostumer == customer.id) allNotesSale.add(noteSale)
             }
             if (it.isNotEmpty()) {
                 findLastDocument()
@@ -97,7 +97,7 @@ class ViewDocumentsActivity : AppCompatActivity() {
         viewModel.allRefunds.observe(this, {
             allRefunds.clear()
             for (refund in it) {
-                if (refund.idCostumer == costumer.id) allRefunds.add(refund)
+                if (refund.idCostumer == customer.id) allRefunds.add(refund)
             }
             if (it.isNotEmpty()) {
                 findLastDocument()

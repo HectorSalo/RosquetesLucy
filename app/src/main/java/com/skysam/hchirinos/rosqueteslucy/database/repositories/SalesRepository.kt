@@ -134,4 +134,24 @@ object SalesRepository {
         getInstance().document(sale.id)
             .delete()
     }
+
+    fun editSale(sale: Sale) {
+        val data: Map<String, Any> = hashMapOf(
+            Constants.ID_COSTUMER to sale.idCostumer,
+            Constants.NAME to sale.nameCostumer,
+            Constants.COSTUMER_LOCATION to sale.location,
+            Constants.PRICE to sale.price,
+            Constants.RATE_DELIVERY to sale.rateDelivery,
+            Constants.RATE_PAID to sale.ratePaid,
+            Constants.QUANTITY to sale.quantity,
+            Constants.IS_DOLAR to sale.isDolar,
+            Constants.NUMBER_INVOICE to sale.invoice,
+            Constants.IS_PAID to sale.isPaid,
+            Constants.DATE_DELIVERY to Date(sale.dateDelivery),
+            Constants.DATE_PAID to Date(sale.datePaid),
+            Constants.IS_ANULLED to sale.isAnnuled
+        )
+        getInstance().document(sale.id)
+            .update(data)
+    }
 }

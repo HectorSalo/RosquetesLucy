@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
@@ -20,14 +20,14 @@ class ViewDocumentsViewModel: ViewModel() {
     val allNotesSales: LiveData<MutableList<NoteSale>> = NoteSaleRepository.getNotesSale().asLiveData()
     val allRefunds: LiveData<MutableList<Refund>> = RefundsRepository.getRefunds().asLiveData()
 
-    private val _costumer = MutableLiveData<Costumer>()
-    val costumer: LiveData<Costumer> get() = _costumer
+    private val _costumer = MutableLiveData<Customer>()
+    val customer: LiveData<Customer> get() = _costumer
 
     private val _location = MutableLiveData<String>()
     val location: LiveData<String> get() = _location
 
-    fun addCostumer(costumer: Costumer) {
-        _costumer.value = costumer
+    fun addCostumer(customer: Customer) {
+        _costumer.value = customer
     }
 
     fun changeLocation(newLocation: String) {

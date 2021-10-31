@@ -9,12 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 
 /**
  * Created by Hector Chirinos (Home) on 2/8/2021.
  */
-class CostumersAdapter(private var costumers: MutableList<Costumer>, private val onClick: OnClick):
+class CostumersAdapter(private var customers: MutableList<Customer>, private val onClick: OnClick):
     RecyclerView.Adapter<CostumersAdapter.ViewHolder>() {
     private lateinit var context: Context
 
@@ -26,7 +26,7 @@ class CostumersAdapter(private var costumers: MutableList<Costumer>, private val
     }
 
     override fun onBindViewHolder(holder: CostumersAdapter.ViewHolder, position: Int) {
-        val item = costumers[position]
+        val item = customers[position]
         holder.name.text = item.name
 
         holder.card.setOnClickListener { onClick.viewCostumer(item) }
@@ -48,7 +48,7 @@ class CostumersAdapter(private var costumers: MutableList<Costumer>, private val
         }
     }
 
-    override fun getItemCount(): Int = costumers.size
+    override fun getItemCount(): Int = customers.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tv_name)
@@ -56,8 +56,8 @@ class CostumersAdapter(private var costumers: MutableList<Costumer>, private val
         val menu: TextView = view.findViewById(R.id.tv_menu)
     }
 
-    fun updateList(newList: MutableList<Costumer>) {
-        costumers = newList
+    fun updateList(newList: MutableList<Customer>) {
+        customers = newList
         notifyDataSetChanged()
     }
 }

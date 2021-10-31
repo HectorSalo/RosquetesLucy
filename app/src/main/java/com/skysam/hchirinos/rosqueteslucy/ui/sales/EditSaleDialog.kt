@@ -1,4 +1,4 @@
-package com.skysam.hchirinos.rosqueteslucy.ui.sales.addSale
+package com.skysam.hchirinos.rosqueteslucy.ui.sales
 
 import android.os.Bundle
 import android.text.Editable
@@ -7,34 +7,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.ui.common.ExitDialog
-import com.skysam.hchirinos.rosqueteslucy.ui.common.OnClickExit
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
+import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentFirstAddSaleBinding
-import com.skysam.hchirinos.rosqueteslucy.ui.costumers.AddLocationDialog
-import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
+import com.skysam.hchirinos.rosqueteslucy.ui.common.ExitDialog
+import com.skysam.hchirinos.rosqueteslucy.ui.common.OnClickExit
 import java.text.DateFormat
 import java.util.*
 
-class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
-
+/**
+ * Created by Hector Chirinos (Home) on 30/10/2021.
+ */
+class EditSaleDialog(private val sale: Sale): DialogFragment(), TextWatcher, OnClickExit {
     private var _binding: FragmentFirstAddSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
     private var dateSelected: Long = 0
-    private lateinit var customer: Customer
-    private var isSale = true
     private val sales = mutableListOf<Sale>()
     private val listSorted = mutableListOf<String>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Window_Fullscreen)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,26 +58,31 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
 
         binding.etPrice.addTextChangedListener(this)
         binding.etRate.addTextChangedListener(this)
-        dateSelected = Date().time
-        binding.etDate.setText(DateFormat.getDateInstance().format(Date()))
+        dateSelected = sale.dateDelivery
+        binding.etDate.setText(DateFormat.getDateInstance().format(sale.dateDelivery))
+        binding.etInvoice.setText(sale.invoice.toString())
+        binding.etQuantity.setText(sale.quantity.toString())
+        binding.etPrice.setText(ClassesCommon.convertDoubleToString(sale.price))
         binding.etQuantity.doAfterTextChanged { binding.tfQuantity.error = null }
         binding.etInvoice.doAfterTextChanged { binding.tfInvoice.error = null }
+        binding.btnTotal.text = getString(R.string.text_update)
         binding.etDate.setOnClickListener { selecDate() }
         binding.btnExit.setOnClickListener { getOut() }
         binding.btnTotal.setOnClickListener { validateData() }
 
-        binding.rgMoneda.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.rb_dolar) {
-                binding.tfRate.visibility = View.GONE
-            } else {
-                binding.tfRate.visibility = View.VISIBLE
-            }
+
+        if (sale.isDolar) {
+            binding.rbDolar.isChecked = true
+            binding.rbBolivar.visibility = View.GONE
+        } else {
+            binding.rbBolivar.isChecked = true
+            binding.rbDolar.visibility = View.GONE
         }
 
-        binding.extendedFab.setOnClickListener {
-            val addLocationDialog = AddLocationDialog(customer, true)
-            addLocationDialog.show(requireActivity().supportFragmentManager, tag)
-        }
+        binding.extendedFab.visibility = View.GONE
+        binding.rgInvoicePaid.visibility = View.GONE
+        binding.tvInvoicePaid.visibility = View.GONE
+        binding.tfRate.visibility = View.GONE
 
         loadViewModel()
     }
@@ -90,70 +98,34 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
     }
 
     override fun onClickExit() {
-        requireActivity().finish()
+        dismiss()
     }
 
     private fun loadViewModel() {
+        viewModel.costumers.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                for (cos in it) {
+                    if (cos.id == sale.idCostumer) {
+                        viewModel.addCostumer(cos)
+                        break
+                    }
+                }
+            }
+        })
         viewModel.customer.observe(viewLifecycleOwner, {
             if (_binding != null) {
-                customer = it
                 listSorted.clear()
-                listSorted.addAll(customer.locations.sorted())
+                listSorted.addAll(it.locations.sorted())
                 binding.tvNameCostumer.text = it.name
                 val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
                 binding.spinner.adapter = adapterLocations
-            }
-        })
-        viewModel.valueWeb.observe(viewLifecycleOwner, {
-            if (_binding != null) {
-                binding.tfRate.hint = getString(R.string.text_rate)
-                binding.etRate.setText(it)
-                if (it == "1,00") {
-                    binding.tfRate.error = getString(R.string.error_rate)
-                    binding.etRate.doAfterTextChanged { binding.tfRate.error = null }
-                }
-            }
-        })
-        viewModel.addLocation.observe(viewLifecycleOwner, {
-            if (_binding != null) {
-                if (it != null) {
-                    binding.spinner.setSelection(listSorted.indexOf(it))
-                }
-            }
-        })
-        viewModel.isSale.observe(viewLifecycleOwner, {
-            if (_binding != null) {
-                if (!it) {
-                    binding.tfInvoice.hint = getString(R.string.text_note_sale_number)
-                    binding.tvInvoicePaid.text = getString(R.string.text_rg_note_sale_paid)
-                    isSale = false
-                }
-            }
-        })
-        viewModel.notesSales.observe(viewLifecycleOwner, {
-            if (_binding != null) {
-                if (!isSale) {
-                    var number = 0
-                    for (noteSale in it) {
-                        if (noteSale.noteNumber > number) {
-                            number = noteSale.noteNumber
-                        }
-                    }
-                    binding.etInvoice.setText((number + 1).toString())
-                }
+                binding.spinner.setSelection(listSorted.indexOf(sale.location))
             }
         })
         viewModel.sales.observe(viewLifecycleOwner, {
             if (_binding != null) {
-                if (isSale) {
-                    sales.clear()
-                    sales.addAll(it)
-                    var number = 0
-                    for (sale in it) {
-                        if (sale.invoice > number) number = sale.invoice
-                    }
-                    binding.etInvoice.setText((number + 1).toString())
-                }
+                sales.clear()
+                sales.addAll(it)
             }
         })
     }
@@ -163,7 +135,6 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         binding.tfQuantity.error = null
         binding.tfDate.error = null
         binding.tfInvoice.error = null
-        binding.tfRate.error = null
 
         var price = binding.etPrice.text.toString()
         if (price.isEmpty()) {
@@ -183,47 +154,30 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
             binding.etQuantity.requestFocus()
             return
         }
-        val dateSelectedS = binding.etDate.text.toString()
-        if (dateSelectedS.isEmpty()) {
-            binding.tfDate.error = getString(R.string.error_field_empty)
-            binding.etDate.requestFocus()
-            return
-        }
         val invoice = binding.etInvoice.text.toString()
         if (invoice.isEmpty()) {
             binding.tfInvoice.error = getString(R.string.error_field_empty)
             binding.etInvoice.requestFocus()
             return
         }
-        for (sale in sales) {
-            if (invoice.toInt() == sale.invoice) {
+        for (sal in sales) {
+            if (invoice.toInt() == sal.invoice && sal.id != sale.id) {
                 binding.tfInvoice.error = getString(R.string.error_invoice_exists)
                 binding.etInvoice.requestFocus()
                 return
             }
         }
-        var rate: String
-        if (binding.rbDolar.isChecked) {
-            rate = "1,00"
-        } else {
-            rate = binding.etRate.text.toString()
-            if (rate.isEmpty()) {
-                binding.tfRate.error = getString(R.string.error_field_empty)
-                binding.etRate.requestFocus()
-                return
-            }
-            if (rate == "0,00") {
-                binding.tfRate.error = getString(R.string.error_price_zero)
-                binding.etRate.requestFocus()
-                return
-            }
-        }
-        rate = rate.replace(".", "").replace(",", ".")
+        sale.location = binding.spinner.selectedItem.toString()
+        sale.price = price.toDouble()
+        sale.quantity = quantity.toInt()
+        sale.dateDelivery = dateSelected
+        sale.datePaid = dateSelected
+        sale.invoice = invoice.toInt()
 
-        viewModel.reviewInvoice(binding.spinner.selectedItem.toString(),
-            price.toDouble(), rate.toDouble(), quantity.toInt(),
-            binding.rbDolar.isChecked, invoice.toInt(), binding.rbPaidYes.isChecked, dateSelected)
-        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        Keyboard.close(binding.root)
+        viewModel.editSale(sale)
+        Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
+        dialog?.dismiss()
     }
 
     private fun selecDate() {

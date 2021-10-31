@@ -10,6 +10,7 @@ import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.database.SharedPref
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSalesBinding
+import com.skysam.hchirinos.rosqueteslucy.ui.sales.EditSaleDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.ViewDetailsSaleDialog
 import java.util.*
@@ -155,18 +156,37 @@ class SalesFragment : Fragment(), OnClick {
         viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
     }
 
-    override fun deleteSale(sale: Sale) {
+    override fun optionsSale(sale: Sale) {
+        val options = listOf(*resources.getStringArray(R.array.options_sale)).toTypedArray()
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle(getString(R.string.title_dialog_delete_sale))
-            .setMessage(getString(R.string.message_dialog_delete_sale))
-            .setPositiveButton(R.string.text_delete_sale) { _, _ ->
-                Toast.makeText(requireContext(), R.string.text_deleting, Toast.LENGTH_SHORT).show()
-                viewModel.deleteSale(sale)
+        builder.setTitle(getString(R.string.title_dialog_options_sale))
+        if (sale.isPaid) {
+            builder.setMessage(getString(R.string.message_dialog_delete_sale))
+                .setPositiveButton(R.string.text_delete_sale) { _, _ ->
+                    Toast.makeText(requireContext(), R.string.text_deleting, Toast.LENGTH_SHORT).show()
+                    viewModel.deleteSale(sale)
+                }
+                .setNeutralButton(R.string.text_annul_sale) {_, _ ->
+                    if (!sale.isAnnuled) viewModel.annulSale(sale)
+                }
+        } else {
+            builder.setItems(options) { _, position ->
+                when (position) {
+                    0 -> {
+                        val editSaleDialog = EditSaleDialog(sale)
+                        editSaleDialog.show(requireActivity().supportFragmentManager, tag)
+                    }
+                    1 -> {
+                        if (!sale.isAnnuled) viewModel.annulSale(sale)
+                    }
+                    2 -> {
+                        Toast.makeText(requireContext(), R.string.text_deleting, Toast.LENGTH_SHORT)
+                            .show()
+                        viewModel.deleteSale(sale)
+                    }
+                }
             }
-            .setNeutralButton(R.string.text_annul_sale) {_, _ ->
-                if (!sale.isAnnuled) viewModel.annulSale(sale)
-            }
-
+        }
         val dialog = builder.create()
         dialog.show()
     }

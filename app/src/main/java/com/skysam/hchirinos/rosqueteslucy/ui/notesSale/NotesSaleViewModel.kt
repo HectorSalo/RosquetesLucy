@@ -4,14 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.CostumerRepository
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.NoteSaleRepository
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.SalesRepository
 
 class NotesSaleViewModel : ViewModel() {
-    val costumers: LiveData<MutableList<Costumer>> = CostumerRepository.getCostumers().asLiveData()
+    val costumers: LiveData<MutableList<Customer>> = CostumerRepository.getCostumers().asLiveData()
     val notesSales: LiveData<MutableList<NoteSale>> = NoteSaleRepository.getNotesSale().asLiveData()
     val valueWeb: LiveData<String> = SalesRepository.getValueWeb().asLiveData()
 
