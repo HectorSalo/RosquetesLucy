@@ -9,14 +9,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogViewDetailsCostumerBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.addSale.AddSaleActivity
 
 /**
  * Created by Hector Chirinos (Home) on 19/8/2021.
  */
-class ViewDetailsCostumerFragment(private val customer: Customer): DialogFragment() {
+class ViewDetailsCustomerFragment(private val costumer: Costumer): DialogFragment() {
     private var _binding: DialogViewDetailsCostumerBinding? = null
     private val binding get() = _binding!!
     private lateinit var buttonPositive: Button
@@ -25,8 +25,8 @@ class ViewDetailsCostumerFragment(private val customer: Customer): DialogFragmen
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogViewDetailsCostumerBinding.inflate(layoutInflater)
 
-        binding.tvRif.text = customer.identifier
-        binding.tvAddress.text = customer.address
+        binding.tvRif.text = costumer.identifier
+        binding.tvAddress.text = costumer.address
 
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.title_details_costumer))
@@ -41,14 +41,14 @@ class ViewDetailsCostumerFragment(private val customer: Customer): DialogFragmen
         buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
         buttonNeutral.setOnClickListener {
             val intent = Intent(requireContext(), AddSaleActivity::class.java)
-            intent.putExtra(Constants.ID_COSTUMER, customer)
+            intent.putExtra(Constants.ID_COSTUMER, costumer)
             intent.putExtra(Constants.IS_SALE, false)
             startActivity(intent)
             dismiss()
         }
         buttonPositive.setOnClickListener {
             val intent = Intent(requireContext(), AddSaleActivity::class.java)
-            intent.putExtra(Constants.ID_COSTUMER, customer)
+            intent.putExtra(Constants.ID_COSTUMER, costumer)
             intent.putExtra(Constants.IS_SALE, true)
             startActivity(intent)
             dismiss()

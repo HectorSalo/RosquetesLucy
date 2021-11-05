@@ -9,24 +9,24 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 
 /**
  * Created by Hector Chirinos (Home) on 2/8/2021.
  */
-class CostumersAdapter(private var customers: MutableList<Customer>, private val onClick: OnClick):
-    RecyclerView.Adapter<CostumersAdapter.ViewHolder>() {
+class CustomersAdapter(private var costumers: MutableList<Costumer>, private val onClick: OnClick):
+    RecyclerView.Adapter<CustomersAdapter.ViewHolder>() {
     private lateinit var context: Context
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CostumersAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomersAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_costumer_item, parent, false)
         context = parent.context
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CostumersAdapter.ViewHolder, position: Int) {
-        val item = customers[position]
+    override fun onBindViewHolder(holder: CustomersAdapter.ViewHolder, position: Int) {
+        val item = costumers[position]
         holder.name.text = item.name
 
         holder.card.setOnClickListener { onClick.viewCostumer(item) }
@@ -48,7 +48,7 @@ class CostumersAdapter(private var customers: MutableList<Customer>, private val
         }
     }
 
-    override fun getItemCount(): Int = customers.size
+    override fun getItemCount(): Int = costumers.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tv_name)
@@ -56,8 +56,8 @@ class CostumersAdapter(private var customers: MutableList<Customer>, private val
         val menu: TextView = view.findViewById(R.id.tv_menu)
     }
 
-    fun updateList(newList: MutableList<Customer>) {
-        customers = newList
+    fun updateList(newList: MutableList<Costumer>) {
+        costumers = newList
         notifyDataSetChanged()
     }
 }

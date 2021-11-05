@@ -5,7 +5,7 @@ import java.io.Serializable
 /**
  * Created by Hector Chirinos (Home) on 2/8/2021.
  */
-data class Customer(
+data class Costumer(
     var id: String,
     var name: String,
     var identifier: String,

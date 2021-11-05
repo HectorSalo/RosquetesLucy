@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddLocationBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
@@ -18,7 +18,7 @@ import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 /**
  * Created by Hector Chirinos (Home) on 11/8/2021.
  */
-class AddLocationDialog(private val customer: Customer, private val isSale: Boolean): DialogFragment() {
+class AddLocationDialog(private val costumer: Costumer, private val isSale: Boolean): DialogFragment() {
     private var _binding: DialogAddLocationBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
@@ -56,7 +56,7 @@ class AddLocationDialog(private val customer: Customer, private val isSale: Bool
             return
         }
         var locationExists = false
-        for (loc in customer.locations) {
+        for (loc in costumer.locations) {
             if (loc == location) {
                 binding.tfLocationCostumer.error = getString(R.string.error_location_exists)
                 binding.etLocationCostumer.requestFocus()
@@ -67,7 +67,7 @@ class AddLocationDialog(private val customer: Customer, private val isSale: Bool
         if (locationExists) return
 
         Keyboard.close(binding.root)
-        if (isSale) viewModel.addLocation(customer.id, location) else viewModel2.addLocation(customer.id, location)
+        if (isSale) viewModel.addLocation(costumer.id, location) else viewModel2.addLocation(costumer.id, location)
         Toast.makeText(requireContext(), getString(R.string.text_saving), Toast.LENGTH_SHORT).show()
         dialog?.dismiss()
     }

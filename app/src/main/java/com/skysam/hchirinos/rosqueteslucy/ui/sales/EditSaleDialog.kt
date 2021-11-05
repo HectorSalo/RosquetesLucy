@@ -112,7 +112,7 @@ class EditSaleDialog(private val sale: Sale): DialogFragment(), TextWatcher, OnC
                 }
             }
         })
-        viewModel.customer.observe(viewLifecycleOwner, {
+        viewModel.costumer.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 listSorted.clear()
                 listSorted.addAll(it.locations.sorted())

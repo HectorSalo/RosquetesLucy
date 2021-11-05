@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.util.Log
 import com.google.firebase.firestore.*
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -17,28 +17,28 @@ object CostumerRepository {
         return FirebaseFirestore.getInstance().collection(Constants.COSTUMERS)
     }
 
-    fun addCostumer(customer: Customer) {
+    fun addCostumer(costumer: Costumer) {
         val data = hashMapOf(
-            Constants.NAME to customer.name,
-            Constants.COSTUMER_IDENTIFIER to customer.identifier,
-            Constants.COSTUMER_ADDRESS to customer.address,
-            Constants.LOCATIONS to customer.locations
+            Constants.NAME to costumer.name,
+            Constants.COSTUMER_IDENTIFIER to costumer.identifier,
+            Constants.COSTUMER_ADDRESS to costumer.address,
+            Constants.LOCATIONS to costumer.locations
         )
         getInstance().add(data)
     }
 
-    fun editCostumer(customer: Customer) {
+    fun editCostumer(costumer: Costumer) {
         val data: Map<String, Any> = hashMapOf(
-            Constants.NAME to customer.name,
-            Constants.COSTUMER_IDENTIFIER to customer.identifier,
-            Constants.COSTUMER_ADDRESS to customer.address,
-            Constants.LOCATIONS to customer.locations
+            Constants.NAME to costumer.name,
+            Constants.COSTUMER_IDENTIFIER to costumer.identifier,
+            Constants.COSTUMER_ADDRESS to costumer.address,
+            Constants.LOCATIONS to costumer.locations
         )
-        getInstance().document(customer.id)
+        getInstance().document(costumer.id)
             .update(data)
     }
 
-    fun getCostumers(): Flow<MutableList<Customer>> {
+    fun getCostumers(): Flow<MutableList<Costumer>> {
         return callbackFlow {
             val request = getInstance()
                 .orderBy(Constants.NAME, Query.Direction.ASCENDING)
@@ -48,23 +48,23 @@ object CostumerRepository {
                         return@addSnapshotListener
                     }
 
-                    val customers: MutableList<Customer> = mutableListOf()
+                    val costumers: MutableList<Costumer> = mutableListOf()
                     for (doc in value!!) {
                         var listLocation = mutableListOf<String>()
                         if (doc.get(Constants.LOCATIONS) != null) {
                             @Suppress("UNCHECKED_CAST")
                             listLocation = doc.get(Constants.LOCATIONS) as MutableList<String>
                         }
-                        val costumer = Customer(
+                        val costumer = Costumer(
                             doc.id,
                             doc.getString(Constants.NAME)!!,
                             doc.getString(Constants.COSTUMER_IDENTIFIER)!!,
                             doc.getString(Constants.COSTUMER_ADDRESS)!!,
                             listLocation
                         )
-                        customers.add(costumer)
+                        costumers.add(costumer)
                     }
-                    offer(customers)
+                    offer(costumers)
                 }
             awaitClose { request.remove() }
         }
@@ -82,8 +82,8 @@ object CostumerRepository {
         }
     }
 
-    fun deleteCostumer(customer: Customer) {
-        getInstance().document(customer.id)
+    fun deleteCostumer(costumer: Costumer) {
+        getInstance().document(costumer.id)
             .delete()
     }
 }

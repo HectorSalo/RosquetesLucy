@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.CloseDialog
@@ -28,7 +28,7 @@ class ViewDetailsSaleDialog(private var sale: Sale): DialogFragment(), CloseDial
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
     private val allSales = mutableListOf<Sale>()
-    private val costumers = mutableListOf<Customer>()
+    private val costumers = mutableListOf<Costumer>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
