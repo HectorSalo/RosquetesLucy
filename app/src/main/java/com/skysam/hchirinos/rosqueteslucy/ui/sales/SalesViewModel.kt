@@ -56,6 +56,9 @@ class SalesViewModel : ViewModel() {
     private val _isSale = MutableLiveData<Boolean>()
     val isSale: LiveData<Boolean> get() = _isSale
 
+    private val _saleToView = MutableLiveData<Sale>()
+    val saleToView: LiveData<Sale> get() = _saleToView
+
     fun addCostumer(costumer: Costumer) {
         _costumer.value = costumer
     }
@@ -77,6 +80,10 @@ class SalesViewModel : ViewModel() {
         _invoice.value = invoice
         _isPaid.value = isPaid
         _date.value = date
+    }
+
+    fun viewDetailsSale(sale: Sale) {
+        _saleToView.value = sale
     }
 
     fun addSale(sale: Sale) {

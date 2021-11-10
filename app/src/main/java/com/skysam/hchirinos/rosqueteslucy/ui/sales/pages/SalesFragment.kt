@@ -152,7 +152,8 @@ class SalesFragment : Fragment(), OnClick {
     }
 
     override fun viewSale(sale: Sale) {
-        val viewDetailsSale = ViewDetailsSaleDialog(sale)
+        viewModel.viewDetailsSale(sale)
+        val viewDetailsSale = ViewDetailsSaleDialog()
         viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
     }
 

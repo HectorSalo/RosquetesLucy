@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Keyboard
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
@@ -21,7 +21,7 @@ import com.skysam.hchirinos.rosqueteslucy.databinding.DialogAddCostumerBinding
 class EditCustomerDialog: DialogFragment() {
     private var _binding: DialogAddCostumerBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: CostumersViewModel by activityViewModels()
+    private val viewModel: CostumersViewModel by viewModels(ownerProducer = {requireParentFragment()})
     private val costumers = mutableListOf<Costumer>()
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
@@ -51,13 +51,11 @@ class EditCustomerDialog: DialogFragment() {
         buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
         buttonPositive.setOnClickListener { validateCostumer() }
 
+        loadViewModel()
+
         return dialog
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        loadViewModel()
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -65,13 +63,13 @@ class EditCustomerDialog: DialogFragment() {
     }
 
     private fun loadViewModel() {
-        viewModel.costumerToUpdate.observe(this.requireActivity(), {
+        viewModel.costumerToUpdate.observe(requireParentFragment(), {
             costumer = it
             if (_binding != null) {
                 loadView()
             }
         })
-        viewModel.costumers.observe(this.requireActivity(), {
+        viewModel.costumers.observe(requireActivity(), {
             if (_binding != null) {
                 costumers.clear()
                 costumers.addAll(it)

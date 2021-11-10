@@ -21,6 +21,7 @@ import com.skysam.hchirinos.rosqueteslucy.databinding.DialogFilterListSaleBindin
 import com.skysam.hchirinos.rosqueteslucy.ui.notesSale.ViewDetailsNoteSaleDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.notesSale.pages.NoteSaleAdapter
 import com.skysam.hchirinos.rosqueteslucy.ui.notesSale.pages.OnClick
+import com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.ViewDetailsSaleDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.SalesAdapter
 import java.util.*
@@ -33,6 +34,7 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
     private var _binding: DialogFilterListSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: FilterListViewModel by activityViewModels()
+    private val viewModel2: SalesViewModel by activityViewModels()
     private val sales = mutableListOf<Sale>()
     private val salesResult = mutableListOf<Sale>()
     private val noteSale = mutableListOf<NoteSale>()
@@ -320,7 +322,8 @@ class FilterListDialog(private val isSale: Boolean): DialogFragment(), OnClick,
 
     override fun viewSale(sale: Sale) {
         if (!sale.isPaid) isEditing = true
-        val viewDetailsSale = ViewDetailsSaleDialog(sale)
+        viewModel2.viewDetailsSale(sale)
+        val viewDetailsSale = ViewDetailsSaleDialog()
         viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
     }
 

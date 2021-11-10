@@ -9,7 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +24,7 @@ import java.util.*
 
 class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
 
-    private lateinit var viewModel: CostumersViewModel
+    private val viewModel: CostumersViewModel by viewModels(ownerProducer = {this})
     private var _binding: FragmentCostumersBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapterCostumer: CustomersAdapter
@@ -38,8 +38,6 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel =
-            ViewModelProvider(this).get(CostumersViewModel::class.java)
         _binding = FragmentCostumersBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
         return binding.root
@@ -153,9 +151,9 @@ class CostumersFragment : Fragment(), OnClick, SearchView.OnQueryTextListener{
     }
 
     override fun edit(costumer: Costumer) {
-        val editCostumerDialog = EditCustomerDialog()
-        editCostumerDialog.show(requireActivity().supportFragmentManager, tag)
         viewModel.addCostumerToEdit(costumer)
+        val editCostumerDialog = EditCustomerDialog()
+        editCostumerDialog.show(childFragmentManager, tag)
     }
 
     override fun delete(costumer: Costumer) {

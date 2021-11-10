@@ -16,12 +16,14 @@ import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentViewDocumentRefundBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.OnClick
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsAdapter
+import com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.ViewDetailsRefundDialog
 
 class ViewDocRefundsFragment : Fragment(), OnClick {
   private var _binding: FragmentViewDocumentRefundBinding? = null
   private val binding get() = _binding!!
   private val viewModel: ViewDocumentsViewModel by activityViewModels()
+  private val viewModel2: RefundsViewModel by activityViewModels()
   private lateinit var refundsAdapter: RefundsAdapter
   private val allRefunds = mutableListOf<Refund>()
   private val refunds = mutableListOf<Refund>()
@@ -105,7 +107,8 @@ class ViewDocRefundsFragment : Fragment(), OnClick {
     }
 
   override fun viewDetails(refund: Refund) {
-    val viewDetailsRefundDialog = ViewDetailsRefundDialog(refund)
+    viewModel2.viewDetailsRefund(refund)
+    val viewDetailsRefundDialog = ViewDetailsRefundDialog()
     viewDetailsRefundDialog.show(requireActivity().supportFragmentManager, tag)
   }
 

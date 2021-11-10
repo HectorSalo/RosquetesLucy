@@ -16,7 +16,6 @@ class CostumersViewModel : ViewModel() {
 
     fun addCostumerToEdit(costumer: Costumer) {
         _costumerToUpdate.value = costumer
-        _costumerToUpdate.value = _costumerToUpdate.value
     }
 
     fun addCostumer(costumer: Costumer) {

@@ -20,6 +20,9 @@ class RefundsViewModel : ViewModel() {
     private val _addLocation = MutableLiveData<String?>().apply { value = null }
     val addLocation: LiveData<String?> get() = _addLocation
 
+    private val _refundToView = MutableLiveData<Refund>()
+    val refundToView: LiveData<Refund> get() = _refundToView
+
     fun addCostumer(costumer: Costumer) {
         _costumer.value = costumer
     }
@@ -41,5 +44,9 @@ class RefundsViewModel : ViewModel() {
 
     fun deleteRefund(refund: Refund) {
         RefundsRepository.deleteRefund(refund)
+    }
+
+    fun viewDetailsRefund(refund: Refund) {
+        _refundToView.value = refund
     }
 }

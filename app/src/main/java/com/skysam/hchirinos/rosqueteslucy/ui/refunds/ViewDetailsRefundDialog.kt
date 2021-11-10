@@ -24,17 +24,42 @@ import java.util.*
 /**
  * Created by Hector Chirinos (Home) on 30/9/2021.
  */
-class ViewDetailsRefundDialog(private val refund: Refund): DialogFragment(), TextWatcher {
+class ViewDetailsRefundDialog: DialogFragment(), TextWatcher {
     private var _binding: DialogAddRefundBinding? = null
     private val binding get() = _binding!!
     private val viewModel: RefundsViewModel by activityViewModels()
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
     private var dateSelected: Long = 0
+    private lateinit var refund: Refund
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogAddRefundBinding.inflate(layoutInflater)
 
+        viewModel.refundToView.observe(this.requireActivity(), {
+            refund = it
+            if (_binding != null) {
+                loadData()
+            }
+        })
+
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setView(binding.root)
+            .setPositiveButton(R.string.text_update, null)
+            .setNegativeButton(R.string.btn_exit, null)
+
+        val dialog = builder.create()
+        dialog.show()
+
+        buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        buttonNegative.setOnClickListener { dialog.dismiss() }
+        buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        buttonPositive.setOnClickListener { validateData() }
+
+        return dialog
+    }
+
+    private fun loadData() {
         dateSelected = refund.date
         binding.etDate.setText(DateFormat.getDateInstance().format(Date(refund.date)))
         binding.tvNameCostumer.text = refund.nameCostumer
@@ -61,21 +86,6 @@ class ViewDetailsRefundDialog(private val refund: Refund): DialogFragment(), Tex
             }
         }
         binding.etRate.setText(refund.rate.toString())
-
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setView(binding.root)
-            .setPositiveButton(R.string.text_update, null)
-            .setNegativeButton(R.string.btn_exit, null)
-
-        val dialog = builder.create()
-        dialog.show()
-
-        buttonNegative = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-        buttonNegative.setOnClickListener { dialog.dismiss() }
-        buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-        buttonPositive.setOnClickListener { validateData() }
-
-        return dialog
     }
 
     private fun selecDate() {
