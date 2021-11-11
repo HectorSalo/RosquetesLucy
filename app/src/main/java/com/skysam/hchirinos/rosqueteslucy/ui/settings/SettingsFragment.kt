@@ -24,6 +24,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     private val viewModel: SettingsViewModel by activityViewModels()
     private var switchLock: SwitchPreferenceCompat? = null
+    private var switchNotification: SwitchPreferenceCompat? = null
+    private var switchNotificationUpdates: SwitchPreferenceCompat? = null
+    private var switchNotificationSalePaid: SwitchPreferenceCompat? = null
+    private var switchNotificationNoteSalePaid: SwitchPreferenceCompat? = null
     private var screenChangePin: PreferenceScreen? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -44,6 +48,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         switchLock = findPreference(Constants.PREFERENCES_LOCK)
         screenChangePin = findPreference(Constants.PREFERENCES_PIN_LOCK)
+        switchNotification = findPreference(getString(R.string.notification_key))
+        switchNotificationUpdates = findPreference(getString(R.string.notification_updates_key))
+        switchNotificationSalePaid = findPreference(getString(R.string.notification_sale_paid_key))
+        switchNotificationNoteSalePaid = findPreference(getString(R.string.notification_note_sale_paid_key))
 
         viewModel.lockActived.observe(viewLifecycleOwner, {
             if (it) {
@@ -55,6 +63,28 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 switchLock?.setIcon(R.drawable.ic_lock_open_24)
                 screenChangePin?.isVisible = false
             }
+        })
+
+        viewModel.notificationActived.observe(viewLifecycleOwner, {
+            if (it) {
+                switchNotification?.isChecked = true
+                switchNotification?.setIcon(R.drawable.ic_notifications_active_24)
+            } else {
+                switchNotification?.isChecked = false
+                switchNotification?.setIcon(R.drawable.ic_notifications_off_24)
+            }
+        })
+
+        viewModel.notificationUpdatesActived.observe(viewLifecycleOwner, {
+            switchNotificationUpdates?.isChecked = it
+        })
+
+        viewModel.notificationSalePaidActived.observe(viewLifecycleOwner, {
+            switchNotificationSalePaid?.isChecked = it
+        })
+
+        viewModel.notificationNoteSalePaidActived.observe(viewLifecycleOwner, {
+            switchNotificationNoteSalePaid?.isChecked = it
         })
 
         switchLock?.setOnPreferenceChangeListener { _, newValue ->
@@ -71,6 +101,30 @@ class SettingsFragment : PreferenceFragmentCompat() {
         screenChangePin?.setOnPreferenceClickListener {
             val pinDialog = PinDialog(true)
             pinDialog.show(requireActivity().supportFragmentManager, tag)
+            true
+        }
+
+        switchNotification?.setOnPreferenceChangeListener { _, newValue ->
+            val isOn = newValue as Boolean
+            viewModel.changeNotificationState(isOn)
+            true
+        }
+
+        switchNotificationUpdates?.setOnPreferenceChangeListener { _, newValue ->
+            val isOn = newValue as Boolean
+            viewModel.changeNotificationUpdateState(isOn)
+            true
+        }
+
+        switchNotificationSalePaid?.setOnPreferenceChangeListener { _, newValue ->
+            val isOn = newValue as Boolean
+            viewModel.changeNotificationSalePaidState(isOn)
+            true
+        }
+
+        switchNotificationNoteSalePaid?.setOnPreferenceChangeListener { _, newValue ->
+            val isOn = newValue as Boolean
+            viewModel.changeNotificationNoteSalePaidState(isOn)
             true
         }
 
@@ -103,7 +157,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
         builder.setTitle(getString(R.string.title_sign_out))
             .setMessage(getString(R.string.message_sign_out))
             .setPositiveButton(R.string.title_sign_out) { _, _ ->
-                CloudMessaging.unsubscribeToMyTopic()
+                CloudMessaging.unsubscribeToTopicUpdateApp()
+                CloudMessaging.unsubscribeToTopicSalePaid()
+                CloudMessaging.unsubscribeToTopicNoteSalePaid()
                 InitSession.signOut()
                 startActivity(Intent(requireContext(), LoginActivity::class.java))
                 requireActivity().finish()

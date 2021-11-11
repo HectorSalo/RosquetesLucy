@@ -52,7 +52,7 @@ class FirstFragment : Fragment() {
                     binding.tfUser.isEnabled = true
                     binding.tfPassword.isEnabled = true
                 } else {
-                    CloudMessaging.subscribeToMyTopic()
+                    subscribeToTopics()
                     startActivity(Intent(requireContext(), MainActivity::class.java))
                     requireActivity().finish()
                 }
@@ -74,7 +74,7 @@ class FirstFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         if (InitSession.getCurrentUser() != null) {
-            CloudMessaging.subscribeToMyTopic()
+            subscribeToTopics()
             if (SharedPref.isLock()) {
                 findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
             } else {
@@ -106,5 +106,22 @@ class FirstFragment : Fragment() {
         binding.tfPassword.isEnabled = false
         Keyboard.close(binding.root)
         viewModel.initSession(email, password)
+    }
+
+    private fun subscribeToTopics() {
+        if (!SharedPref.isNotificationActive()) {
+            CloudMessaging.unsubscribeToTopicUpdateApp()
+            CloudMessaging.unsubscribeToTopicSalePaid()
+            CloudMessaging.unsubscribeToTopicNoteSalePaid()
+            return
+        }
+        if (SharedPref.isNotificationUpdatesActive()) CloudMessaging.subscribeToTopicUpdateApp()
+        else CloudMessaging.unsubscribeToTopicUpdateApp()
+
+        if (SharedPref.isNotificationSalePaidActive()) CloudMessaging.subscribeToTopicSalePaid()
+        else CloudMessaging.unsubscribeToTopicSalePaid()
+
+        if (SharedPref.isNotificationNoteSalePaidActive()) CloudMessaging.subscribeToTopicNoteSalePaid()
+        else CloudMessaging.unsubscribeToTopicNoteSalePaid()
     }
 }
