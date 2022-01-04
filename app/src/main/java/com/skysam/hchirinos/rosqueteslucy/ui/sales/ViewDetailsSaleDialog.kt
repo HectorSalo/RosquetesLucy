@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.CloseDialog
@@ -23,12 +23,13 @@ import java.util.*
 /**
  * Created by Hector Chirinos (Home) on 15/8/2021.
  */
-class ViewDetailsSaleDialog(private var sale: Sale): DialogFragment(), CloseDialog {
+class ViewDetailsSaleDialog: DialogFragment(), CloseDialog {
     private var _binding: FragmentSecondAddSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
     private val allSales = mutableListOf<Sale>()
-    private val costumers = mutableListOf<Customer>()
+    private val costumers = mutableListOf<Costumer>()
+    private lateinit var sale: Sale
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +47,37 @@ class ViewDetailsSaleDialog(private var sale: Sale): DialogFragment(), CloseDial
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.saleToView.observe(viewLifecycleOwner, {
+            sale = it
+            if (_binding != null) {
+                loadViewModel()
+                loadData()
+            }
+        })
 
+        binding.btnSale.setOnClickListener { paidSale() }
+        binding.ibBack.setOnClickListener {
+            val position = allSales.indexOf(sale)
+            sale = allSales[position + 1]
+            loadData()
+            if (allSales.indexOf(sale) == allSales.lastIndex) binding.ibBack.visibility = View.INVISIBLE
+            if (allSales.indexOf(sale) == 1) binding.ibFoward.visibility = View.VISIBLE
+        }
+        binding.ibFoward.setOnClickListener {
+            val position = allSales.indexOf(sale)
+            sale = allSales[position - 1]
+            loadData()
+            if (allSales.indexOf(sale) == 0) binding.ibFoward.visibility = View.INVISIBLE
+            if (allSales.indexOf(sale) == allSales.lastIndex - 1) binding.ibBack.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun loadViewModel() {
         viewModel.sales.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 allSales.clear()
@@ -66,28 +97,6 @@ class ViewDetailsSaleDialog(private var sale: Sale): DialogFragment(), CloseDial
                 }
             }
         })
-
-        binding.btnSale.setOnClickListener { paidSale() }
-        binding.ibBack.setOnClickListener {
-            val position = allSales.indexOf(sale)
-            sale = allSales[position + 1]
-            loadData()
-            if (allSales.indexOf(sale) == allSales.lastIndex) binding.ibBack.visibility = View.INVISIBLE
-            if (allSales.indexOf(sale) == 1) binding.ibFoward.visibility = View.VISIBLE
-        }
-        binding.ibFoward.setOnClickListener {
-            val position = allSales.indexOf(sale)
-            sale = allSales[position - 1]
-            loadData()
-            if (allSales.indexOf(sale) == 0) binding.ibFoward.visibility = View.INVISIBLE
-            if (allSales.indexOf(sale) == allSales.lastIndex - 1) binding.ibBack.visibility = View.VISIBLE
-        }
-        loadData()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun loadData() {

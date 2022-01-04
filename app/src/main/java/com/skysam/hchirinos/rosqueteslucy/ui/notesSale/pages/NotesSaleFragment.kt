@@ -7,7 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentNotesSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.notesSale.NotesSaleViewModel
@@ -22,7 +22,7 @@ class NotesSaleFragment : Fragment(), OnClick {
     private val notesSale = mutableListOf<NoteSale>()
     private val notesSalePaid = mutableListOf<NoteSale>()
     private val notesSaleNotPaid = mutableListOf<NoteSale>()
-    private val costumers = mutableListOf<Customer>()
+    private val costumers = mutableListOf<Costumer>()
     private var index = 0
 
     companion object {

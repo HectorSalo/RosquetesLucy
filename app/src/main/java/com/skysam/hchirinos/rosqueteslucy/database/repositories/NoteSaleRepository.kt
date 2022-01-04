@@ -6,7 +6,10 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.Query
+import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
+import com.skysam.hchirinos.rosqueteslucy.common.Notification
+import com.skysam.hchirinos.rosqueteslucy.common.RosquetesLucy
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -87,5 +90,14 @@ object NoteSaleRepository {
         )
         getInstance().document(noteSale.id)
             .update(data)
+            .addOnSuccessListener {
+                Notification.sendNotification(
+                    RosquetesLucy.RosquetesLucy.getContext().getString(R.string.notification_received_title),
+                    RosquetesLucy.RosquetesLucy.getContext().getString(
+                        R.string.notification_received_message,
+                        RosquetesLucy.RosquetesLucy.getContext().getString(R.string.text_note_sale_single),
+                        noteSale.noteNumber.toString()),
+                    Constants.TOPIC_NOTIFICATION_NOTE_SALE_PAID)
+            }
     }
 }

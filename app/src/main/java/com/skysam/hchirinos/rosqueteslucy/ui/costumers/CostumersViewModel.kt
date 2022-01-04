@@ -1,25 +1,33 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.costumers
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.CostumerRepository
 
 class CostumersViewModel : ViewModel() {
 
-    val costumers: LiveData<MutableList<Customer>> = CostumerRepository.getCostumers().asLiveData()
+    val costumers: LiveData<MutableList<Costumer>> = CostumerRepository.getCostumers().asLiveData()
 
-    fun addCostumer(customer: Customer) {
-        CostumerRepository.addCostumer(customer)
+    private val _costumerToUpdate = MutableLiveData<Costumer>()
+    val costumerToUpdate: LiveData<Costumer> get() = _costumerToUpdate
+
+    fun addCostumerToEdit(costumer: Costumer) {
+        _costumerToUpdate.value = costumer
     }
 
-    fun editCostumer(customer: Customer) {
-        CostumerRepository.editCostumer(customer)
+    fun addCostumer(costumer: Costumer) {
+        CostumerRepository.addCostumer(costumer)
     }
 
-    fun deleteCostumer(customer: Customer) {
-        CostumerRepository.deleteCostumer(customer)
+    fun editCostumer(costumer: Costumer) {
+        CostumerRepository.editCostumer(costumer)
+    }
+
+    fun deleteCostumer(costumer: Costumer) {
+        CostumerRepository.deleteCostumer(costumer)
     }
 
     fun deleteLocations(id: String, locations: MutableList<String>) {

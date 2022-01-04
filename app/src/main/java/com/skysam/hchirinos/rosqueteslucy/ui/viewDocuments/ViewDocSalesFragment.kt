@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentViewDocumentSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.sales.pages.OnClick
@@ -26,7 +26,7 @@ class ViewDocSalesFragment: Fragment(), OnClick {
   private lateinit var adapaterSales: SalesAdapter
   private val allSales = mutableListOf<Sale>()
   private val sales = mutableListOf<Sale>()
-  private lateinit var customer: Customer
+  private lateinit var costumer: Costumer
   private var location = Constants.ALL_LOCATIONS
 
   override fun onCreateView(
@@ -56,9 +56,9 @@ class ViewDocSalesFragment: Fragment(), OnClick {
   }
 
   private fun loadViewModel() {
-    viewModel.customer.observe(viewLifecycleOwner, {
+    viewModel.costumer.observe(viewLifecycleOwner, {
       if (_binding != null) {
-        customer = it
+        costumer = it
       }
     })
     viewModel.allSales.observe(viewLifecycleOwner, {
@@ -81,12 +81,12 @@ class ViewDocSalesFragment: Fragment(), OnClick {
     when(location) {
       Constants.ALL_LOCATIONS -> {
         for (sale in allSales) {
-          if (sale.idCostumer == customer.id) sales.add(sale)
+          if (sale.idCostumer == costumer.id) sales.add(sale)
         }
       }
       else -> {
         for (sale in allSales) {
-          if (sale.idCostumer == customer.id && sale.location == location) sales.add(sale)
+          if (sale.idCostumer == costumer.id && sale.location == location) sales.add(sale)
         }
       }
     }
@@ -107,7 +107,7 @@ class ViewDocSalesFragment: Fragment(), OnClick {
     }
 
   override fun viewSale(sale: Sale) {
-    val viewDetailsSale = ViewDetailsSaleCostumerDialog(sale, customer)
+    val viewDetailsSale = ViewDetailsSaleCostumerDialog(sale, costumer)
     viewDetailsSale.show(requireActivity().supportFragmentManager, tag)
   }
 

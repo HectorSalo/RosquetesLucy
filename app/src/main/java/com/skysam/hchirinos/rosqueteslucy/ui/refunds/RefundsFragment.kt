@@ -140,7 +140,8 @@ class RefundsFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
     }
 
     override fun viewDetails(refund: Refund) {
-        val viewDetailsRefundDialog = ViewDetailsRefundDialog(refund)
+        viewModel.viewDetailsRefund(refund)
+        val viewDetailsRefundDialog = ViewDetailsRefundDialog()
         viewDetailsRefundDialog.show(requireActivity().supportFragmentManager, tag)
     }
 

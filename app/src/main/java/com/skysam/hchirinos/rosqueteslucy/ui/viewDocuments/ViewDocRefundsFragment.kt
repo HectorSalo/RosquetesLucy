@@ -11,21 +11,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentViewDocumentRefundBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.OnClick
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsAdapter
+import com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.ViewDetailsRefundDialog
 
 class ViewDocRefundsFragment : Fragment(), OnClick {
   private var _binding: FragmentViewDocumentRefundBinding? = null
   private val binding get() = _binding!!
   private val viewModel: ViewDocumentsViewModel by activityViewModels()
+  private val viewModel2: RefundsViewModel by activityViewModels()
   private lateinit var refundsAdapter: RefundsAdapter
   private val allRefunds = mutableListOf<Refund>()
   private val refunds = mutableListOf<Refund>()
-  private lateinit var customer: Customer
+  private lateinit var costumer: Costumer
   private var location = Constants.ALL_LOCATIONS
 
   override fun onCreateView(
@@ -54,9 +56,9 @@ class ViewDocRefundsFragment : Fragment(), OnClick {
   }
 
   private fun loadViewModel() {
-    viewModel.customer.observe(viewLifecycleOwner, {
+    viewModel.costumer.observe(viewLifecycleOwner, {
       if (_binding != null) {
-        customer = it
+        costumer = it
       }
     })
     viewModel.allRefunds.observe(viewLifecycleOwner, {
@@ -79,12 +81,12 @@ class ViewDocRefundsFragment : Fragment(), OnClick {
     when(location) {
       Constants.ALL_LOCATIONS -> {
         for (refund in allRefunds) {
-          if (refund.idCostumer == customer.id) refunds.add(refund)
+          if (refund.idCostumer == costumer.id) refunds.add(refund)
         }
       }
       else -> {
         for (refund in allRefunds) {
-          if (refund.idCostumer == customer.id && refund.location == location) refunds.add(refund)
+          if (refund.idCostumer == costumer.id && refund.location == location) refunds.add(refund)
         }
       }
     }
@@ -105,7 +107,8 @@ class ViewDocRefundsFragment : Fragment(), OnClick {
     }
 
   override fun viewDetails(refund: Refund) {
-    val viewDetailsRefundDialog = ViewDetailsRefundDialog(refund)
+    viewModel2.viewDetailsRefund(refund)
+    val viewDetailsRefundDialog = ViewDetailsRefundDialog()
     viewDetailsRefundDialog.show(requireActivity().supportFragmentManager, tag)
   }
 

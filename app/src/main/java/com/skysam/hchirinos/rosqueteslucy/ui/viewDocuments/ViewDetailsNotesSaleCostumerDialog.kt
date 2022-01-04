@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentSecondAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.notesSale.pages.PaidNoteSaleDialog
@@ -19,7 +19,7 @@ import java.util.*
 /**
  * Created by Hector Chirinos (Home) on 22/10/2021.
  */
-class ViewDetailsNotesSaleCostumerDialog(private var noteSale: NoteSale, private val customer: Customer): DialogFragment(), CloseDialog {
+class ViewDetailsNotesSaleCostumerDialog(private var noteSale: NoteSale, private val costumer: Costumer): DialogFragment(), CloseDialog {
     private var _binding: FragmentSecondAddSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
@@ -45,7 +45,7 @@ class ViewDetailsNotesSaleCostumerDialog(private var noteSale: NoteSale, private
             if (_binding != null) {
                 allNotesSaleFromCostumer.clear()
                 for (noteS in it) {
-                    if (noteS.idCostumer == customer.id) allNotesSaleFromCostumer.add(noteS)
+                    if (noteS.idCostumer == costumer.id) allNotesSaleFromCostumer.add(noteS)
                 }
                 if (allNotesSaleFromCostumer.indexOf(noteSale) != allNotesSaleFromCostumer.lastIndex) binding.ibBack.visibility = View.VISIBLE
                 if (allNotesSaleFromCostumer.indexOf(noteSale) != 0) binding.ibFoward.visibility = View.VISIBLE
@@ -84,7 +84,7 @@ class ViewDetailsNotesSaleCostumerDialog(private var noteSale: NoteSale, private
         binding.tvTextIvaBs.visibility = View.GONE
         binding.tvNameCostumer.text = noteSale.nameCostumer
         binding.tvLocationCostumer.text = noteSale.location
-        binding.tvRif.text = customer.identifier
+        binding.tvRif.text = costumer.identifier
         binding.tvDate.text = DateFormat.getDateInstance().format(noteSale.dateDelivery)
         binding.tvInvoice.text = getString(R.string.text_note_sale_item, noteSale.noteNumber.toString())
         binding.tvRate.text = getString(R.string.text_rate_view, convertFormatNumber(noteSale.ratePaid))

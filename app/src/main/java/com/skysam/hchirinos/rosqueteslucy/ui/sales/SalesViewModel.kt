@@ -1,7 +1,7 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.sales
 
 import androidx.lifecycle.*
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.NoteSale
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.database.repositories.CostumerRepository
@@ -10,15 +10,15 @@ import com.skysam.hchirinos.rosqueteslucy.database.repositories.SalesRepository
 
 class SalesViewModel : ViewModel() {
 
-    val costumers: LiveData<MutableList<Customer>> = CostumerRepository.getCostumers().asLiveData()
+    val costumers: LiveData<MutableList<Costumer>> = CostumerRepository.getCostumers().asLiveData()
     val sales: LiveData<MutableList<Sale>> = SalesRepository.getSales().asLiveData()
     val notesSales: LiveData<MutableList<NoteSale>> = NoteSaleRepository.getNotesSale().asLiveData()
     val valueWeb: LiveData<String> = SalesRepository.getValueWeb().asLiveData()
     private val _indexPage = MutableLiveData<Int>()
     val indexPage: LiveData<Int> get() = _indexPage
 
-    private val _costumer = MutableLiveData<Customer>()
-    val customer: LiveData<Customer> get() = _costumer
+    private val _costumer = MutableLiveData<Costumer>()
+    val costumer: LiveData<Costumer> get() = _costumer
 
     private val _location = MutableLiveData<String>()
     val location: LiveData<String> get() = _location
@@ -56,8 +56,11 @@ class SalesViewModel : ViewModel() {
     private val _isSale = MutableLiveData<Boolean>()
     val isSale: LiveData<Boolean> get() = _isSale
 
-    fun addCostumer(customer: Customer) {
-        _costumer.value = customer
+    private val _saleToView = MutableLiveData<Sale>()
+    val saleToView: LiveData<Sale> get() = _saleToView
+
+    fun addCostumer(costumer: Costumer) {
+        _costumer.value = costumer
     }
 
     fun addLocation(id: String, location: String) {
@@ -77,6 +80,10 @@ class SalesViewModel : ViewModel() {
         _invoice.value = invoice
         _isPaid.value = isPaid
         _date.value = date
+    }
+
+    fun viewDetailsSale(sale: Sale) {
+        _saleToView.value = sale
     }
 
     fun addSale(sale: Sale) {

@@ -36,19 +36,36 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header"
-        app:isPreferenceVisible="false">
+    <PreferenceCategory app:title="@string/notification_header">
 
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+            app:key="@string/notification_key"
+            app:title="@string/notification_title"
+            app:defaultValue="true"/>
 
         <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+            app:dependency="@string/notification_key"
+            app:key="@string/notification_updates_key"
+            app:summaryOff="@string/notification_summary_off"
+            app:summaryOn="@string/notification_updates_summary_on"
+            app:title="@string/notification_updates_title"
+            app:defaultValue="true"/>
+
+        <SwitchPreferenceCompat
+            app:dependency="@string/notification_key"
+            app:key="@string/notification_sale_paid_key"
+            app:summaryOff="@string/notification_summary_off"
+            app:summaryOn="@string/notification_sale_paid_summary_on"
+            app:title="@string/notification_sale_paid_title"
+            app:defaultValue="true"/>
+
+        <SwitchPreferenceCompat
+            app:dependency="@string/notification_key"
+            app:key="@string/notification_note_sale_paid_key"
+            app:summaryOff="@string/notification_summary_off"
+            app:summaryOn="@string/notification_note_sale_paid_summary_on"
+            app:title="@string/notification_note_sale_paid_title"
+            app:defaultValue="true"/>
 
     </PreferenceCategory>
 

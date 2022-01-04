@@ -43,8 +43,25 @@ object Constants {
     const val PREFERENCES_DAYS_EXPIRED = "days_expired"
     const val PREFERENCES_LOCK = "lock"
     const val PREFERENCES_PIN_LOCK = "pinLock"
+    const val PREFERENCES_NOTIFICATION_ACTIVE = "notification"
+    const val PREFERENCES_NOTIFICATION_UPDATES_ACTIVE = "notifiactionUpdates"
+    const val PREFERENCES_NOTIFICATION_SALE_PAID_ACTIVE = "notificationSalePaid"
+    const val PREFERENCES_NOTIFICATION_NOTE_SALE_PAID_ACTIVE = "notificationNoteSalePaid"
 
     const val TOPIC_NOTIFICATION_UPDATE_APP = "updateApp"
+    const val TOPIC_NOTIFICATION_SALE_PAID = "salePaid"
+    const val TOPIC_NOTIFICATION_NOTE_SALE_PAID = "noteSalePaid"
+
+    const val METHOD = "method"
+    const val TITLE = "title"
+    const val MESSAGE = "message"
+    const val TOPIC = "topic"
+    const val SUCCESS = "success"
+    const val SEND_NOTIFICATION_SUCCESS = 3
+    const val ERROR_SERVER = 100
+    const val ERROR_VOLLEY = 102
+    const val ERROR_PROCESS_DATA = 103
+    const val ERROR_METHOD_NOT_EXIST = 104
 
     const val ALL_LOCATIONS = "Todas las Sucursales"
 }

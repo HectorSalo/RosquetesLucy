@@ -39,6 +39,9 @@ class GraphsFragment : Fragment() {
     private val refunds = mutableListOf<Refund>()
     private var isByRange = true
     private var monthByDefault = 0
+    private var yearByDefault = 0
+    private var positionMonth = 0
+    private var positionYear = 0
     private lateinit var dateStart: Date
     private lateinit var dateFinal: Date
 
@@ -62,6 +65,9 @@ class GraphsFragment : Fragment() {
         calendar[Calendar.MINUTE] = 59
         dateFinal = calendar.time
         monthByDefault = calendar[Calendar.MONTH]
+        yearByDefault = calendar[Calendar.YEAR]
+        positionMonth = monthByDefault
+        positionYear = yearByDefault
         loadViewModel()
 
         binding.etDate.setText(getString(R.string.text_date_range,
@@ -71,31 +77,45 @@ class GraphsFragment : Fragment() {
             if (isChecked) {
                 isByRange = false
                 configAdapter()
-                binding.spinner.visibility = View.VISIBLE
+                binding.spinnerMonth.visibility = View.VISIBLE
+                binding.spinnerYear.visibility = View.VISIBLE
                 binding.tfDate.visibility = View.INVISIBLE
             }
         }
         binding.chipWeek.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 isByRange = true
-                binding.spinner.visibility = View.GONE
+                binding.spinnerMonth.visibility = View.GONE
+                binding.spinnerYear.visibility = View.GONE
                 binding.tfDate.visibility = View.VISIBLE
-                loadChart(true, -1)
+                loadChart(true, -1, -1)
             }
         }
-        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinnerMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
                 id: Long
             ) {
-                loadChart(false, position)
+                positionMonth = position
+                loadChart(false, positionMonth, positionYear)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
+        }
+        binding.spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
+                positionYear = if (position == 0) 2021 else 2022
+                loadChart(false, positionMonth, positionYear)
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
         }
     }
 
@@ -111,14 +131,14 @@ class GraphsFragment : Fragment() {
                 for (sale in sales) {
                     if (sale.isPaid) salesPaid.add(sale) else salesNotPaid.add(sale)
                 }
-                loadChart(true, -1)
+                loadChart(true, -1, -1)
             }
         })
         viewModel.expenses.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 expenses.clear()
                 expenses.addAll(it)
-                loadChart(true, -1)
+                loadChart(true, -1, -1)
             }
         })
         viewModel.notesSale.observe(viewLifecycleOwner, {
@@ -130,14 +150,14 @@ class GraphsFragment : Fragment() {
                 for (noteSale in notesSale) {
                     if (noteSale.isPaid) notesSalePaid.add(noteSale) else notesSaleNotPaid.add(noteSale)
                 }
-                loadChart(true, -1)
+                loadChart(true, -1, -1)
             }
         })
         viewModel.refunds.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 refunds.clear()
                 refunds.addAll(it)
-                loadChart(true, -1)
+                loadChart(true, -1, -1)
             }
         })
     }
@@ -162,12 +182,12 @@ class GraphsFragment : Fragment() {
             dateFinal = calendar.time
             binding.etDate.setText(getString(R.string.text_date_range,
                 formatDate(dateStart), formatDate(dateFinal)))
-            loadChart(true, -1)
+            loadChart(true, -1, -1)
         }
         picker.show(requireActivity().supportFragmentManager, picker.toString())
     }
 
-    private fun loadChart(isByRange: Boolean, selection: Int) {
+    private fun loadChart(isByRange: Boolean, selectionMonth: Int, selectionYear: Int) {
         val calendarStartRange = Calendar.getInstance()
         val calendarFinalRange = Calendar.getInstance()
         calendarStartRange.time = dateStart
@@ -198,7 +218,7 @@ class GraphsFragment : Fragment() {
             } else {
                 val calendar = Calendar.getInstance()
                 calendar.time = Date(sale.datePaid)
-                if (calendar[Calendar.MONTH] == selection) {
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
                     val total = sale.quantity * sale.price
                     totalSalesPaid += if (sale.isDolar) {
                         total
@@ -224,7 +244,7 @@ class GraphsFragment : Fragment() {
             } else {
                 val calendar = Calendar.getInstance()
                 calendar.time = Date(sale.datePaid)
-                if (calendar[Calendar.MONTH] == selection) {
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
                     totalSalesNotPaid += if (sale.isDolar) {
                         (sale.quantity * sale.price)
                     } else {
@@ -243,7 +263,7 @@ class GraphsFragment : Fragment() {
             } else {
                 val calendar = Calendar.getInstance()
                 calendar.time = Date(expense.dateCreated)
-                if (calendar[Calendar.MONTH] == selection) {
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
                     totalExpenses += expense.total
                 }
             }
@@ -262,7 +282,7 @@ class GraphsFragment : Fragment() {
             } else {
                 val calendar = Calendar.getInstance()
                 calendar.time = Date(noteSale.datePaid)
-                if (calendar[Calendar.MONTH] == selection) {
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
                     totalNotesSalePaid += if (noteSale.isDolar) {
                         noteSale.quantity * noteSale.price
                     } else {
@@ -286,7 +306,7 @@ class GraphsFragment : Fragment() {
             } else {
                 val calendar = Calendar.getInstance()
                 calendar.time = Date(noteSale.datePaid)
-                if (calendar[Calendar.MONTH] == selection) {
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
                     totalNotesSaleNotPaid += if (noteSale.isDolar) {
                         noteSale.quantity * noteSale.price
                     } else {
@@ -310,7 +330,7 @@ class GraphsFragment : Fragment() {
             } else {
                 val calendar = Calendar.getInstance()
                 calendar.time = Date(refund.date)
-                if (calendar[Calendar.MONTH] == selection) {
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
                     totalRefunds += if (refund.isDolar) {
                         (refund.quantity * refund.price)
                     } else {
@@ -395,12 +415,20 @@ class GraphsFragment : Fragment() {
 
     private fun configAdapter() {
         val selectionSpinner = monthByDefault
-        val listSpinner = listOf(*resources.getStringArray(R.array.months))
+        val selectionSpinnerYear = if (yearByDefault == 2021) 0 else 1
+        val listSpinnerMonth = listOf(*resources.getStringArray(R.array.months))
+        val listSpinnerYear = listOf(*resources.getStringArray(R.array.years))
 
-        val adapterUnits = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSpinner)
-        binding.spinner.apply {
+        val adapterUnits = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSpinnerMonth)
+        binding.spinnerMonth.apply {
             adapter = adapterUnits
             setSelection(selectionSpinner)
+        }
+
+        val adapterYear = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSpinnerYear)
+        binding.spinnerYear.apply {
+            adapter = adapterYear
+            setSelection(selectionSpinnerYear)
         }
     }
 

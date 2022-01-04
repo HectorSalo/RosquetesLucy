@@ -16,7 +16,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.ui.common.ExitDialog
 import com.skysam.hchirinos.rosqueteslucy.ui.common.OnClickExit
-import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Customer
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Sale
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentFirstAddSaleBinding
 import com.skysam.hchirinos.rosqueteslucy.ui.costumers.AddLocationDialog
@@ -30,7 +30,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
     private val binding get() = _binding!!
     private val viewModel: SalesViewModel by activityViewModels()
     private var dateSelected: Long = 0
-    private lateinit var customer: Customer
+    private lateinit var costumer: Costumer
     private var isSale = true
     private val sales = mutableListOf<Sale>()
     private val listSorted = mutableListOf<String>()
@@ -72,7 +72,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
         }
 
         binding.extendedFab.setOnClickListener {
-            val addLocationDialog = AddLocationDialog(customer, true)
+            val addLocationDialog = AddLocationDialog(costumer, true)
             addLocationDialog.show(requireActivity().supportFragmentManager, tag)
         }
 
@@ -94,11 +94,11 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
     }
 
     private fun loadViewModel() {
-        viewModel.customer.observe(viewLifecycleOwner, {
+        viewModel.costumer.observe(viewLifecycleOwner, {
             if (_binding != null) {
-                customer = it
+                costumer = it
                 listSorted.clear()
-                listSorted.addAll(customer.locations.sorted())
+                listSorted.addAll(costumer.locations.sorted())
                 binding.tvNameCostumer.text = it.name
                 val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
                 binding.spinner.adapter = adapterLocations
