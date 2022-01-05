@@ -168,14 +168,12 @@
     <string name="text_note_sale_paid_graph">Notas Cobradas</string>
     <string name="text_note_sale_not_paid_graph">Notas por Cobrar</string>
     <string name="text_waste">Pérdidas</string>
-    <string name="title_chart">Balance\n($)</string>
     <string name="chip_week">Rango de Fecha</string>
     <string name="chip_month">Mensual</string>
     <string name="text_date_range">%1$s - %2$s</string>
     <string name="text_total_graph_zero">Balance en cero en este período</string>
     <string name="text_total_graph_superavit">Tiene un superávit en este período de:\n$ %1$s</string>
     <string name="text_total_graph_deficit">Tiene un déficit en este período de:\n$ %1$s</string>
-    <string name="title_report_day">Reporte Diario</string>
     <string name="text_amount_add_graph">+ %1$s</string>
     <string name="text_amount_rest_graph">- %1$s</string>
 

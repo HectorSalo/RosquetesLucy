@@ -12,9 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
 import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
@@ -51,7 +48,6 @@ class GraphsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGraphsBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -68,6 +64,7 @@ class GraphsFragment : Fragment() {
         yearByDefault = calendar[Calendar.YEAR]
         positionMonth = monthByDefault
         positionYear = yearByDefault
+        binding.textView?.text = getString(R.string.title_amount_total, "($)")
         loadViewModel()
 
         binding.etDate.setText(getString(R.string.text_date_range,
@@ -88,7 +85,7 @@ class GraphsFragment : Fragment() {
                 binding.spinnerMonth.visibility = View.GONE
                 binding.spinnerYear.visibility = View.GONE
                 binding.tfDate.visibility = View.VISIBLE
-                loadChart(true, -1, -1)
+                loadData(true, -1, -1)
             }
         }
         binding.spinnerMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -99,7 +96,7 @@ class GraphsFragment : Fragment() {
                 id: Long
             ) {
                 positionMonth = position
-                loadChart(false, positionMonth, positionYear)
+                loadData(false, positionMonth, positionYear)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -109,7 +106,7 @@ class GraphsFragment : Fragment() {
         binding.spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
                 positionYear = if (position == 0) 2021 else 2022
-                loadChart(false, positionMonth, positionYear)
+                loadData(false, positionMonth, positionYear)
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -131,14 +128,14 @@ class GraphsFragment : Fragment() {
                 for (sale in sales) {
                     if (sale.isPaid) salesPaid.add(sale) else salesNotPaid.add(sale)
                 }
-                loadChart(true, -1, -1)
+                loadData(true, -1, -1)
             }
         })
         viewModel.expenses.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 expenses.clear()
                 expenses.addAll(it)
-                loadChart(true, -1, -1)
+                loadData(true, -1, -1)
             }
         })
         viewModel.notesSale.observe(viewLifecycleOwner, {
@@ -150,14 +147,14 @@ class GraphsFragment : Fragment() {
                 for (noteSale in notesSale) {
                     if (noteSale.isPaid) notesSalePaid.add(noteSale) else notesSaleNotPaid.add(noteSale)
                 }
-                loadChart(true, -1, -1)
+                loadData(true, -1, -1)
             }
         })
         viewModel.refunds.observe(viewLifecycleOwner, {
             if (_binding != null) {
                 refunds.clear()
                 refunds.addAll(it)
-                loadChart(true, -1, -1)
+                loadData(true, -1, -1)
             }
         })
     }
@@ -182,23 +179,16 @@ class GraphsFragment : Fragment() {
             dateFinal = calendar.time
             binding.etDate.setText(getString(R.string.text_date_range,
                 formatDate(dateStart), formatDate(dateFinal)))
-            loadChart(true, -1, -1)
+            loadData(true, -1, -1)
         }
         picker.show(requireActivity().supportFragmentManager, picker.toString())
     }
 
-    private fun loadChart(isByRange: Boolean, selectionMonth: Int, selectionYear: Int) {
+    private fun loadData(isByRange: Boolean, selectionMonth: Int, selectionYear: Int) {
         val calendarStartRange = Calendar.getInstance()
         val calendarFinalRange = Calendar.getInstance()
         calendarStartRange.time = dateStart
         calendarFinalRange.time = dateFinal
-
-        val pieBalance = binding.pieBalance
-        pieBalance.description = null
-        pieBalance.centerText = getString(R.string.title_chart)
-        pieBalance.setCenterTextSize(24f)
-        pieBalance.setDrawEntryLabels(false)
-        pieBalance.isRotationEnabled = false
 
         var totalSalesPaid = 0.0
         var totalWaste = 0.0
@@ -340,43 +330,23 @@ class GraphsFragment : Fragment() {
             }
         }
 
-        val pieEntries = mutableListOf<PieEntry>()
-        pieEntries.add(PieEntry(totalSalesPaid.toFloat(), getString(R.string.text_sales_paid)))
-        pieEntries.add(PieEntry(totalNotesSalePaid.toFloat(), getString(R.string.text_note_sale_paid_graph)))
-        pieEntries.add(PieEntry(totalSalesNotPaid.toFloat(), getString(R.string.text_sales_not_paid)))
-        pieEntries.add(PieEntry(totalNotesSaleNotPaid.toFloat(), getString(R.string.text_note_sale_not_paid_graph)))
-        //pieEntries.add(PieEntry(totalWaste.toFloat(), getString(R.string.text_waste)))
-        pieEntries.add(PieEntry(totalExpenses.toFloat(), getString(R.string.title_expenses)))
-        pieEntries.add(PieEntry(totalRefunds.toFloat(), getString(R.string.title_refunds)))
+        binding.tvSalePaid?.text = getString(R.string.text_amount_add_graph,
+            ClassesCommon.convertDoubleToString(totalSalesPaid))
 
-        val pieDataSet = PieDataSet(pieEntries, "")
-        pieDataSet.valueTextSize = 18f
-        pieDataSet.setColors(
-            ContextCompat.getColor(requireContext(), R.color.green_light),
-            ContextCompat.getColor(requireContext(), R.color.purple),
-            ContextCompat.getColor(requireContext(), R.color.red_light),
-            ContextCompat.getColor(requireContext(), R.color.yellow),
-            ContextCompat.getColor(requireContext(), R.color.blue),
-            ContextCompat.getColor(requireContext(), R.color.mostaza)
-        )
-        pieDataSet.formSize = 16f
-        val pieData = PieData(pieDataSet)
-        pieData.setValueFormatter { value, _, _, _ ->
-            if (value == 0.0f) {
-                String.format("", value)
-            } else {
-                String.format(Locale.GERMANY, "%,.2f", value)
-            }
-        }
+        binding.tvSaleNotPaid?.text = getString(R.string.text_amount_add_graph,
+            ClassesCommon.convertDoubleToString(totalSalesNotPaid))
 
-        pieBalance.data = pieData
-        pieBalance.legend.textColor = requireContext().resolveColorAttr(android.R.attr.textColorSecondary)
-        pieBalance.legend.textSize = 14f
-        pieBalance.legend.isWordWrapEnabled = true
-        pieBalance.invalidate()
+        binding.tvNoteSalePaid?.text = getString(R.string.text_amount_add_graph,
+            ClassesCommon.convertDoubleToString(totalNotesSalePaid))
 
-        pieBalance.visibility = View.VISIBLE
-        binding.progressBar.visibility = View.GONE
+        binding.tvNoteSaleNotPaid?.text = getString(R.string.text_amount_add_graph,
+            ClassesCommon.convertDoubleToString(totalNotesSaleNotPaid))
+
+        binding.tvRefunds?.text = getString(R.string.text_amount_rest_graph,
+            ClassesCommon.convertDoubleToString(totalRefunds))
+
+        binding.tvExpenses?.text = getString(R.string.text_amount_rest_graph,
+            ClassesCommon.convertDoubleToString(totalExpenses))
 
         val total = totalSalesPaid + totalSalesNotPaid + totalNotesSalePaid + totalNotesSaleNotPaid -
                 totalExpenses - totalRefunds
@@ -393,6 +363,7 @@ class GraphsFragment : Fragment() {
             binding.tvTotal.text = getString(R.string.text_total_graph_zero)
             binding.tvTotal.setTextColor(requireContext().resolveColorAttr(android.R.attr.textColorSecondary))
         }
+        binding.progressBar.visibility = View.GONE
     }
 
     @ColorInt
@@ -429,18 +400,6 @@ class GraphsFragment : Fragment() {
         binding.spinnerYear.apply {
             adapter = adapterYear
             setSelection(selectionSpinnerYear)
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
-        inflater.inflate(R.menu.menu_top_bar_graphs, menu)
-        val itemReport = menu.findItem(R.id.action_report_day)
-        itemReport.setOnMenuItemClickListener {
-            val dialogReportDay = DialogReportDay()
-            dialogReportDay.show(requireActivity().supportFragmentManager, tag)
-            true
         }
     }
 
