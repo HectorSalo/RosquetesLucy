@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="red_normal">#D32F2F</color>
-    <color name="red_light">#FF6659</color>
-    <color name="red_dark">#9A0007</color>
-    <color name="blue_gray_normal">#B0BEC5</color>
-    <color name="blue_gray_dark">#808E95</color>
+    <color name="green_base_normal">#B4E0D8</color>
+    <color name="green_base_light">#E7FFFF</color>
+    <color name="green_base_dark">#84AEA7</color>
+    <color name="green_second_base_normal">#009479</color>
+    <color name="green_second_base_light">#50C5A8</color>
+    <color name="green_second_base_dark">#00654D</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="green">#43A047</color>
+    <color name="red">#B71C1C</color>
+
+    <color name="green_light">#81C784</color>
+    <color name="purple">#B39DDB</color>
+    <color name="red_light">#EF9A9A</color>
+    <color name="yellow">#FFE082</color>
+    <color name="blue">#90CAF9</color>
+    <color name="mostaza">#B86F01</color>
+
+    <color name="brown_normal">#9A332A</color>
+    <color name="brown_light">#D06253</color>
+    <color name="brown_dark">#660000</color>
+    <color name="blue_gray_normal">#B0BEC5</color>
+    <color name="blue_gray_dark">#808E95</color>
+
+    <color name="color_about">#2C2B2B</color>
 </resources>

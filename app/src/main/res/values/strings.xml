@@ -1,30 +1,226 @@
 <resources>
     <string name="app_name">Rosquetes Lucy</string>
-    <string name="title_sales">Ventas</string>
+    <string name="title_sales">Facturas</string>
     <string name="title_costumers">Clientes</string>
-    <string name="title_graphs">Gráficas</string>
+    <string name="title_expenses">Compras</string>
+    <string name="title_storage">Inventario</string>
+    <string name="title_notes_sales">Notas de Venta</string>
+    <string name="title_refunds">Devoluciones</string>
+    <string name="title_graphs">Estadísticas</string>
+    <string name="title_activity_add_sale">Generar Venta</string>
+    <string name="title_activity_settings">Configuración</string>
+    <string name="title_activity_view_documents">Documentos</string>
+    <string name="title_suppliers">Proveedores</string>
+    <string name="title_history_expenses">Historial de Compras</string>
+    <string name="title_products_expenses">Productos de Materia Prima</string>
 
+    <!--Messages-->
     <string name="text_empty"> </string>
-    <string name="list_sales_empty">No ha realizado su primera Venta</string>
+    <string name="text_yes">Si</string>
+    <string name="text_no">No</string>
+    <string name="list_sales_empty">No ha realizado su primera Factura</string>
+    <string name="list_sales_not_paid_empty">No tiene Facturas por cobrar</string>
+    <string name="list_sales_paid_empty">No tiene Facturas pagadas</string>
+    <string name="list_sales_annulled_empty">No tiene Facturas anuladas</string>
     <string name="list_costumer_empty">No ha creado su primer Cliente</string>
+    <string name="list_expenses_empty">No ha realizado su primera Compra</string>
+    <string name="list_note_sale_empty">No ha realizado su primera Nota de Venta</string>
+    <string name="list_notes_sale_not_paid_empty">No tiene Notas de Ventas por cobrar</string>
+    <string name="list_notes_sales_paid_empty">No tiene Notas de Ventas pagadas</string>
     <string name="list_graph_empty">Debe realizar su primera Venta para cargar las gráficas</string>
+    <string name="list_refunds_empty">Sin devoluciones</string>
+    <string name="list_supplier_empty">No ha creado su primer Proveedor</string>
+    <string name="list_filter_empty">Realice una nueva búsqueda</string>
+    <string name="list_doc_sales_empty">Cliente sin Facturas</string>
+    <string name="list_doc_note_sale_empty">Cliente sin Notas de Ventas</string>
+    <string name="list_doc_refund_empty">Cliente sin Devoluciones</string>
+    <string name="error_field_empty">Campo vacío</string>
+    <string name="text_saving">Guardando&#8230;</string>
+    <string name="text_editing">Actualizando&#8230;</string>
+    <string name="text_deleting">Eliminando&#8230;</string>
+    <string name="text_edit">Editar</string>
+    <string name="text_view_details">Ver detalles</string>
+    <string name="text_delete">Eliminar</string>
+    <string name="text_update">Actualizar</string>
 
+    <!--Components-->
     <string name="btn_save">Guardar</string>
     <string name="btn_cancel">Cancelar</string>
+    <string name="btn_total">Totalizar</string>
+    <string name="btn_exit">Salir</string>
+    <string name="btn_close">Cerrar</string>
+    <string name="symbol_bolivar">Bs.</string>
+    <string name="symbol_dolar">$</string>
+    <string name="search_by_date">Por rango de fecha</string>
+    <string name="search_by_number">Por rango numérico</string>
+    <string name="text_from">Desde:</string>
+    <string name="text_until">Hasta:</string>
+
+    <!--Menus-->
+    <string name="menu_search">Buscar</string>
+    <string name="subtitle_sales">Ventas</string>
+    <string name="subtitle_expenses">Compras</string>
 
     <!--Costumers-->
     <string name="title_add_costumer">Agregar cliente</string>
-    <string name="text_name_costumer">Nombre de cliente</string>
+    <string name="title_edit_costumer">Editar cliente</string>
+    <string name="title_details_costumer">Detalles cliente</string>
+    <string name="text_name_costumer">Razón Social</string>
     <string name="text_id_costumer">RIF</string>
+    <string name="text_address_costumer">Dirección Fiscal</string>
     <string name="text_location_costumer">Sucursal</string>
-    <string name="title_activity_add_sale">Generar Venta</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="text_locations_costumer">Sucursales</string>
+    <string name="error_costumer_exists">Este cliente ya existe</string>
+    <string name="error_identifier_exists">Este RIF está almacenado con otro cliente</string>
+    <string name="error_location_exists">Sucursal ya existe para este cliente</string>
+    <string name="text_add_location">Nueva sucursal</string>
+    <string name="text_delete_location">Eliminar sucursal</string>
+    <string name="text_edit_costumer">Editar cliente</string>
+    <string name="text_delete_costumer">Eliminar cliente</string>
+    <string name="text_add_refund">Agregar devolución</string>
+    <string name="text_view_documents">Ver documentos</string>
+    <string name="title_delete_locations">Seleccione las sucursales a eliminar</string>
+    <string name="error_delete_all_locations">No puede eliminar todas las sucursales</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- Sales-->
+    <string name="text_quantity">Cantidad</string>
+    <string name="text_price">Precio</string>
+    <string name="text_price_init">0,00</string>
+    <string name="text_invoice_number">#Fact.</string>
+    <string name="text_date">Fecha</string>
+    <string name="text_rg_invoice_paid">¿Factura cobrada?</string>
+    <string name="text_rg_note_sale_paid">¿Nota cobrada?</string>
+    <string name="text_rate">Tasa de cambio (Bs. / $)</string>
+    <string name="text_rate_view">(Bs. / $) %1$s</string>
+    <string name="text_loading_rate">Cargando tasa de cambio</string>
+    <string name="btn_sale">Generar Factura</string>
+    <string name="btn_note_sale">Generar Nota de Venta</string>
+    <string name="btn_paid_sale">Cobrar Factura</string>
+    <string name="btn_paid_note">Cobrar Nota de Venta</string>
+    <string name="text_total_bs">Total (Bs.)</string>
+    <string name="text_total_dolar">Total ($)</string>
+    <string name="text_total_amount">%1$s</string>
+    <string name="title_price_unit">Precio unit.</string>
+    <string name="title_amount_total">Monto %1$s</string>
+    <string name="text_subtitle_details">Resumen de Venta</string>
+    <string name="text_costumer_location">%1$s - %2$s</string>
+    <string name="title_iva_bs">IVA 16% (Bs.)</string>
+    <string name="title_iva_dolar">IVA 16% ($)</string>
+    <string name="title_waste">Pérdida ($)</string>
+    <string name="error_price_zero">Precio debe ser mayor a cero</string>
+    <string name="error_invoice_exists">#Factura ya fue usada</string>
+    <string name="error_rate">Error al obtener tasa de cambio</string>
+    <string name="text_date_days_between">%1$s (%2$s días vencidos)</string>
+    <string name="text_date_paid">Factura cobrada el %1$s</string>
+    <string name="text_date_note_sale_not_paid">Venta realizada el %1$s</string>
+    <string name="text_date_note_sale_paid">Venta cobrada el %1$s</string>
+    <string name="text_date_annul">Factura anulada el %1$s</string>
+    <string name="text_price_item">%1$s %2$s</string>
+    <string name="text_price_convert_item">%1$s %2$s ($ %3$s)</string>
+    <string name="text_invoice_item">#Fact. asociada: %1$s</string>
+    <string name="text_note_sale_item">#Nota de Venta: %1$s</string>
+    <string name="title_dialog_paid">Datos de cobro</string>
+    <string name="text_note_sale_number">#Nota de Venta</string>
+    <string name="title_dialog_options_sale">¿Qué desea hacer con la Factura?</string>
+    <string name="message_dialog_delete_sale">Escoja entre eliminar o anular la Factura seleccionada.\nEsta acción no se puede deshacer</string>
+    <string name="text_delete_sale">Eliminar Factura</string>
+    <string name="text_annul_sale">Anular Factura</string>
 
+    <!-- FilterList-->
+    <string name="title_filter_list">Buscar en %1$s</string>
+    <string name="text_last_visit_all">Última sucursal visitada: %1$s, el día %2$s y se generó una %3$s</string>
+    <string name="text_last_visit_location">Última visita: %1$s\nSe generó una %2$s</string>
+    <string name="text_not_last_visit">No ha realizado visitas</string>
+    <string name="text_sale_single">Factura</string>
+    <string name="text_note_sale_single">Nota de Venta</string>
+    <string name="text_refund_single">Devolución</string>
+
+    <!-- Expenses-->
+    <string name="btn_expense">Comprar</string>
+    <string name="text_product">Producto</string>
+    <string name="text_add_expense">Crear compra</string>
+    <string name="text_unit">Unidad</string>
+    <string name="title_add_producto_dialog">Agregar producto</string>
+    <string name="error_name_product_exists">Producto ya existe</string>
+    <string name="product_added">Producto ya está en la lista</string>
+    <string name="text_total_dolar_expense">Total ($) %1$s</string>
+    <string name="title_edit_producto_dialog">Editar %1$s</string>
+
+    <!-- Refund-->
+    <string name="btn_add_refund">Agregar devolución</string>
+    <string name="text_quantity_refund_item">%1$s unidades devueltas</string>
+
+    <!-- Supplier-->
+    <string name="text_delete_supplier">Eliminar proveedor</string>
+    <string name="text_edit_supplier">Editar proveedor</string>
+
+    <!--Dialogs Common-->
+    <string name="title_confirmation_dialog">Confirmar</string>
+    <string name="msg_exit_dialog">Se perderá toda la información.\n¿Desea salir?</string>
+    <string name="msg_delete_dialog">¿Desea eliminar esta información?</string>
+    <string name="list_filter_without_result">No hay documentos en el rango consultado.\nRealice una nueva búsqueda</string>
+    <string name="error_date_invalidate">Debe seleccionar fecha inicial y final</string>
+    <string name="error_number_final">Número final debe ser mayor o igual que el inicial</string>
+
+    <!-- Graphs -->
+    <string name="text_sales_paid">Facturas Cobradas</string>
+    <string name="text_sales_not_paid">Facturas Por cobrar</string>
+    <string name="text_note_sale_paid_graph">Notas Cobradas</string>
+    <string name="text_note_sale_not_paid_graph">Notas por Cobrar</string>
+    <string name="text_waste">Pérdidas</string>
+    <string name="chip_week">Rango de Fecha</string>
+    <string name="chip_month">Mensual</string>
+    <string name="text_date_range">%1$s - %2$s</string>
+    <string name="text_total_graph_zero">Balance en cero en este período</string>
+    <string name="text_total_graph_superavit">Tiene un superávit en este período de:\n$ %1$s</string>
+    <string name="text_total_graph_deficit">Tiene un déficit en este período de:\n$ %1$s</string>
+    <string name="text_amount_add_graph">+ %1$s</string>
+    <string name="text_amount_rest_graph">- %1$s</string>
+
+    <!-- Preference Titles -->
+    <string name="personalizacion_header">Personalización</string>
+    <string name="text_about">Información de la App</string>
+    <string name="about_title">Desarrollado por&#8230;</string>
+    <string name="title_sign_out">Cerrar sesión</string>
+    <string name="message_sign_out">¿Desea cerrar la sesión actual?</string>
+    <string name="version_name">Versión %1$s</string>
+    <string name="days_expired_title">Alerta de días vencidos</string>
+
+    <!-- Lock Preferences -->
+    <string name="lock_title">Bloquear acceso a la aplicación</string>
+    <string name="lock_summary_on">Acceso bloqueado</string>
+    <string name="lock_summary_off">Sin bloqueo</string>
+    <string name="title_change_pin_lock">Cambiar PIN de desbloqueo</string>
+    <string name="text_type_pin">Ingrese Pin</string>
+    <string name="text_type_pin_again">Repetir Pin</string>
+    <string name="error_pin_match">Códigos no coinciden</string>
+    <string name="error_pin_length">Código debe tener 4 dígitos</string>
+    <string name="error_biometric">Error al leer datos biométricos</string>
+    <string name="error_biometric_hw">Dispositivo sin lector biométrico</string>
+    <string name="error_biometric_register">Dispositivo no tiene huella registrada</string>
+
+    <!-- Notification Preferences -->
+    <string name="notification_key">notification</string>
+    <string name="notification_updates_key">notificationUpdate</string>
+    <string name="notification_sale_paid_key">notificationSalePaid</string>
+    <string name="notification_note_sale_paid_key">notificationNoteSalePaid</string>
+    <string name="notification_header">Notificaciones</string>
+    <string name="notification_title">Notificaciones activas</string>
+    <string name="notification_updates_title">Actualizaciones</string>
+    <string name="notification_sale_paid_title">Pago de Facturas</string>
+    <string name="notification_note_sale_paid_title">Pago de Nota de Ventas</string>
+    <string name="notification_updates_summary_on">Notificar cuándo exista una nueva versión de la App</string>
+    <string name="notification_sale_paid_summary_on">Notificar cuándo una Factura ha sido pagada</string>
+    <string name="notification_note_sale_paid_summary_on">Notificar cuándo una Nota de Venta ha sido pagada</string>
+    <string name="notification_summary_off">Desactivado</string>
+    <string name="notification_received_title">¡Pago realizado!</string>
+    <string name="notification_received_message">Se acaba de pagar la %1$s #%2$s</string>
+
+    <!-- LoginActivity -->
+    <string name="text_email_user">Correo electrónico</string>
+    <string name="text_password">Contraseña</string>
+    <string name="btn_init_session">Iniciar Sesión</string>
+    <string name="error_pin_code">Pin Incorrecto</string>
+    <string name="title_dialog_fingerprint">Bienvenido a Rosquetes Lucy App</string>
+    <string name="btn_dialog_fingerprint">Acceder con PIN de respaldo</string>
 </resources>

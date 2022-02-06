@@ -3,23 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_view_sale">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.skysam.hchirinos.rosqueteslucy.ui.sales.SalesFragment"
-        android:label="@string/title_sales"
-        tools:layout="@layout/fragment_sales" />
+        android:id="@+id/navigation_view_sale"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.viewDocuments.ViewDocSalesFragment"
+        tools:layout="@layout/fragment_view_document_sale" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.skysam.hchirinos.rosqueteslucy.ui.costumers.CostumersFragment"
-        android:label="@string/title_costumers"
-        tools:layout="@layout/fragment_costumers" />
+        android:id="@+id/navigation_view_note_sale"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.viewDocuments.ViewDocNotesSaleFragment"
+        tools:layout="@layout/fragment_view_document_note_sale" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.skysam.hchirinos.rosqueteslucy.ui.graphs.GraphsFragment"
-        android:label="@string/title_graphs"
-        tools:layout="@layout/fragment_graphs" />
+        android:id="@+id/navigation_view_refund"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.viewDocuments.ViewDocRefundsFragment"
+        tools:layout="@layout/fragment_view_document_refund" />
 </navigation>

@@ -1,39 +1,406 @@
 package com.skysam.hchirinos.rosqueteslucy.ui.graphs
 
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.util.TypedValue
+import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
+import com.skysam.hchirinos.rosqueteslucy.common.dataClass.*
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentGraphsBinding
+import java.text.DateFormat
+import java.util.*
+
 
 class GraphsFragment : Fragment() {
 
-    private lateinit var graphsViewModel: GraphsViewModel
+    private val viewModel: GraphsViewModel by activityViewModels()
     private var _binding: FragmentGraphsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+    private val sales = mutableListOf<Sale>()
+    private val salesNotPaid = mutableListOf<Sale>()
+    private val salesPaid = mutableListOf<Sale>()
+    private val expenses = mutableListOf<Expense>()
+    private val notesSale = mutableListOf<NoteSale>()
+    private val notesSalePaid = mutableListOf<NoteSale>()
+    private val notesSaleNotPaid = mutableListOf<NoteSale>()
+    private val refunds = mutableListOf<Refund>()
+    private var isByRange = true
+    private var monthByDefault = 0
+    private var yearByDefault = 0
+    private var positionMonth = 0
+    private var positionYear = 0
+    private lateinit var dateStart: Date
+    private lateinit var dateFinal: Date
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        graphsViewModel =
-            ViewModelProvider(this).get(GraphsViewModel::class.java)
-
         _binding = FragmentGraphsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        val textView: TextView = binding.textListEmpty
-        graphsViewModel.text.observe(viewLifecycleOwner, {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.HOUR_OF_DAY] = 0
+        calendar[Calendar.MINUTE] = 0
+        dateStart = calendar.time
+        calendar[Calendar.HOUR_OF_DAY] = 23
+        calendar[Calendar.MINUTE] = 59
+        dateFinal = calendar.time
+        monthByDefault = calendar[Calendar.MONTH]
+        yearByDefault = calendar[Calendar.YEAR]
+        positionMonth = monthByDefault
+        positionYear = yearByDefault
+        binding.textView?.text = getString(R.string.title_amount_total, "($)")
+        loadViewModel()
 
+        binding.etDate.setText(getString(R.string.text_date_range,
+            formatDate(dateStart), formatDate(dateFinal)))
+        binding.etDate.setOnClickListener { selecDate() }
+        binding.chipMonth.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                isByRange = false
+                configAdapter()
+                binding.spinnerMonth.visibility = View.VISIBLE
+                binding.spinnerYear.visibility = View.VISIBLE
+                binding.tfDate.visibility = View.INVISIBLE
+            }
+        }
+        binding.chipWeek.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                isByRange = true
+                binding.spinnerMonth.visibility = View.GONE
+                binding.spinnerYear.visibility = View.GONE
+                binding.tfDate.visibility = View.VISIBLE
+                loadData(true, -1, -1)
+            }
+        }
+        binding.spinnerMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                positionMonth = position
+                loadData(false, positionMonth, positionYear)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
+        binding.spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
+                positionYear = if (position == 0) 2021 else 2022
+                loadData(false, positionMonth, positionYear)
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+    }
+
+    private fun loadViewModel() {
+        viewModel.sales.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                salesNotPaid.clear()
+                salesPaid.clear()
+                sales.clear()
+                for (saleA in it) {
+                    if (!saleA.isAnnuled) sales.add(saleA)
+                }
+                for (sale in sales) {
+                    if (sale.isPaid) salesPaid.add(sale) else salesNotPaid.add(sale)
+                }
+                loadData(true, -1, -1)
+            }
         })
-        return root
+        viewModel.expenses.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                expenses.clear()
+                expenses.addAll(it)
+                loadData(true, -1, -1)
+            }
+        })
+        viewModel.notesSale.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                notesSalePaid.clear()
+                notesSaleNotPaid.clear()
+                notesSale.clear()
+                notesSale.addAll(it)
+                for (noteSale in notesSale) {
+                    if (noteSale.isPaid) notesSalePaid.add(noteSale) else notesSaleNotPaid.add(noteSale)
+                }
+                loadData(true, -1, -1)
+            }
+        })
+        viewModel.refunds.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                refunds.clear()
+                refunds.addAll(it)
+                loadData(true, -1, -1)
+            }
+        })
+    }
+
+    private fun selecDate() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        val calendar = Calendar.getInstance()
+
+        val picker = builder.build()
+        picker.addOnPositiveButtonClickListener { selection: Pair<Long, Long> ->
+            val timeZone = TimeZone.getDefault()
+            val offset = timeZone.getOffset(Date().time) * -1
+            calendar.timeInMillis = selection.first
+            calendar.timeInMillis = calendar.timeInMillis + offset
+            calendar[Calendar.HOUR_OF_DAY] = 0
+            calendar[Calendar.MINUTE] = 0
+            dateStart = calendar.time
+            calendar.timeInMillis = selection.second
+            calendar.timeInMillis = calendar.timeInMillis + offset
+            calendar[Calendar.HOUR_OF_DAY] = 23
+            calendar[Calendar.MINUTE] = 59
+            dateFinal = calendar.time
+            binding.etDate.setText(getString(R.string.text_date_range,
+                formatDate(dateStart), formatDate(dateFinal)))
+            loadData(true, -1, -1)
+        }
+        picker.show(requireActivity().supportFragmentManager, picker.toString())
+    }
+
+    private fun loadData(isByRange: Boolean, selectionMonth: Int, selectionYear: Int) {
+        val calendarStartRange = Calendar.getInstance()
+        val calendarFinalRange = Calendar.getInstance()
+        calendarStartRange.time = dateStart
+        calendarFinalRange.time = dateFinal
+
+        var totalSalesPaid = 0.0
+        var totalWaste = 0.0
+        for (sale in salesPaid) {
+            if (isByRange) {
+                val dateSale = Date(sale.datePaid)
+                if (dateSale.after(calendarStartRange.time) && dateSale.before(calendarFinalRange.time)) {
+                    val total = sale.quantity * sale.price
+                    totalSalesPaid += if (sale.isDolar) {
+                        total
+                    } else {
+                        total / sale.ratePaid
+                    }
+                    val rest = (total / sale.rateDelivery) - (total / sale.ratePaid)
+                    if (!sale.isDolar) totalWaste += if (rest > 0) rest else 0.0
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(sale.datePaid)
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
+                    val total = sale.quantity * sale.price
+                    totalSalesPaid += if (sale.isDolar) {
+                        total
+                    } else {
+                        total / sale.ratePaid
+                    }
+                    val rest = (total / sale.rateDelivery) - (total / sale.ratePaid)
+                    if (!sale.isDolar) totalWaste += if (rest > 0) rest else 0.0
+                }
+            }
+        }
+        var totalSalesNotPaid = 0.0
+        for (sale in salesNotPaid) {
+            if (isByRange) {
+                val dateSale = Date(sale.datePaid)
+                if (dateSale.after(calendarStartRange.time) && dateSale.before(calendarFinalRange.time)) {
+                    totalSalesNotPaid += if (sale.isDolar) {
+                        (sale.quantity * sale.price)
+                    } else {
+                        (sale.quantity * sale.price) / sale.ratePaid
+                    }
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(sale.datePaid)
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
+                    totalSalesNotPaid += if (sale.isDolar) {
+                        (sale.quantity * sale.price)
+                    } else {
+                        (sale.quantity * sale.price) / sale.ratePaid
+                    }
+                }
+            }
+        }
+        var totalExpenses = 0.0
+        for (expense in expenses) {
+            if (isByRange) {
+                val dateExpense = Date(expense.dateCreated)
+                if (dateExpense.after(calendarStartRange.time) && dateExpense.before(calendarFinalRange.time)) {
+                    totalExpenses += expense.total
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(expense.dateCreated)
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
+                    totalExpenses += expense.total
+                }
+            }
+        }
+        var totalNotesSalePaid = 0.0
+        for (noteSale in notesSalePaid) {
+            if (isByRange) {
+                val dateNoteSale = Date(noteSale.datePaid)
+                if (dateNoteSale.after(calendarStartRange.time) && dateNoteSale.before(calendarFinalRange.time)) {
+                    totalNotesSalePaid += if (noteSale.isDolar) {
+                        noteSale.quantity * noteSale.price
+                    } else {
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
+                    }
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(noteSale.datePaid)
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
+                    totalNotesSalePaid += if (noteSale.isDolar) {
+                        noteSale.quantity * noteSale.price
+                    } else {
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
+                    }
+                }
+            }
+        }
+
+        var totalNotesSaleNotPaid = 0.0
+        for (noteSale in notesSaleNotPaid) {
+            if (isByRange) {
+                val dateNoteSale = Date(noteSale.datePaid)
+                if (dateNoteSale.after(calendarStartRange.time) && dateNoteSale.before(calendarFinalRange.time)) {
+                    totalNotesSaleNotPaid += if (noteSale.isDolar) {
+                        noteSale.quantity * noteSale.price
+                    } else {
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
+                    }
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(noteSale.datePaid)
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
+                    totalNotesSaleNotPaid += if (noteSale.isDolar) {
+                        noteSale.quantity * noteSale.price
+                    } else {
+                        (noteSale.quantity * noteSale.price) / noteSale.rateDelivery
+                    }
+                }
+            }
+        }
+
+        var totalRefunds = 0.0
+        for (refund in refunds) {
+            if (isByRange) {
+                val dateRefund = Date(refund.date)
+                if (dateRefund.after(calendarStartRange.time) && dateRefund.before(calendarFinalRange.time)) {
+                    totalRefunds += if (refund.isDolar) {
+                        (refund.quantity * refund.price)
+                    } else {
+                        (refund.quantity * refund.price) / refund.rate
+                    }
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = Date(refund.date)
+                if (calendar[Calendar.MONTH] == selectionMonth && calendar[Calendar.YEAR] == selectionYear) {
+                    totalRefunds += if (refund.isDolar) {
+                        (refund.quantity * refund.price)
+                    } else {
+                        (refund.quantity * refund.price) / refund.rate
+                    }
+                }
+            }
+        }
+
+        binding.tvSalePaid?.text = getString(R.string.text_amount_add_graph,
+            ClassesCommon.convertDoubleToString(totalSalesPaid))
+
+        binding.tvSaleNotPaid?.text = getString(R.string.text_amount_add_graph,
+            ClassesCommon.convertDoubleToString(totalSalesNotPaid))
+
+        binding.tvNoteSalePaid?.text = getString(R.string.text_amount_add_graph,
+            ClassesCommon.convertDoubleToString(totalNotesSalePaid))
+
+        binding.tvNoteSaleNotPaid?.text = getString(R.string.text_amount_add_graph,
+            ClassesCommon.convertDoubleToString(totalNotesSaleNotPaid))
+
+        binding.tvRefunds?.text = getString(R.string.text_amount_rest_graph,
+            ClassesCommon.convertDoubleToString(totalRefunds))
+
+        binding.tvExpenses?.text = getString(R.string.text_amount_rest_graph,
+            ClassesCommon.convertDoubleToString(totalExpenses))
+
+        val total = totalSalesPaid + totalSalesNotPaid + totalNotesSalePaid + totalNotesSaleNotPaid -
+                totalExpenses - totalRefunds
+        if (total > 0.0) {
+            binding.tvTotal.text = getString(R.string.text_total_graph_superavit,
+                ClassesCommon.convertDoubleToString(total))
+            binding.tvTotal.setTextColor(ContextCompat.getColor(requireContext(), R.color.green_second_base_dark))
+        }  else {
+            binding.tvTotal.text = getString(R.string.text_total_graph_deficit,
+            ClassesCommon.convertDoubleToString(total))
+            binding.tvTotal.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+        }
+        if (total == 0.0) {
+            binding.tvTotal.text = getString(R.string.text_total_graph_zero)
+            binding.tvTotal.setTextColor(requireContext().resolveColorAttr(android.R.attr.textColorSecondary))
+        }
+        binding.progressBar.visibility = View.GONE
+    }
+
+    @ColorInt
+    fun Context.resolveColorAttr(@AttrRes colorAttr: Int): Int {
+        val resolvedAttr = resolveThemeAttr(colorAttr)
+        // resourceId is used if it's a ColorStateList, and data if it's a color reference or a hex color
+        val colorRes = if (resolvedAttr.resourceId != 0) resolvedAttr.resourceId else resolvedAttr.data
+        return ContextCompat.getColor(requireContext(), colorRes)
+    }
+
+    private fun Context.resolveThemeAttr(@AttrRes attrRes: Int): TypedValue {
+        val typedValue = TypedValue()
+        theme.resolveAttribute(attrRes, typedValue, true)
+        return typedValue
+    }
+
+    private fun formatDate(date: Date): String {
+        return DateFormat.getDateInstance().format(date)
+    }
+
+    private fun configAdapter() {
+        val selectionSpinner = monthByDefault
+        val selectionSpinnerYear = if (yearByDefault == 2021) 0 else 1
+        val listSpinnerMonth = listOf(*resources.getStringArray(R.array.months))
+        val listSpinnerYear = listOf(*resources.getStringArray(R.array.years))
+
+        val adapterUnits = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSpinnerMonth)
+        binding.spinnerMonth.apply {
+            adapter = adapterUnits
+            setSelection(selectionSpinner)
+        }
+
+        val adapterYear = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSpinnerYear)
+        binding.spinnerYear.apply {
+            adapter = adapterYear
+            setSelection(selectionSpinnerYear)
+        }
     }
 
     override fun onDestroyView() {

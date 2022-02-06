@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Splash" parent="Theme.RosquetesLucy">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+        <item name="android:statusBarColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="ButtonColor" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/green_second_base_normal</item>
+    </style>
+
+    <style name="DialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/green_second_base_normal</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.Button.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="StyleButtonCircle" parent="Widget.MaterialComponents.Button.Icon">
+        <item name="android:textSize">32sp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:layout_margin">24dp</item>
+        <item name="android:textColor">@color/green_second_base_normal</item>
+    </style>
+</resources>

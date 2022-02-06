@@ -1,0 +1,84 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/personalizacion_header">
+
+        <EditTextPreference
+            app:key="signature"
+            app:title="@string/title_costumers"
+            app:useSimpleSummaryProvider="true"
+            app:isPreferenceVisible="false"/>
+
+        <ListPreference
+            app:defaultValue="7"
+            app:entries="@array/days_expired_entries"
+            app:entryValues="@array/days_expired_values"
+            app:key="days_expired"
+            app:title="@string/days_expired_title"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_campaign_24"/>
+
+        <SwitchPreferenceCompat
+            app:key="lock"
+            app:summaryOff="@string/lock_summary_off"
+            app:summaryOn="@string/lock_summary_on"
+            app:title="@string/lock_title"
+            app:icon="@drawable/ic_lock_open_24"/>
+
+        <PreferenceScreen
+            app:key="pinLock"
+            app:title="@string/title_change_pin_lock"
+            app:isPreferenceVisible="false"/>
+
+        <PreferenceScreen
+            app:key="signOut"
+            app:title="@string/title_sign_out"
+            app:icon="@drawable/ic_exit_to_app_24"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/notification_header">
+
+        <SwitchPreferenceCompat
+            app:key="@string/notification_key"
+            app:title="@string/notification_title"
+            app:defaultValue="true"/>
+
+        <SwitchPreferenceCompat
+            app:dependency="@string/notification_key"
+            app:key="@string/notification_updates_key"
+            app:summaryOff="@string/notification_summary_off"
+            app:summaryOn="@string/notification_updates_summary_on"
+            app:title="@string/notification_updates_title"
+            app:defaultValue="true"/>
+
+        <SwitchPreferenceCompat
+            app:dependency="@string/notification_key"
+            app:key="@string/notification_sale_paid_key"
+            app:summaryOff="@string/notification_summary_off"
+            app:summaryOn="@string/notification_sale_paid_summary_on"
+            app:title="@string/notification_sale_paid_title"
+            app:defaultValue="true"/>
+
+        <SwitchPreferenceCompat
+            app:dependency="@string/notification_key"
+            app:key="@string/notification_note_sale_paid_key"
+            app:summaryOff="@string/notification_summary_off"
+            app:summaryOn="@string/notification_note_sale_paid_summary_on"
+            app:title="@string/notification_note_sale_paid_title"
+            app:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/text_about">
+
+        <PreferenceScreen
+            app:key="about"
+            app:title="@string/about_title"
+            app:icon="@drawable/ic_code_24"/>
+
+        <PreferenceScreen
+            app:key="name_version"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -8,4 +8,68 @@
         <item>G-</item>
     </string-array>
 
+    <string-array name="months">
+        <item>Enero</item>
+        <item>Febrero</item>
+        <item>Marzo</item>
+        <item>Abril</item>
+        <item>Mayo</item>
+        <item>Junio</item>
+        <item>Julio</item>
+        <item>Agosto</item>
+        <item>Septiembre</item>
+        <item>Octubre</item>
+        <item>Noviembre</item>
+        <item>Diciembre</item>
+    </string-array>
+
+    <string-array name="years">
+        <item>2021</item>
+        <item>2022</item>
+    </string-array>
+
+    <string-array name="days_expired_values">
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
+    </string-array>
+
+    <string-array name="days_expired_entries">
+        <item>Con 3 días</item>
+        <item>Con 5 días</item>
+        <item>Con 7 días</item>
+    </string-array>
+
+    <string-array name="units">
+        <item>Seleccione unidad</item>
+        <item>Caja(s)</item>
+        <item>Cartón(es)</item>
+        <item>Envase(s)</item>
+        <item>Gramo(s)</item>
+        <item>Kilogramo(s)</item>
+        <item>Litro(s)</item>
+        <item>Libra(s)</item>
+        <item>Mililitro(s)</item>
+        <item>Paquete(s)</item>
+        <item>Unidad(es)</item>
+    </string-array>
+
+    <string-array name="doc_sale">
+        <item>Todas</item>
+        <item>Por Cobrar</item>
+        <item>Cobradas</item>
+        <item>Anuladas</item>
+    </string-array>
+
+    <string-array name="doc_note_sale">
+        <item>Todas</item>
+        <item>Por Cobrar</item>
+        <item>Cobradas</item>
+    </string-array>
+
+    <string-array name="options_sale">
+        <item>Editar Factura</item>
+        <item>Anular Factura</item>
+        <item>Eliminar Factura</item>
+    </string-array>
 </resources>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:title="@string/subtitle_sales">
+            <menu>
+
+                <item
+                    android:id="@+id/navigation_costumers"
+                    android:icon="@drawable/ic_costumers_24"
+                    android:title="@string/title_costumers"/>
+
+                <item
+                    android:id="@+id/navigation_sales"
+                    android:icon="@drawable/ic_sales_24"
+                    android:title="@string/title_sales" />
+
+                <item
+                    android:id="@+id/navigation_notes_sales"
+                    android:icon="@drawable/ic_notes_sale_24"
+                    android:title="@string/title_notes_sales"/>
+
+                <item
+                    android:id="@+id/navigation_refunds"
+                    android:icon="@drawable/ic_refund_24"
+                    android:title="@string/title_refunds"/>
+
+            </menu>
+
+        </item>
+
+    </group>
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:title="@string/subtitle_expenses">
+            <menu>
+
+                <item
+                    android:id="@+id/navigation_supplier"
+                    android:icon="@drawable/ic_supplier_24"
+                    android:title="@string/title_suppliers"/>
+
+                <item
+                    android:id="@+id/navigation_expenses"
+                    android:icon="@drawable/ic_shops_24"
+                    android:title="@string/title_history_expenses" />
+
+                <item
+                    android:id="@+id/navigation_products_expenses"
+                    android:icon="@drawable/ic_factory_24"
+                    android:title="@string/title_products_expenses"
+                    android:visible="false"/>
+
+                <item
+                    android:id="@+id/navigation_storage"
+                    android:icon="@drawable/ic_graphs_24"
+                    android:title="@string/title_storage"
+                    android:visible="false"/>
+
+            </menu>
+
+        </item>
+
+    </group>
+
+    <group
+        android:checkableBehavior="single">
+
+        <item android:title="@string/text_empty">
+            <menu>
+                <item
+                    android:id="@+id/navigation_graphs"
+                    android:icon="@drawable/ic_graphs_24"
+                    android:title="@string/title_graphs"/>
+
+                <item
+                    android:id="@+id/navigation_settings"
+                    android:icon="@drawable/ic_settings_24"
+                    android:title="@string/title_activity_settings"
+                    />
+
+            </menu>
+        </item>
+    </group>
+</menu>

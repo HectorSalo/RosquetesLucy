@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_costumers">
+
+    <fragment
+        android:id="@+id/navigation_sales"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.sales.ContainerPagesSalesFragment"
+        android:label="@string/title_sales"
+        tools:layout="@layout/fragment_container_pages_sales" />
+
+    <fragment
+        android:id="@+id/navigation_costumers"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.costumers.CostumersFragment"
+        android:label="@string/title_costumers"
+        tools:layout="@layout/fragment_costumers" />
+
+    <fragment
+        android:id="@+id/navigation_graphs"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.graphs.GraphsFragment"
+        android:label="@string/title_graphs"
+        tools:layout="@layout/fragment_graphs" />
+    <fragment
+        android:id="@+id/navigation_expenses"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.expenses.ExpensesFragment"
+        android:label="@string/title_expenses"
+        tools:layout="@layout/fragment_expenses"/>
+    <fragment
+        android:id="@+id/navigation_notes_sales"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.notesSale.ContainerPagesNoteSalesFragment"
+        android:label="@string/title_notes_sales"
+        tools:layout="@layout/fragment_container_pages_note_sales"/>
+    <fragment
+        android:id="@+id/navigation_refunds"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsFragment"
+        android:label="@string/title_refunds"
+        tools:layout="@layout/fragment_refunds" />
+    <fragment
+        android:id="@+id/navigation_supplier"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.suppliers.SuppliersFragment"
+        android:label="@string/title_suppliers"
+        tools:layout="@layout/fragment_suppliers"/>
+</navigation>
