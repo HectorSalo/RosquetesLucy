@@ -52,7 +52,7 @@ object SuppliersRepository {
                         )
                         suppliers.add(supplier)
                     }
-                    offer(suppliers)
+                    trySend(suppliers)
                 }
             awaitClose { request.remove() }
         }

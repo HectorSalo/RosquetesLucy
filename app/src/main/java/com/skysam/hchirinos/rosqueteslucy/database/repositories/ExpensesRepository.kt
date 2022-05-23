@@ -30,7 +30,7 @@ object ExpensesRepository {
             Constants.ID_SUPPLIER to expense.idSupplier,
             Constants.PRIMARY_PRODUCTS to expense.listProducts,
             Constants.PRICE to expense.total,
-            Constants.DATE_PAID to Date(expense.dateCreated!!),
+            Constants.DATE_PAID to Date(expense.dateCreated),
             Constants.RATE_PAID to expense.rate
         )
         getInstance().add(data)
@@ -73,7 +73,7 @@ object ExpensesRepository {
                         )
                         expenses.add(expenseNew)
                     }
-                    offer(expenses)
+                    trySend(expenses)
                 }
             awaitClose { request.remove() }
         }

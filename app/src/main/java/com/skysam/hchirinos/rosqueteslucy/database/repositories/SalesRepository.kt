@@ -45,9 +45,9 @@ object SalesRepository {
                 val valorNeto = valor?.replace(",", ".")
                 val valorCotizacion = valorNeto!!.toFloat()
                 val valorRounded = String.format(Locale.US, "%.2f", valorCotizacion)
-                offer(valorRounded)
+                trySend(valorRounded)
             } else {
-                offer("1,00")
+                trySend("1,00")
             }
 
             awaitClose { }
@@ -107,7 +107,7 @@ object SalesRepository {
                         )
                         sales.add(saleNew)
                     }
-                    offer(sales)
+                    trySend(sales)
                 }
             awaitClose { request.remove() }
         }

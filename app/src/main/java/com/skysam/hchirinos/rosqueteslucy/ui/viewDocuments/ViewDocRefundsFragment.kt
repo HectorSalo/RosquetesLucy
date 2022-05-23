@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Costumer
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
@@ -18,6 +19,7 @@ import com.skysam.hchirinos.rosqueteslucy.ui.refunds.OnClick
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsAdapter
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.RefundsViewModel
 import com.skysam.hchirinos.rosqueteslucy.ui.refunds.ViewDetailsRefundDialog
+import java.util.*
 
 class ViewDocRefundsFragment : Fragment(), OnClick {
   private var _binding: FragmentViewDocumentRefundBinding? = null
@@ -56,24 +58,24 @@ class ViewDocRefundsFragment : Fragment(), OnClick {
   }
 
   private fun loadViewModel() {
-    viewModel.costumer.observe(viewLifecycleOwner, {
+    viewModel.costumer.observe(viewLifecycleOwner) {
       if (_binding != null) {
         costumer = it
       }
-    })
-    viewModel.allRefunds.observe(viewLifecycleOwner, {
+    }
+    viewModel.allRefunds.observe(viewLifecycleOwner) {
       if (_binding != null) {
         allRefunds.clear()
         allRefunds.addAll(it)
         fillList()
       }
-    })
-    viewModel.location.observe(viewLifecycleOwner, {
+    }
+    viewModel.location.observe(viewLifecycleOwner) {
       if (_binding != null) {
         location = it
         fillList()
       }
-    })
+    }
   }
 
   private fun fillList() {
@@ -94,11 +96,36 @@ class ViewDocRefundsFragment : Fragment(), OnClick {
       refundsAdapter.updateList(refunds)
       binding.rvRefunds.visibility = View.VISIBLE
       binding.textListEmpty.visibility = View.GONE
+      showTotals()
     } else {
       binding.rvRefunds.visibility = View.GONE
       binding.textListEmpty.visibility = View.VISIBLE
+      binding.tvUnits.visibility = View.GONE
+      binding.tvTotal.visibility = View.GONE
     }
     binding.progressBar.visibility = View.GONE
+  }
+
+  private fun showTotals() {
+    var units = 0
+    var totalBs = 0.0
+    var totalDl = 0.0
+    for (ref in refunds) {
+      units += ref.quantity
+      if (ref.isDolar) {
+        totalBs += (ref.quantity * ref.price) * ref.rate
+        totalDl += ref.quantity * ref.price
+      } else {
+        totalBs += ref.quantity * ref.price
+        totalDl += (ref.quantity * ref.price) / ref.rate
+      }
+    }
+    val convert = ClassesCommon.convertDoubleToString(totalDl)
+    binding.tvUnits.text = getString(R.string.text_quantity_refund_item, units.toString())
+    binding.tvTotal.text = getString(R.string.text_price_convert_item, "Bs.",
+      String.format(Locale.GERMANY, "%,.2f", totalBs), convert)
+    binding.tvUnits.visibility = View.VISIBLE
+    binding.tvTotal.visibility = View.VISIBLE
   }
 
   override fun onDestroyView() {

@@ -76,7 +76,7 @@ class ViewDocumentsActivity : AppCompatActivity() {
     }
 
     private fun loadViewModel() {
-        viewModel.allSales.observe(this, {
+        viewModel.allSales.observe(this) {
             allSales.clear()
             for (sale in it) {
                 if (sale.idCostumer == costumer.id) allSales.add(sale)
@@ -84,8 +84,8 @@ class ViewDocumentsActivity : AppCompatActivity() {
             if (it.isNotEmpty()) {
                 findLastDocument()
             }
-        })
-        viewModel.allNotesSales.observe(this, {
+        }
+        viewModel.allNotesSales.observe(this) {
             allNotesSale.clear()
             for (noteSale in it) {
                 if (noteSale.idCostumer == costumer.id) allNotesSale.add(noteSale)
@@ -93,8 +93,8 @@ class ViewDocumentsActivity : AppCompatActivity() {
             if (it.isNotEmpty()) {
                 findLastDocument()
             }
-        })
-        viewModel.allRefunds.observe(this, {
+        }
+        viewModel.allRefunds.observe(this) {
             allRefunds.clear()
             for (refund in it) {
                 if (refund.idCostumer == costumer.id) allRefunds.add(refund)
@@ -102,7 +102,7 @@ class ViewDocumentsActivity : AppCompatActivity() {
             if (it.isNotEmpty()) {
                 findLastDocument()
             }
-        })
+        }
     }
 
     private fun findLastDocument() {

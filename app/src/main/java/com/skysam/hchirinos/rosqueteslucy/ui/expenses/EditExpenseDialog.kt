@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -25,7 +24,6 @@ import java.util.*
 class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWatcher, OnClickList {
     private var _binding: DialogAddExpenseBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ExpensesViewModel by activityViewModels()
     private lateinit var adapterItem: ItemListAdapter
     private val productsInList = mutableListOf<PrimaryProducts>()
     private var dateSelected: Long = 0
@@ -58,8 +56,8 @@ class EditExpenseDialog(private val expense: Expense): DialogFragment(), TextWat
         binding.etRate.addTextChangedListener(this)
         binding.tvNameSupplier.text = expense.nameSupplier
         binding.tvTotal.text = getString(R.string.text_total_dolar_expense,
-            ClassesCommon.convertDoubleToString(expense.total!!))
-        dateSelected = expense.dateCreated!!
+            ClassesCommon.convertDoubleToString(expense.total))
+        dateSelected = expense.dateCreated
         binding.etDate.setText(DateFormat.getDateInstance().format(dateSelected))
 
         binding.etDate.setOnClickListener { selecDate() }

@@ -60,7 +60,7 @@ object RefundsRepository {
                         )
                         refunds.add(refundNew)
                     }
-                    offer(refunds)
+                    trySend(refunds)
                 }
             awaitClose { request.remove() }
         }

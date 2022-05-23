@@ -36,12 +36,12 @@ class ViewDetailsRefundDialog: DialogFragment(), TextWatcher {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogAddRefundBinding.inflate(layoutInflater)
 
-        viewModel.refundToView.observe(this.requireActivity(), {
+        viewModel.refundToView.observe(this.requireActivity()) {
             refund = it
             if (_binding != null) {
                 loadData()
             }
-        })
+        }
 
         val builder = AlertDialog.Builder(requireActivity())
         builder.setView(binding.root)

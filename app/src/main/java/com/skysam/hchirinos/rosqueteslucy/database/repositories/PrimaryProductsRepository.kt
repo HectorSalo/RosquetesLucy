@@ -2,13 +2,15 @@ package com.skysam.hchirinos.rosqueteslucy.database.repositories
 
 import android.content.ContentValues
 import android.util.Log
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.MetadataChanges
 import com.skysam.hchirinos.rosqueteslucy.common.Constants
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.PrimaryProducts
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import java.util.*
 
 /**
  * Created by Hector Chirinos (Home) on 1/10/2021.
@@ -52,7 +54,7 @@ object PrimaryProductsRepository {
                             products = doc.get(Constants.PRIMARY_PRODUCTS) as MutableList<String>
                         }
                     }
-                    offer(products)
+                    trySend(products)
                 }
             awaitClose { request.remove() }
         }

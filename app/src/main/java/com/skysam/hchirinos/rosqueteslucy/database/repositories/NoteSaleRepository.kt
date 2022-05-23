@@ -71,7 +71,7 @@ object NoteSaleRepository {
                         )
                         notesSale.add(noteSaleNew)
                     }
-                    offer(notesSale)
+                    trySend(notesSale)
                 }
             awaitClose { request.remove() }
         }

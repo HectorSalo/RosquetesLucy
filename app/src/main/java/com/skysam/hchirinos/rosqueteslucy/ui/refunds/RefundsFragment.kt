@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Refund
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentRefundsBinding
 import java.util.*
@@ -54,6 +55,9 @@ class RefundsFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
                 binding.rvRefunds.visibility = View.GONE
                 binding.textListEmpty.visibility = View.VISIBLE
             }
+            binding.tvRange.visibility = View.GONE
+            binding.tvUnits.visibility = View.GONE
+            binding.tvTotal.visibility = View.GONE
         }
         loadViewModel()
     }
@@ -72,7 +76,7 @@ class RefundsFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
     }
 
     private fun loadViewModel() {
-        viewModel.refunds.observe(viewLifecycleOwner, {
+        viewModel.refunds.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 refunds.clear()
                 if (it.isNotEmpty()) {
@@ -85,8 +89,11 @@ class RefundsFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
                     binding.textListEmpty.visibility = View.VISIBLE
                 }
                 binding.progressBar.visibility = View.GONE
+                binding.tvRange.visibility = View.GONE
+                binding.tvUnits.visibility = View.GONE
+                binding.tvTotal.visibility = View.GONE
             }
-        })
+        }
     }
 
     private fun selecDate() {
@@ -127,9 +134,35 @@ class RefundsFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
         }
         if (refundsFilter.isEmpty()) {
             binding.lottieAnimationView.visibility = View.VISIBLE
+            binding.tvUnits.visibility = View.GONE
+            binding.tvRange.visibility = View.GONE
+            binding.tvTotal.visibility = View.GONE
             binding.lottieAnimationView.playAnimation()
         } else {
+            var units = 0
+            var totalBs = 0.0
+            var totalDl = 0.0
+            for (ref in refundsFilter) {
+                units += ref.quantity
+                if (ref.isDolar) {
+                    totalBs += (ref.quantity * ref.price) * ref.rate
+                    totalDl += ref.quantity * ref.price
+                } else {
+                    totalBs += ref.quantity * ref.price
+                    totalDl += (ref.quantity * ref.price) / ref.rate
+                }
+            }
+            val convert = ClassesCommon.convertDoubleToString(totalDl)
+            binding.tvUnits.text = getString(R.string.text_quantity_refund_item, units.toString())
+            binding.tvTotal.text = getString(R.string.text_price_convert_item, "Bs.",
+                String.format(Locale.GERMANY, "%,.2f", totalBs), convert)
+            binding.tvRange.text = getString(R.string.text_date_range,
+                ClassesCommon.convertDateToString(dateStart!!),
+                ClassesCommon.convertDateToString(dateFinal!!))
             binding.lottieAnimationView.visibility = View.GONE
+            binding.tvUnits.visibility = View.VISIBLE
+            binding.tvRange.visibility = View.VISIBLE
+            binding.tvTotal.visibility = View.VISIBLE
         }
         refundsAdapter.updateList(refundsFilter)
     }

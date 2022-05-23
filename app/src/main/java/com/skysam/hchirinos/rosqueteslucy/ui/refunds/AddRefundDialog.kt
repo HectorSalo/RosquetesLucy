@@ -35,6 +35,7 @@ class AddRefundDialog: DialogFragment(), TextWatcher {
     private lateinit var costumer: Costumer
     private var dateSelected: Long = 0
     private val listSorted = mutableListOf<String>()
+    private var rateCurrent = ""
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogAddRefundBinding.inflate(layoutInflater)
@@ -78,33 +79,35 @@ class AddRefundDialog: DialogFragment(), TextWatcher {
     }
 
     private fun loadViewModel() {
-        viewModel.costumer.observe(this.requireActivity(), {
+        viewModel.costumer.observe(this.requireActivity()) {
             if (_binding != null) {
                 costumer = it
                 listSorted.clear()
                 listSorted.addAll(costumer.locations.sorted())
                 binding.tvNameCostumer.text = it.name
-                val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
+                val adapterLocations =
+                    ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
                 binding.spinner.adapter = adapterLocations
             }
-        })
-        viewModel.valueWeb.observe(this.requireActivity(), {
+        }
+        viewModel.valueWeb.observe(this.requireActivity()) {
             if (_binding != null) {
                 binding.tfRate.hint = getString(R.string.text_rate)
                 binding.etRate.setText(it)
+                rateCurrent = it
                 if (it == "1,00") {
                     binding.tfRate.error = getString(R.string.error_rate)
                     binding.etRate.doAfterTextChanged { binding.tfRate.error = null }
                 }
             }
-        })
-        viewModel.addLocation.observe(this.requireActivity(), {
+        }
+        viewModel.addLocation.observe(this.requireActivity()) {
             if (_binding != null) {
                 if (it != null) {
                     binding.spinner.setSelection(listSorted.indexOf(it))
                 }
             }
-        })
+        }
     }
 
     private fun selecDate() {
@@ -155,7 +158,7 @@ class AddRefundDialog: DialogFragment(), TextWatcher {
         }
         var rate: String
         if (binding.rbDolar.isChecked) {
-            rate = "1,00"
+            rate = rateCurrent
         } else {
             rate = binding.etRate.text.toString()
             if (rate.isEmpty()) {

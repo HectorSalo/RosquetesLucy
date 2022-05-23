@@ -64,7 +64,7 @@ object CostumerRepository {
                         )
                         costumers.add(costumer)
                     }
-                    offer(costumers)
+                    trySend(costumers)
                 }
             awaitClose { request.remove() }
         }
