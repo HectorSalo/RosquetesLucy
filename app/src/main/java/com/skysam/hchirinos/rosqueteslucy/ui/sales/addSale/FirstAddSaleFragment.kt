@@ -94,17 +94,18 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
     }
 
     private fun loadViewModel() {
-        viewModel.costumer.observe(viewLifecycleOwner, {
+        viewModel.costumer.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 costumer = it
                 listSorted.clear()
                 listSorted.addAll(costumer.locations.sorted())
                 binding.tvNameCostumer.text = it.name
-                val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
+                val adapterLocations =
+                    ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
                 binding.spinner.adapter = adapterLocations
             }
-        })
-        viewModel.valueWeb.observe(viewLifecycleOwner, {
+        }
+        viewModel.valueWeb.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 binding.tfRate.hint = getString(R.string.text_rate)
                 binding.etRate.setText(it)
@@ -113,15 +114,15 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
                     binding.etRate.doAfterTextChanged { binding.tfRate.error = null }
                 }
             }
-        })
-        viewModel.addLocation.observe(viewLifecycleOwner, {
+        }
+        viewModel.addLocation.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 if (it != null) {
                     binding.spinner.setSelection(listSorted.indexOf(it))
                 }
             }
-        })
-        viewModel.isSale.observe(viewLifecycleOwner, {
+        }
+        viewModel.isSale.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 if (!it) {
                     binding.tfInvoice.hint = getString(R.string.text_note_sale_number)
@@ -129,8 +130,8 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
                     isSale = false
                 }
             }
-        })
-        viewModel.notesSales.observe(viewLifecycleOwner, {
+        }
+        viewModel.notesSales.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 if (!isSale) {
                     var number = 0
@@ -142,8 +143,8 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
                     binding.etInvoice.setText((number + 1).toString())
                 }
             }
-        })
-        viewModel.sales.observe(viewLifecycleOwner, {
+        }
+        viewModel.sales.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 if (isSale) {
                     sales.clear()
@@ -155,7 +156,7 @@ class FirstAddSaleFragment : Fragment(), OnClickExit, TextWatcher {
                     binding.etInvoice.setText((number + 1).toString())
                 }
             }
-        })
+        }
     }
 
     private fun validateData() {

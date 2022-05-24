@@ -42,4 +42,9 @@
         android:name="com.skysam.hchirinos.rosqueteslucy.ui.suppliers.SuppliersFragment"
         android:label="@string/title_suppliers"
         tools:layout="@layout/fragment_suppliers"/>
+    <fragment
+        android:id="@+id/navigation_production"
+        android:name="com.skysam.hchirinos.rosqueteslucy.ui.production.ProductionFragment"
+        android:label="@string/title_production"
+        tools:layout="@layout/fragment_production" />
 </navigation>

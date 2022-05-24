@@ -39,6 +39,10 @@ object Constants {
 
     const val SUPPLIERS = "suppliers"
 
+    const val PRODUCTIONS = "productions"
+    const val DATE = "date"
+    const val RATE = "rate"
+
     const val PREFERENCES = "preferences"
     const val PREFERENCES_DAYS_EXPIRED = "days_expired"
     const val PREFERENCES_LOCK = "lock"

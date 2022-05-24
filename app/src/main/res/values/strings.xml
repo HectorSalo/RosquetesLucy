@@ -11,6 +11,7 @@
     <string name="title_activity_settings">Configuración</string>
     <string name="title_activity_view_documents">Documentos</string>
     <string name="title_suppliers">Proveedores</string>
+    <string name="title_production">Producción</string>
     <string name="title_history_expenses">Historial de Compras</string>
     <string name="title_products_expenses">Productos de Materia Prima</string>
 
@@ -29,6 +30,7 @@
     <string name="list_notes_sales_paid_empty">No tiene Notas de Ventas pagadas</string>
     <string name="list_graph_empty">Debe realizar su primera Venta para cargar las gráficas</string>
     <string name="list_refunds_empty">Sin devoluciones</string>
+    <string name="list_productions_empty">Sin Producciones registradas</string>
     <string name="list_supplier_empty">No ha creado su primer Proveedor</string>
     <string name="list_filter_empty">Realice una nueva búsqueda</string>
     <string name="list_doc_sales_empty">Cliente sin Facturas</string>
@@ -153,6 +155,9 @@
     <!-- Supplier-->
     <string name="text_delete_supplier">Eliminar proveedor</string>
     <string name="text_edit_supplier">Editar proveedor</string>
+
+    <!-- Production-->
+    <string name="text_quantity_production_item">%1$s unidades producidas</string>
 
     <!--Dialogs Common-->
     <string name="title_confirmation_dialog">Confirmar</string>

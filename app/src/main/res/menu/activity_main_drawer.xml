@@ -28,6 +28,11 @@
                     android:icon="@drawable/ic_refund_24"
                     android:title="@string/title_refunds"/>
 
+                <item
+                    android:id="@+id/navigation_production"
+                    android:icon="@drawable/ic_production_24"
+                    android:title="@string/title_production"/>
+
             </menu>
 
         </item>

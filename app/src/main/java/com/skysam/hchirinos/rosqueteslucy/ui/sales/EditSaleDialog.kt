@@ -102,7 +102,7 @@ class EditSaleDialog(private val sale: Sale): DialogFragment(), TextWatcher, OnC
     }
 
     private fun loadViewModel() {
-        viewModel.costumers.observe(viewLifecycleOwner, {
+        viewModel.costumers.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 for (cos in it) {
                     if (cos.id == sale.idCostumer) {
@@ -111,23 +111,24 @@ class EditSaleDialog(private val sale: Sale): DialogFragment(), TextWatcher, OnC
                     }
                 }
             }
-        })
-        viewModel.costumer.observe(viewLifecycleOwner, {
+        }
+        viewModel.costumer.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 listSorted.clear()
                 listSorted.addAll(it.locations.sorted())
                 binding.tvNameCostumer.text = it.name
-                val adapterLocations = ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
+                val adapterLocations =
+                    ArrayAdapter(requireContext(), R.layout.layout_spinner, listSorted)
                 binding.spinner.adapter = adapterLocations
                 binding.spinner.setSelection(listSorted.indexOf(sale.location))
             }
-        })
-        viewModel.sales.observe(viewLifecycleOwner, {
+        }
+        viewModel.sales.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 sales.clear()
                 sales.addAll(it)
             }
-        })
+        }
     }
 
     private fun validateData() {
