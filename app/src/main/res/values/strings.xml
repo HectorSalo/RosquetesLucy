@@ -158,6 +158,7 @@
 
     <!-- Production-->
     <string name="text_quantity_production_item">%1$s unidades producidas</string>
+    <string name="text_not_production">Sin producción en la fecha seleccionada</string>
 
     <!--Dialogs Common-->
     <string name="title_confirmation_dialog">Confirmar</string>

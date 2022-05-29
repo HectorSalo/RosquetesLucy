@@ -10,6 +10,7 @@ import androidx.core.util.Pair
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.skysam.hchirinos.rosqueteslucy.R
+import com.skysam.hchirinos.rosqueteslucy.common.ClassesCommon
 import com.skysam.hchirinos.rosqueteslucy.common.dataClass.Expense
 import com.skysam.hchirinos.rosqueteslucy.databinding.FragmentExpensesBinding
 import java.util.*
@@ -71,7 +72,7 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
     }
 
     private fun loadViewModel() {
-        viewModel.expenses.observe(viewLifecycleOwner, {
+        viewModel.expenses.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 expenses.clear()
                 if (it.isNotEmpty()) {
@@ -85,7 +86,7 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
                 }
                 binding.progressBar.visibility = View.GONE
             }
-        })
+        }
     }
 
     private fun selecDate() {
@@ -127,8 +128,21 @@ class ExpensesFragment : Fragment(), OnClick, SearchView.OnQueryTextListener {
         if (expensesFilter.isEmpty()) {
             binding.lottieAnimationView.visibility = View.VISIBLE
             binding.lottieAnimationView.playAnimation()
+            binding.tvRange.visibility = View.GONE
+            binding.tvTotal.visibility = View.GONE
         } else {
+            var totalDl = 0.0
+            for (expen in expensesFilter) {
+                totalDl += expen.total
+            }
+            binding.tvTotal.text = getString(R.string.text_total_dolar_expense,
+                String.format(Locale.GERMANY, "%,.2f", totalDl))
+            binding.tvRange.text = getString(R.string.text_date_range,
+                ClassesCommon.convertDateToString(dateStart!!),
+                ClassesCommon.convertDateToString(dateFinal!!))
             binding.lottieAnimationView.visibility = View.GONE
+            binding.tvRange.visibility = View.VISIBLE
+            binding.tvTotal.visibility = View.VISIBLE
         }
         adapterExpense.updateList(expensesFilter)
     }

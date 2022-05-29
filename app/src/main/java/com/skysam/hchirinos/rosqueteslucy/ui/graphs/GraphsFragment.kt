@@ -34,6 +34,7 @@ class GraphsFragment : Fragment() {
     private val notesSalePaid = mutableListOf<NoteSale>()
     private val notesSaleNotPaid = mutableListOf<NoteSale>()
     private val refunds = mutableListOf<Refund>()
+    private val productions = mutableListOf<Production>()
     private var isByRange = true
     private var monthByDefault = 0
     private var yearByDefault = 0
@@ -64,7 +65,7 @@ class GraphsFragment : Fragment() {
         yearByDefault = calendar[Calendar.YEAR]
         positionMonth = monthByDefault
         positionYear = yearByDefault
-        binding.textView?.text = getString(R.string.title_amount_total, "($)")
+        binding.textView.text = getString(R.string.title_amount_total, "($)")
         loadViewModel()
 
         binding.etDate.setText(getString(R.string.text_date_range,
@@ -86,6 +87,7 @@ class GraphsFragment : Fragment() {
                 binding.spinnerYear.visibility = View.GONE
                 binding.tfDate.visibility = View.VISIBLE
                 loadData(true, -1, -1)
+                filterList(true)
             }
         }
         binding.spinnerMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -97,6 +99,7 @@ class GraphsFragment : Fragment() {
             ) {
                 positionMonth = position
                 loadData(false, positionMonth, positionYear)
+                filterList(false)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -105,8 +108,9 @@ class GraphsFragment : Fragment() {
         }
         binding.spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
-                positionYear = if (position == 0) 2021 else 2022
+                positionYear = 2021 + position
                 loadData(false, positionMonth, positionYear)
+                filterList(false)
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -117,7 +121,7 @@ class GraphsFragment : Fragment() {
     }
 
     private fun loadViewModel() {
-        viewModel.sales.observe(viewLifecycleOwner, {
+        viewModel.sales.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 salesNotPaid.clear()
                 salesPaid.clear()
@@ -130,33 +134,42 @@ class GraphsFragment : Fragment() {
                 }
                 loadData(true, -1, -1)
             }
-        })
-        viewModel.expenses.observe(viewLifecycleOwner, {
+        }
+        viewModel.expenses.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 expenses.clear()
                 expenses.addAll(it)
                 loadData(true, -1, -1)
             }
-        })
-        viewModel.notesSale.observe(viewLifecycleOwner, {
+        }
+        viewModel.notesSale.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 notesSalePaid.clear()
                 notesSaleNotPaid.clear()
                 notesSale.clear()
                 notesSale.addAll(it)
                 for (noteSale in notesSale) {
-                    if (noteSale.isPaid) notesSalePaid.add(noteSale) else notesSaleNotPaid.add(noteSale)
+                    if (noteSale.isPaid) notesSalePaid.add(noteSale) else notesSaleNotPaid.add(
+                        noteSale
+                    )
                 }
                 loadData(true, -1, -1)
             }
-        })
-        viewModel.refunds.observe(viewLifecycleOwner, {
+        }
+        viewModel.refunds.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 refunds.clear()
                 refunds.addAll(it)
                 loadData(true, -1, -1)
             }
-        })
+        }
+        viewModel.productions.observe(viewLifecycleOwner) {
+            if (_binding != null) {
+                productions.clear()
+                productions.addAll(it)
+                filterList(true)
+            }
+        }
     }
 
     private fun selecDate() {
@@ -180,6 +193,7 @@ class GraphsFragment : Fragment() {
             binding.etDate.setText(getString(R.string.text_date_range,
                 formatDate(dateStart), formatDate(dateFinal)))
             loadData(true, -1, -1)
+            filterList(true)
         }
         picker.show(requireActivity().supportFragmentManager, picker.toString())
     }
@@ -330,22 +344,22 @@ class GraphsFragment : Fragment() {
             }
         }
 
-        binding.tvSalePaid?.text = getString(R.string.text_amount_add_graph,
+        binding.tvSalePaid.text = getString(R.string.text_amount_add_graph,
             ClassesCommon.convertDoubleToString(totalSalesPaid))
 
-        binding.tvSaleNotPaid?.text = getString(R.string.text_amount_add_graph,
+        binding.tvSaleNotPaid.text = getString(R.string.text_amount_add_graph,
             ClassesCommon.convertDoubleToString(totalSalesNotPaid))
 
-        binding.tvNoteSalePaid?.text = getString(R.string.text_amount_add_graph,
+        binding.tvNoteSalePaid.text = getString(R.string.text_amount_add_graph,
             ClassesCommon.convertDoubleToString(totalNotesSalePaid))
 
-        binding.tvNoteSaleNotPaid?.text = getString(R.string.text_amount_add_graph,
+        binding.tvNoteSaleNotPaid.text = getString(R.string.text_amount_add_graph,
             ClassesCommon.convertDoubleToString(totalNotesSaleNotPaid))
 
-        binding.tvRefunds?.text = getString(R.string.text_amount_rest_graph,
+        binding.tvRefunds.text = getString(R.string.text_amount_rest_graph,
             ClassesCommon.convertDoubleToString(totalRefunds))
 
-        binding.tvExpenses?.text = getString(R.string.text_amount_rest_graph,
+        binding.tvExpenses.text = getString(R.string.text_amount_rest_graph,
             ClassesCommon.convertDoubleToString(totalExpenses))
 
         val total = totalSalesPaid + totalSalesNotPaid + totalNotesSalePaid + totalNotesSaleNotPaid -
@@ -386,7 +400,7 @@ class GraphsFragment : Fragment() {
 
     private fun configAdapter() {
         val selectionSpinner = monthByDefault
-        val selectionSpinnerYear = if (yearByDefault == 2021) 0 else 1
+        val selectionSpinnerYear = yearByDefault - 2021
         val listSpinnerMonth = listOf(*resources.getStringArray(R.array.months))
         val listSpinnerYear = listOf(*resources.getStringArray(R.array.years))
 
@@ -406,5 +420,46 @@ class GraphsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun filterList(isByRange: Boolean) {
+        val productionsFilter = mutableListOf<Production>()
+        for (production in productions) {
+            if (isByRange) {
+                if (production.date.after(dateStart) && production.date.before(dateFinal)) {
+                    productionsFilter.add(production)
+                }
+            } else {
+                val calendar = Calendar.getInstance()
+                calendar.time = production.date
+                if (calendar[Calendar.MONTH] == positionMonth && calendar[Calendar.YEAR] == positionYear) {
+                    productionsFilter.add(production)
+                }
+            }
+        }
+        if (productionsFilter.isEmpty()) {
+            binding.tvUnitsProduction.text = getString(R.string.text_not_production)
+            binding.tvTotalProduction.visibility = View.GONE
+        } else {
+            var units = 0
+            var totalBs = 0.0
+            var totalDl = 0.0
+            for (prod in productionsFilter) {
+                units += prod.quantity
+                if (prod.isDolar) {
+                    totalBs += (prod.quantity * prod.price) * prod.rate
+                    totalDl += prod.quantity * prod.price
+                } else {
+                    totalBs += prod.quantity * prod.price
+                    totalDl += (prod.quantity * prod.price) / prod.rate
+                }
+            }
+            val convert = ClassesCommon.convertDoubleToString(totalDl)
+            binding.tvUnitsProduction.text = getString(R.string.text_quantity_production_item, units.toString())
+            binding.tvTotalProduction.text = getString(R.string.text_price_convert_item, "Bs.",
+                String.format(Locale.GERMANY, "%,.2f", totalBs), convert)
+            binding.tvUnitsProduction.visibility = View.VISIBLE
+            binding.tvTotalProduction.visibility = View.VISIBLE
+        }
     }
 }
