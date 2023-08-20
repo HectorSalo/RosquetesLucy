@@ -6,15 +6,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion '32.1.0-rc1'
+    compileSdkVersion 33
+    buildToolsVersion '33.0.2'
 
     defaultConfig {
         applicationId "com.skysam.hchirinos.rosqueteslucy"
         minSdkVersion 23
-        targetSdkVersion 32
-        versionCode 17
-        versionName "8.2"
+        targetSdkVersion 33
+        versionCode 18
+        versionName "8.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
